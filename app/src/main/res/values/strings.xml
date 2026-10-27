@@ -18,7 +18,7 @@
     <string name="ascend_have">Points</string>
     <string name="ascend_bonus">Profit bonus</string>
     <string name="ascend_gain">On ascend</string>
-    <string name="ascend_warning">Ascending restarts this farm: money, gardens, supervisors, discount managers and upgrades are lost. Points, accountants and guide birds stay.</string>
+    <string name="ascend_warning">Ascending restarts this farm: money, gardens, discount managers and upgrades are lost. Points, supervisors, accountants and guide birds stay.</string>
     <string name="ascend_confirm">Ascend</string>
     <string name="cancel">Cancel</string>
     <string name="menu_teleport">Teleport</string>

@@ -198,7 +198,7 @@ public final class GameState {
         return Math.max(0, angelsForEarnings(w, lifetimeEarnings[w]) - angelsClaimed[w]);
     }
 
-    /** Restarts farm {@code w} in exchange for that farm's points. Accountants and guide birds stay. */
+    /** Restarts farm {@code w} in exchange for that farm's points. Supervisors, accountants and guide birds stay. */
     public synchronized boolean ascend(int w) {
         sync();
         double gain = pendingAngels(w);
@@ -210,7 +210,7 @@ public final class GameState {
         money[w] = Worlds.ALL[w].startMoney;
         for (Garden garden : worlds[w].gardens) {
             garden.count = 0;
-            garden.manager = false;
+            // garden.manager is kept: supervisors are permanent.
             garden.discount = false;
             garden.speedLevel = 0;
             garden.valueLevel = 0;
