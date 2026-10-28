@@ -127,6 +127,10 @@ public final class GameState {
         return money[w];
     }
 
+    public synchronized double getLifetimeEarnings(int w) {
+        return lifetimeEarnings[w];
+    }
+
     public synchronized double getAngels(int w) {
         return angels[w];
     }

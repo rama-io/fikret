@@ -119,27 +119,19 @@
             android:exported="false" />
 
         <activity
-            android:name=".activities.ComingSoonActivity"
+            android:name=".activities.FinanceActivity"
             android:exported="false" />
 
         <activity
             android:name=".activities.Main"
-            android:excludeFromRecents="true"
             android:exported="true"
-            android:launchMode="singleTask"
             android:windowSoftInputMode="adjustResize">
-            <intent-filter>
-                <action android:name="android.intent.action.MAIN" />
 
-                <category android:name="android.intent.category.HOME" />
-                <category android:name="android.intent.category.DEFAULT" />
-            </intent-filter>
-
-            <!-- Temporary default launcher for IDE -->
             <intent-filter>
                 <action android:name="android.intent.action.MAIN" />
                 <category android:name="android.intent.category.LAUNCHER" />
             </intent-filter>
+
         </activity>
     </application>
 

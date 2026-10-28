@@ -24,6 +24,13 @@
     <View style="@style/SeparatorListVertical" />
 
     <TextView
+        android:id="@+id/menu_finance"
+        style="@style/BTN"
+        android:text="@string/menu_finance" />
+
+    <View style="@style/SeparatorListVertical" />
+
+    <TextView
         android:id="@+id/menu_ascend"
         style="@style/BTN"
         android:text="@string/menu_ascend" />
@@ -44,5 +51,13 @@
         android:id="@+id/menu_about"
         style="@style/BTN"
         android:text="About" />
+
+    <View
+        style="@style/SeparatorListVertical" />
+
+    <TextView
+        android:id="@+id/cancel"
+        style="@style/BTN"
+        android:text="@string/cancel" />
 
 </LinearLayout>

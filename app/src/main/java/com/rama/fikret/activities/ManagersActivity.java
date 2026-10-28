@@ -30,6 +30,11 @@ public class ManagersActivity extends ListScreenActivity {
     }
 
     @Override
+    protected String emptyText() {
+        return getString(R.string.empty_managers);
+    }
+
+    @Override
     protected String subtitle() {
         return Worlds.ALL[state.getCurrentWorld()].name;
     }

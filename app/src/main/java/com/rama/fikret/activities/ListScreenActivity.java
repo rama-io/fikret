@@ -32,6 +32,7 @@ public abstract class ListScreenActivity extends Activity {
         public void run() {
             state.sync();
             ViewUpdates.setText(moneyText, NumberFormatter.money(world, state.getMoney(world)));
+            onTick();
             refreshRows();
             handler.postDelayed(this, TICK_MS);
         }
@@ -45,6 +46,15 @@ public abstract class ListScreenActivity extends Activity {
 
     protected String subtitle() {
         return "";
+    }
+
+    /** Text shown when the list has no rows. */
+    protected String emptyText() {
+        return "";
+    }
+
+    /** Called every tick before the visible rows are rebound; screens whose row set changes on its own hook in here. */
+    protected void onTick() {
     }
 
     @Override
@@ -68,7 +78,9 @@ public abstract class ListScreenActivity extends Activity {
 
         adapter = createAdapter();
         list.setAdapter(adapter);
-        list.setEmptyView(findViewById(R.id.empty));
+        TextView empty = findViewById(R.id.empty);
+        empty.setText(emptyText());
+        list.setEmptyView(empty);
     }
 
     @Override

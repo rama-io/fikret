@@ -116,6 +116,7 @@ public class Main extends Activity {
         bindMenuItem(dialog, content, R.id.menu_map, new Intent(this, GameActivity.class));
         bindMenuItem(dialog, content, R.id.menu_managers, new Intent(this, ManagersActivity.class));
         bindMenuItem(dialog, content, R.id.menu_upgrades, new Intent(this, UpgradesActivity.class));
+        bindMenuItem(dialog, content, R.id.menu_finance, new Intent(this, FinanceActivity.class));
         content.findViewById(R.id.menu_ascend).setOnClickListener(v -> {
             dialog.dismiss();
             showAscend();
@@ -123,7 +124,11 @@ public class Main extends Activity {
         bindMenuItem(dialog, content, R.id.menu_teleport, new Intent(this, TeleportActivity.class));
         bindMenuItem(dialog, content, R.id.menu_about, new Intent(this, About.class));
 
-        // Teleport is always there once there is somewhere to teleport to.
+        View cancelButton = content.findViewById(R.id.cancel);
+        if (cancelButton != null) {
+            cancelButton.setOnClickListener(v -> dialog.dismiss());
+        }
+
         boolean teleportAvailable = DeveloperMode.availableFarms() > 1;
         int visibility = teleportAvailable ? View.VISIBLE : View.GONE;
         content.findViewById(R.id.menu_teleport).setVisibility(visibility);
@@ -176,11 +181,6 @@ public class Main extends Activity {
                 "+" + NumberFormatter.number(gain));
         ViewUpdates.setBackgroundColor(ascendDialog.findViewById(R.id.ascend_confirm),
                 gain > 0 ? ViewUpdates.themeColor(this, R.attr.accent) : ViewUpdates.color(this, R.color.disabled));
-    }
-
-    private Intent comingSoon(int titleRes) {
-        return new Intent(this, ComingSoonActivity.class)
-                .putExtra(ComingSoonActivity.EXTRA_TITLE, getString(titleRes));
     }
 
     private void bindMenuItem(final Dialog dialog, View content, int id, final Intent target) {
