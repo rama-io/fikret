@@ -119,6 +119,10 @@
             android:exported="false" />
 
         <activity
+            android:name=".activities.FinanceActivity"
+            android:exported="false" />
+
+        <activity
             android:name=".activities.Main"
             android:exported="true"
             android:windowSoftInputMode="adjustResize">

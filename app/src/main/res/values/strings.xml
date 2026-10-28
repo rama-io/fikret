@@ -22,7 +22,10 @@
     <string name="ascend_confirm">Ascend</string>
     <string name="cancel">Cancel</string>
     <string name="menu_teleport">Teleport</string>
-    <string name="coming_soon">Coming soon</string>
+    <string name="menu_finance">Finance</string>
+    <string name="empty_finance">No active farms yet. Hire a supervisor to start earning.</string>
+    <string name="empty_upgrades">All upgrades bought.</string>
+    <string name="empty_managers">Everyone is hired.</string>
     <string name="rescue">Rescue</string>
     <string name="activate">Activate</string>
     <string name="rescued">Rescued</string>

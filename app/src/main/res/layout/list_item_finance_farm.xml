@@ -1,0 +1,75 @@
+<?xml version="1.0" encoding="utf-8"?>
+<LinearLayout xmlns:android="http://schemas.android.com/apk/res/android"
+    style="@style/VerticalList_BG2">
+
+    <LinearLayout style="@style/HorizontalList">
+
+        <TextView
+            android:id="@+id/farm_name"
+            android:layout_width="0dp"
+            android:layout_height="wrap_content"
+            android:layout_weight="1"
+            android:singleLine="true"
+            android:textColor="?attr/accent"
+            android:textSize="@dimen/h3" />
+
+        <TextView
+            android:id="@+id/farm_income"
+            android:layout_width="wrap_content"
+            android:layout_height="wrap_content"
+            android:singleLine="true"
+            android:textColor="@color/text"
+            android:textSize="@dimen/h3" />
+    </LinearLayout>
+
+    <TextView
+        android:id="@+id/farm_rates"
+        style="@style/Text"
+        android:gravity="end"
+        android:textColor="@color/subtle"
+        android:textSize="@dimen/small" />
+
+    <View style="@style/SeparatorListVertical" />
+
+    <LinearLayout
+        android:id="@+id/farm_sources"
+        style="@style/VerticalList" />
+
+    <View style="@style/SeparatorListVertical" />
+
+    <TextView
+        style="@style/Text"
+        android:text="By garden"
+        android:textColor="@color/subtle"
+        android:textSize="@dimen/small" />
+
+    <LinearLayout
+        android:id="@+id/farm_gardens"
+        style="@style/VerticalList" />
+
+    <View style="@style/SeparatorListVertical" />
+
+    <TextView
+        android:id="@+id/farm_points"
+        style="@style/Text" />
+
+    <TextView
+        android:id="@+id/farm_ascend"
+        style="@style/Text"
+        android:textColor="@color/subtle" />
+
+    <TextView
+        android:id="@+id/farm_idle"
+        style="@style/Text"
+        android:textColor="@color/warning" />
+
+    <TextView
+        android:id="@+id/farm_best"
+        style="@style/Text" />
+
+    <TextView
+        android:id="@+id/farm_lifetime"
+        style="@style/Text"
+        android:textColor="@color/subtle"
+        android:textSize="@dimen/small" />
+</LinearLayout>

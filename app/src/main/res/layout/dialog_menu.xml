@@ -24,6 +24,13 @@
     <View style="@style/SeparatorListVertical" />
 
     <TextView
+        android:id="@+id/menu_finance"
+        style="@style/BTN"
+        android:text="@string/menu_finance" />
+
+    <View style="@style/SeparatorListVertical" />
+
+    <TextView
         android:id="@+id/menu_ascend"
         style="@style/BTN"
         android:text="@string/menu_ascend" />

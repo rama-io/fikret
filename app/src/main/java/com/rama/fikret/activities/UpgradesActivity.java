@@ -27,6 +27,11 @@ public class UpgradesActivity extends ListScreenActivity {
     }
 
     @Override
+    protected String emptyText() {
+        return getString(R.string.empty_upgrades);
+    }
+
+    @Override
     protected String subtitle() {
         return Worlds.ALL[state.getCurrentWorld()].name;
     }

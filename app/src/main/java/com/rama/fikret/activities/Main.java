@@ -116,6 +116,7 @@ public class Main extends Activity {
         bindMenuItem(dialog, content, R.id.menu_map, new Intent(this, GameActivity.class));
         bindMenuItem(dialog, content, R.id.menu_managers, new Intent(this, ManagersActivity.class));
         bindMenuItem(dialog, content, R.id.menu_upgrades, new Intent(this, UpgradesActivity.class));
+        bindMenuItem(dialog, content, R.id.menu_finance, new Intent(this, FinanceActivity.class));
         content.findViewById(R.id.menu_ascend).setOnClickListener(v -> {
             dialog.dismiss();
             showAscend();
