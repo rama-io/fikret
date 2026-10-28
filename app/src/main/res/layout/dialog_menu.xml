@@ -45,4 +45,12 @@
         style="@style/BTN"
         android:text="About" />
 
+    <View
+        style="@style/SeparatorListVertical" />
+
+    <TextView
+        android:id="@+id/cancel"
+        style="@style/BTN"
+        android:text="@string/cancel" />
+
 </LinearLayout>

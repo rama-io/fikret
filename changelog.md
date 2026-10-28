@@ -1,8 +1,12 @@
 # Changelog
 
-## 3
+## 4
 
 - Release forest farm
+
+## 3
+
+- Finance view
 
 ## 2
 

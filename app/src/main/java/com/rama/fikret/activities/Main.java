@@ -123,7 +123,11 @@ public class Main extends Activity {
         bindMenuItem(dialog, content, R.id.menu_teleport, new Intent(this, TeleportActivity.class));
         bindMenuItem(dialog, content, R.id.menu_about, new Intent(this, About.class));
 
-        // Teleport is always there once there is somewhere to teleport to.
+        View cancelButton = content.findViewById(R.id.cancel);
+        if (cancelButton != null) {
+            cancelButton.setOnClickListener(v -> dialog.dismiss());
+        }
+
         boolean teleportAvailable = DeveloperMode.availableFarms() > 1;
         int visibility = teleportAvailable ? View.VISIBLE : View.GONE;
         content.findViewById(R.id.menu_teleport).setVisibility(visibility);
