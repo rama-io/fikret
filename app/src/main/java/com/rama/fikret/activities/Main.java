@@ -182,11 +182,6 @@ public class Main extends Activity {
                 gain > 0 ? ViewUpdates.themeColor(this, R.attr.accent) : ViewUpdates.color(this, R.color.disabled));
     }
 
-    private Intent comingSoon(int titleRes) {
-        return new Intent(this, ComingSoonActivity.class)
-                .putExtra(ComingSoonActivity.EXTRA_TITLE, getString(titleRes));
-    }
-
     private void bindMenuItem(final Dialog dialog, View content, int id, final Intent target) {
         content.findViewById(id).setOnClickListener(v -> {
             dialog.dismiss();
