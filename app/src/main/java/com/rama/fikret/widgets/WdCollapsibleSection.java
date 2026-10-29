@@ -10,8 +10,8 @@ import android.view.View;
 import android.widget.LinearLayout;
 import android.widget.TextView;
 
-import com.rama.mako_zero.R;
-import com.rama.mako_zero.managers.PrefsManager;
+import com.rama.fikret.R;
+import com.rama.fikret.managers.PrefsManager;
 
 public class WdCollapsibleSection extends LinearLayout {
     private LinearLayout header;
@@ -67,6 +67,16 @@ public class WdCollapsibleSection extends LinearLayout {
             }
             return false;
         });
+    }
+
+    public void setHeader(CharSequence text) {
+        labelView.setText(text);
+    }
+
+    public void setKey(String key, boolean defaultExpanded) {
+        this.key = key;
+        this.defaultExpanded = defaultExpanded;
+        applyState(loadState());
     }
 
     @Override
