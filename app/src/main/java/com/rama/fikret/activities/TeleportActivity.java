@@ -48,8 +48,7 @@ public class TeleportActivity extends ListScreenActivity {
             public View getView(int position, View convertView, ViewGroup parent) {
                 TextView row = (TextView) convertView;
                 if (row == null) {
-                    row = (TextView) LayoutInflater.from(TeleportActivity.this)
-                            .inflate(R.layout.list_item_teleport, parent, false);
+                    row = (TextView) LayoutInflater.from(TeleportActivity.this).inflate(R.layout.list_item_teleport, parent, false);
                     applyFont(row);
                 }
                 final int stageId = Worlds.ALL_STAGE_IDS[position];

@@ -19,15 +19,11 @@ import java.util.ArrayList;
 import java.util.List;
 import java.util.Locale;
 
-/**
- * What each active farm earns per second and where it comes from. A farm is active when it is
- * available and at least one of its gardens has a supervisor.
- */
 public class FinanceActivity extends ListScreenActivity {
     private static final int TYPE_FARM = 0;
     private static final int TYPE_SUMMARY = 1;
 
-    private static final String[] SOURCE_NAMES = {"Base", "Upgrades", "Milestones", "Points"};
+    private static final int[] SOURCE_NAMES = {R.string.source_base, R.string.source_upgrades, R.string.source_milestones, R.string.source_points};
 
     private final List<FarmFinance> farms = new ArrayList<>();
 
@@ -62,7 +58,6 @@ public class FinanceActivity extends ListScreenActivity {
         return getString(R.string.empty_finance);
     }
 
-    /** Returns true when the set of active farms changed. */
     private boolean refreshFarms() {
         int before = farms.size();
         int[] worldsBefore = new int[before];
@@ -197,7 +192,7 @@ public class FinanceActivity extends ListScreenActivity {
                     lake += f.lakeIncome;
                 }
                 ViewUpdates.setText((TextView) income,
-                        NumberFormatter.money(Worlds.ANGEL_WORLD, lake) + "/s");
+                        getString(R.string.per_second, NumberFormatter.money(Worlds.ANGEL_WORLD, lake)));
             }
             return;
         }
@@ -211,17 +206,16 @@ public class FinanceActivity extends ListScreenActivity {
     private void bindFarm(FarmHolder h, FarmFinance f) {
         int w = f.world;
         ViewUpdates.setText(h.name, Worlds.ALL[w].name);
-        ViewUpdates.setText(h.income, NumberFormatter.money(w, f.income) + "/s");
-        ViewUpdates.setText(h.rates, NumberFormatter.number(f.income * 60) + "/min  ·  "
-                + NumberFormatter.number(f.income * 3600) + "/h");
+        ViewUpdates.setText(h.income, getString(R.string.per_second, NumberFormatter.money(w, f.income)));
+        ViewUpdates.setText(h.rates, getString(R.string.income_rates,
+                NumberFormatter.number(f.income * 60), NumberFormatter.number(f.income * 3600)));
 
         for (int i = 0; i < h.sources.length; i++) {
             double value = f.bySource[i];
-            // Base is always shown; the others only once they add something.
             boolean show = i == FarmFinance.SOURCE_BASE || value > 0;
             h.sources[i].root.setVisibility(show ? View.VISIBLE : View.GONE);
             if (show) {
-                bindBar(h.sources[i], SOURCE_NAMES[i], w, value, f.income);
+                bindBar(h.sources[i], getString(SOURCE_NAMES[i]), w, value, f.income);
             }
         }
 
@@ -235,34 +229,46 @@ public class FinanceActivity extends ListScreenActivity {
             }
         }
 
-        ViewUpdates.setText(h.points, "Points: " + NumberFormatter.number(f.points)
-                + "  (+" + NumberFormatter.number(f.pointsBonusPercent) + "% profit)");
+        ViewUpdates.setText(h.points, getString(R.string.finance_points,
+                NumberFormatter.number(f.points), NumberFormatter.number(f.pointsBonusPercent)));
         ViewUpdates.setText(h.ascend, f.pendingPoints > 0
-                ? "On ascend: +" + NumberFormatter.number(f.pendingPoints) + " points, profit x"
-                + NumberFormatter.number(f.ascendFactor)
-                : "On ascend: nothing to gain yet");
+                ? getString(R.string.finance_ascend_gain,
+                NumberFormatter.number(f.pendingPoints), NumberFormatter.number(f.ascendFactor))
+                : getString(R.string.finance_ascend_none));
 
         h.idle.setVisibility(f.idleIncome > 0 ? View.VISIBLE : View.GONE);
-        ViewUpdates.setText(h.idle, "Idle gardens: +" + NumberFormatter.money(w, f.idleIncome)
-                + "/s with a supervisor");
+        ViewUpdates.setText(h.idle, getString(R.string.finance_idle,
+                NumberFormatter.money(w, f.idleIncome)));
 
-        if (f.bestBuy == null) {
+        if (f.bestBuyKind == FarmFinance.BEST_NONE) {
             h.best.setVisibility(View.GONE);
         } else {
             h.best.setVisibility(View.VISIBLE);
-            ViewUpdates.setText(h.best, "Best buy: " + f.bestBuy + ", pays back in "
-                    + longDuration(f.bestBuyPayback) + ". "
-                    + (f.bestBuyWait <= 0 ? "You can afford it now."
-                    : "Affordable in " + longDuration(f.bestBuyWait) + "."));
+            ViewUpdates.setText(h.best, getString(R.string.finance_best_buy,
+                    bestBuyName(f, w), longDuration(f.bestBuyPayback),
+                    f.bestBuyWait <= 0 ? getString(R.string.finance_afford_now)
+                            : getString(R.string.finance_afford_in, longDuration(f.bestBuyWait))));
         }
 
-        ViewUpdates.setText(h.lifetime, "Earned in total: " + NumberFormatter.money(w, f.lifetime));
+        ViewUpdates.setText(h.lifetime, getString(R.string.finance_lifetime, NumberFormatter.money(w, f.lifetime)));
+    }
+
+    private String bestBuyName(FarmFinance f, int w) {
+        String garden = Worlds.ALL[w].gardens[f.bestBuyGarden].name;
+        switch (f.bestBuyKind) {
+            case FarmFinance.BEST_SPEED:
+                return getString(R.string.upgrade_speed_name, garden);
+            case FarmFinance.BEST_VALUE:
+                return getString(R.string.upgrade_value_name, garden);
+            default:
+                return getString(R.string.supervisor_name, garden);
+        }
     }
 
     private void bindBar(Bar bar, String label, int w, double value, double total) {
         double share = total > 0 ? value / total : 0;
         ViewUpdates.setText(bar.label, label);
-        ViewUpdates.setText(bar.value, NumberFormatter.money(w, value) + "/s");
+        ViewUpdates.setText(bar.value, getString(R.string.per_second, NumberFormatter.money(w, value)));
         ViewUpdates.setText(bar.percent, percent(share));
         int progress = (int) Math.round(Math.min(1, share) * 1000);
         if (bar.fill.getProgress() != progress) {
@@ -275,12 +281,12 @@ public class FinanceActivity extends ListScreenActivity {
         return String.format(Locale.US, pct < 10 ? "%.1f%%" : "%.0f%%", pct);
     }
 
-    private static String longDuration(double seconds) {
+    private String longDuration(double seconds) {
         if (Double.isNaN(seconds) || Double.isInfinite(seconds)) {
-            return "never";
+            return getString(R.string.duration_never);
         }
         if (seconds >= 2 * 86400) {
-            return NumberFormatter.number(seconds / 86400) + " days";
+            return getString(R.string.duration_days, NumberFormatter.number(seconds / 86400));
         }
         return NumberFormatter.duration(seconds);
     }

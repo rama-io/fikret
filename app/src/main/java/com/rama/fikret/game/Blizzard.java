@@ -11,10 +11,10 @@ public class Blizzard {
     private static final float SPEED_X = 200f;
     private static final float SPEED_Y = 100f;
 
-    private static final int FLAKE_PX = 8;          // on-screen size of one flake, in device pixels
-    private static final int GRID = 96;             // flakes per tile side (tile = 96 * 8 = 768 px)
-    private static final int BLOCK = 6;             // the grid is split into 6x6 blocks...
-    private static final float SECOND_FLAKE = 0.7f; // ...with one flake each and a 70% chance of a second
+    private static final int FLAKE_PX = 8;
+    private static final int GRID = 96;
+    private static final int BLOCK = 6;
+    private static final float SECOND_FLAKE = 0.7f;
 
     private final Bitmap flakes;
     private final int tileSize = GRID * FLAKE_PX;

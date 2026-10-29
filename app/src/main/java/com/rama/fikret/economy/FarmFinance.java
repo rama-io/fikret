@@ -1,16 +1,5 @@
 package com.rama.fikret.economy;
 
-/**
- * A read-only snapshot of what one farm earns right now, split by where the income comes from.
- *
- * Only gardens with a supervisor count as income: the others earn only when tapped. Their
- * would-be income is kept apart as {@link #idleIncome}.
- *
- * The income of a garden is {@code base * upgrades * milestones * points}. These factors multiply,
- * so the part above the base is shared out by the log of each factor: a factor that doubled the
- * income twice as much as another gets twice the share. The four sources always add up to
- * {@link #income}.
- */
 public final class FarmFinance {
     public static final int SOURCE_BASE = 0;
     public static final int SOURCE_UPGRADES = 1;
@@ -21,26 +10,25 @@ public final class FarmFinance {
     private static final double LN2 = Math.log(2);
 
     public final int world;
-    /** Money per second from supervised gardens. */
     public final double income;
     public final double[] bySource = new double[SOURCES];
     public final double[] byGarden = new double[Worlds.GARDENS_PER_WORLD];
-    /** Money per second the gardens without a supervisor would add if they had one. */
     public final double idleIncome;
-    /** {@link #income} converted to Lake money, so farms with different currencies can be added. */
     public final double lakeIncome;
     public final double lifetime;
 
     public final double points;
     public final double pointsBonusPercent;
     public final double pendingPoints;
-    /** How much profit grows by when ascending now: 1.1 means +10%. */
     public final double ascendFactor;
+    public static final int BEST_NONE = -1;
+    public static final int BEST_SUPERVISOR = 0;
+    public static final int BEST_SPEED = 1;
+    public static final int BEST_VALUE = 2;
 
-    /** The upgrade or supervisor that pays itself back fastest, or null when there is none. */
-    public final String bestBuy;
+    public final int bestBuyKind;
+    public final int bestBuyGarden;
     public final double bestBuyPayback;
-    /** Seconds until the best buy is affordable at the current income; 0 when it already is. */
     public final double bestBuyWait;
 
     private FarmFinance(GameState s, int w) {
@@ -51,7 +39,8 @@ public final class FarmFinance {
         double idle = 0;
         double money = s.getMoney(w);
 
-        String bestName = null;
+        int bestKind = BEST_NONE;
+        int bestGarden = -1;
         double bestCost = 0;
         double bestGain = 0;
         double bestRatio = Double.POSITIVE_INFINITY;
@@ -69,7 +58,8 @@ public final class FarmFinance {
                 double cost = s.managerCost(w, g);
                 if (cost / potential < bestRatio) {
                     bestRatio = cost / potential;
-                    bestName = def.name + " supervisor";
+                    bestKind = BEST_SUPERVISOR;
+                    bestGarden = g;
                     bestCost = cost;
                     bestGain = potential;
                 }
@@ -80,8 +70,7 @@ public final class FarmFinance {
             total += potential;
 
             double base = def.baseRevenue * count / def.cycleSeconds;
-            double lnUpgrades = (s.upgradeLevel(w, g, GameState.UPGRADE_SPEED)
-                    + s.upgradeLevel(w, g, GameState.UPGRADE_VALUE)) * LN2;
+            double lnUpgrades = (s.upgradeLevel(w, g, GameState.UPGRADE_SPEED) + s.upgradeLevel(w, g, GameState.UPGRADE_VALUE)) * LN2;
             double lnMilestones = GameState.milestonesReached(count) * LN2;
             double lnAll = lnUpgrades + lnMilestones + lnPoints;
             double extra = Math.max(0, potential - base);
@@ -96,18 +85,16 @@ public final class FarmFinance {
                     continue;
                 }
                 double cost = s.upgradeCost(w, g, type);
-                // Both kinds of upgrade double this garden's income.
                 if (cost / potential < bestRatio) {
                     bestRatio = cost / potential;
-                    bestName = def.name + (type == GameState.UPGRADE_SPEED ? " Speed x2" : " Value x2");
+                    bestKind = type == GameState.UPGRADE_SPEED ? BEST_SPEED : BEST_VALUE;
+                    bestGarden = g;
                     bestCost = cost;
                     bestGain = potential;
                 }
             }
         }
-        // The base slice is what is left once the other three are taken out, so the four always add up.
-        bySource[SOURCE_BASE] = total - bySource[SOURCE_UPGRADES] - bySource[SOURCE_MILESTONES]
-                - bySource[SOURCE_POINTS];
+        bySource[SOURCE_BASE] = total - bySource[SOURCE_UPGRADES] - bySource[SOURCE_MILESTONES] - bySource[SOURCE_POINTS];
 
         income = total;
         idleIncome = idle;
@@ -119,18 +106,16 @@ public final class FarmFinance {
         pendingPoints = s.pendingAngels(w);
         ascendFactor = (1 + Worlds.ANGEL_BONUS * (points + pendingPoints)) / pointsMultiplier;
 
-        bestBuy = bestName;
+        bestBuyKind = bestKind;
+        bestBuyGarden = bestGarden;
         bestBuyPayback = bestGain > 0 ? bestCost / bestGain : Double.POSITIVE_INFINITY;
-        bestBuyWait = bestName == null ? 0
-                : money >= bestCost ? 0
-                : total > 0 ? (bestCost - money) / total : Double.POSITIVE_INFINITY;
+        bestBuyWait = bestKind == BEST_NONE ? 0 : money >= bestCost ? 0 : total > 0 ? (bestCost - money) / total : Double.POSITIVE_INFINITY;
     }
 
     public static FarmFinance of(GameState state, int world) {
         return new FarmFinance(state, world);
     }
 
-    /** Garden indexes with income, biggest first. */
     public int[] gardensByIncome() {
         int n = 0;
         int[] order = new int[byGarden.length];

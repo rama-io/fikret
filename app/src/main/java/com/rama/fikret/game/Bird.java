@@ -27,7 +27,6 @@ public class Bird {
     private boolean walkToggle = false;
     private long walkAnimTimer = 0;
 
-    /** The sheet comes from {@link BirdSheets#forWorld}, so each farm's supervisors wear that farm's colours. */
     public Bird(SpriteSheet spriteSheet, int startRow, int startCol) {
         this.spriteSheet = spriteSheet;
         this.row = this.fromRow = startRow;
@@ -40,10 +39,6 @@ public class Bird {
 
     public void setSwimming(boolean swimming) {
         this.swimming = swimming;
-    }
-
-    public boolean isSwimming() {
-        return swimming;
     }
 
     public void teleportTo(int newRow, int newCol) {

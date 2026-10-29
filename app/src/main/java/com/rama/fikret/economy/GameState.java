@@ -192,7 +192,6 @@ public final class GameState {
         return 1 + Worlds.ANGEL_BONUS * angels[w];
     }
 
-    /** Points a farm has earned in total, with its earnings converted to Lake money first. */
     public static double angelsForEarnings(int w, double lifetime) {
         double lakeMoney = Math.max(0, lifetime) * Worlds.START_MONEY / Worlds.ALL[w].startMoney;
         return Math.floor(Math.sqrt(lakeMoney / Worlds.ANGEL_DIVISOR));
@@ -202,7 +201,6 @@ public final class GameState {
         return Math.max(0, angelsForEarnings(w, lifetimeEarnings[w]) - angelsClaimed[w]);
     }
 
-    /** Restarts farm {@code w} in exchange for that farm's points. Supervisors, discount managers, accountants and guide birds stay. */
     public synchronized boolean ascend(int w) {
         sync();
         double gain = pendingAngels(w);
@@ -214,7 +212,6 @@ public final class GameState {
         money[w] = Worlds.ALL[w].startMoney;
         for (Garden garden : worlds[w].gardens) {
             garden.count = 0;
-            // garden.manager and garden.discount are kept: supervisors and discount managers are permanent.
             garden.speedLevel = 0;
             garden.valueLevel = 0;
             garden.elapsed = 0;
@@ -238,10 +235,6 @@ public final class GameState {
         if (count < 50) return 50;
         if (count < 100) return 100;
         return (count / 100 + 1) * 100;
-    }
-
-    public boolean isUnlocked(int w, int g) {
-        return g == 0 || worlds[w].gardens[g].count > 0 || worlds[w].gardens[g - 1].count > 0;
     }
 
     public double priceMultiplier(int w, int g) {
@@ -280,9 +273,6 @@ public final class GameState {
 
     public synchronized boolean buy(int w, int g, int amount) {
         sync();
-        if (!isUnlocked(w, g)) {
-            return false;
-        }
         Quote q = quote(w, g, amount);
         if (q.amount <= 0 || q.cost > money[w]) {
             return false;
@@ -355,15 +345,6 @@ public final class GameState {
         world.travelManager = true;
         save();
         return true;
-    }
-
-    public boolean hasAnyTravelManager() {
-        for (int w = 0; w < worlds.length; w++) {
-            if (hasTravelManager(w)) {
-                return true;
-            }
-        }
-        return false;
     }
 
     public boolean hasAccountantList(int w) {
@@ -439,21 +420,22 @@ public final class GameState {
         return Worlds.upgradePrice(w, tier, type == UPGRADE_SPEED, g);
     }
 
-    public synchronized boolean buyUpgrade(int w, int g, int type) {
+    public synchronized boolean buyUpgrade(int w, int g, int type, int tier) {
         sync();
-        if (upgradeMaxed(w, g, type)) {
+        int level = upgradeLevel(w, g, type);
+        if (tier < level || tier >= Worlds.UPGRADE_MAX_LEVEL) {
             return false;
         }
-        double cost = upgradeCost(w, g, type);
+        double cost = upgradeCostAt(w, g, type, tier);
         if (money[w] < cost) {
             return false;
         }
         money[w] -= cost;
         Garden garden = worlds[w].gardens[g];
         if (type == UPGRADE_SPEED) {
-            garden.speedLevel++;
+            garden.speedLevel = tier + 1;
         } else {
-            garden.valueLevel++;
+            garden.valueLevel = tier + 1;
         }
         save();
         return true;
