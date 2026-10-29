@@ -240,10 +240,6 @@ public final class GameState {
         return (count / 100 + 1) * 100;
     }
 
-    public boolean isUnlocked(int w, int g) {
-        return g == 0 || worlds[w].gardens[g].count > 0 || worlds[w].gardens[g - 1].count > 0;
-    }
-
     public double priceMultiplier(int w, int g) {
         Garden garden = worlds[w].gardens[g];
         double m = 1;
@@ -280,9 +276,6 @@ public final class GameState {
 
     public synchronized boolean buy(int w, int g, int amount) {
         sync();
-        if (!isUnlocked(w, g)) {
-            return false;
-        }
         Quote q = quote(w, g, amount);
         if (q.amount <= 0 || q.cost > money[w]) {
             return false;
@@ -440,20 +433,24 @@ public final class GameState {
     }
 
     public synchronized boolean buyUpgrade(int w, int g, int type) {
+        return buyUpgrade(w, g, type, upgradeLevel(w, g, type));
+    }
+    public synchronized boolean buyUpgrade(int w, int g, int type, int tier) {
         sync();
-        if (upgradeMaxed(w, g, type)) {
+        int level = upgradeLevel(w, g, type);
+        if (tier < level || tier >= Worlds.UPGRADE_MAX_LEVEL) {
             return false;
         }
-        double cost = upgradeCost(w, g, type);
+        double cost = upgradeCostAt(w, g, type, tier);
         if (money[w] < cost) {
             return false;
         }
         money[w] -= cost;
         Garden garden = worlds[w].gardens[g];
         if (type == UPGRADE_SPEED) {
-            garden.speedLevel++;
+            garden.speedLevel = tier + 1;
         } else {
-            garden.valueLevel++;
+            garden.valueLevel = tier + 1;
         }
         save();
         return true;

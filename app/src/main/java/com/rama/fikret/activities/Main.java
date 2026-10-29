@@ -201,7 +201,6 @@ public class Main extends Activity {
         row.setTag(g);
         final int w = world < 0 ? state.getCurrentWorld() : world;
         int count = state.getCount(w, g);
-        boolean unlocked = state.isUnlocked(w, g);
 
         ViewUpdates.setImageResource((ImageView) row.findViewById(R.id.garden_icon),
                 GardenIcons.forGarden(w, g));
@@ -214,7 +213,7 @@ public class Main extends Activity {
             bar.setProgress(progress);
         }
         ViewUpdates.setText((TextView) row.findViewById(R.id.product_value),
-                count > 0 ? NumberFormatter.money(w, state.revenuePerCycle(w, g)) : "Locked");
+                count > 0 ? NumberFormatter.money(w, state.revenuePerCycle(w, g)) : "Not owned");
         ViewUpdates.setText((TextView) row.findViewById(R.id.duration),
                 state.isRunning(w, g) && state.cycleSeconds(w, g) >= 0.25
                         ? NumberFormatter.duration(state.timeLeft(w, g))
@@ -222,7 +221,7 @@ public class Main extends Activity {
 
         int multiplier = MULTIPLIERS[multiplierIndex];
         GameState.Quote quote = state.quote(w, g, multiplier);
-        boolean affordable = unlocked && quote.amount > 0 && quote.cost <= state.getMoney(w);
+        boolean affordable = quote.amount > 0 && quote.cost <= state.getMoney(w);
         String label;
         if (multiplier == GameState.BUY_MAX) {
             label = "Buy Max" + (quote.amount > 0 ? " (" + quote.amount + ")" : "");

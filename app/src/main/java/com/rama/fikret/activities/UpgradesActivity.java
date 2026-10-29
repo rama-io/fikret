@@ -89,9 +89,8 @@ public class UpgradesActivity extends ListScreenActivity {
                 return;
             }
             int[] upgrade = rows.get(position);
-            boolean nextTier = state.upgradeLevel(world, upgrade[2], upgrade[1]) == upgrade[0];
-            if (nextTier && state.getCount(world, upgrade[2]) > 0
-                    && state.buyUpgrade(world, upgrade[2], upgrade[1])) {
+            if (state.getCount(world, upgrade[2]) > 0
+                    && state.buyUpgrade(world, upgrade[2], upgrade[1], upgrade[0])) {
                 rebuildRows();
                 adapter.notifyDataSetChanged();
             }
@@ -114,15 +113,17 @@ public class UpgradesActivity extends ListScreenActivity {
         boolean speed = type == GameState.UPGRADE_SPEED;
         ViewUpdates.setText((TextView) row.findViewById(R.id.garden_name),
                 garden + (speed ? " Speed x2" : " Value x2"));
+        int skipped = tier - state.upgradeLevel(world, g, type);
         ViewUpdates.setText((TextView) row.findViewById(R.id.upgrade_description),
-                speed
+                (speed
                         ? "Doubles how fast " + garden + " harvests."
-                        : "Doubles how much " + garden + " earns.");
+                        : "Doubles how much " + garden + " earns.")
+                        + (skipped > 0 ? " Includes " + skipped + " cheaper tier" + (skipped > 1 ? "s" : "") + "." : ""));
 
         double cost = state.upgradeCostAt(world, g, type, tier);
         ViewUpdates.setText((TextView) row.findViewById(R.id.activate_cost), NumberFormatter.money(world, cost));
 
-        boolean available = state.upgradeLevel(world, g, type) == tier && state.getCount(world, g) > 0;
+        boolean available = state.upgradeLevel(world, g, type) <= tier && state.getCount(world, g) > 0;
         boolean affordable = available && state.getMoney(world) >= cost;
         ViewUpdates.setBackgroundColor(row.findViewById(R.id.activate_button),
                 affordable ? ViewUpdates.themeColor(this, R.attr.accent) : ViewUpdates.color(this, R.color.disabled));
