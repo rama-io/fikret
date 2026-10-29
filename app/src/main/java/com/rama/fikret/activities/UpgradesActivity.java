@@ -89,8 +89,7 @@ public class UpgradesActivity extends ListScreenActivity {
                 return;
             }
             int[] upgrade = rows.get(position);
-            if (state.getCount(world, upgrade[2]) > 0
-                    && state.buyUpgrade(world, upgrade[2], upgrade[1], upgrade[0])) {
+            if (state.getCount(world, upgrade[2]) > 0 && state.buyUpgrade(world, upgrade[2], upgrade[1], upgrade[0])) {
                 rebuildRows();
                 adapter.notifyDataSetChanged();
             }
@@ -108,24 +107,17 @@ public class UpgradesActivity extends ListScreenActivity {
         int g = rows.get(position)[2];
 
         String garden = Worlds.ALL[world].gardens[g].name;
-        ViewUpdates.setImageResource((ImageView) row.findViewById(R.id.garden_picture),
-                GardenIcons.forGarden(world, g));
+        ViewUpdates.setImageResource((ImageView) row.findViewById(R.id.garden_picture), GardenIcons.forGarden(world, g));
         boolean speed = type == GameState.UPGRADE_SPEED;
-        ViewUpdates.setText((TextView) row.findViewById(R.id.garden_name),
-                garden + (speed ? " Speed x2" : " Value x2"));
+        ViewUpdates.setText((TextView) row.findViewById(R.id.garden_name), garden + (speed ? " Speed x2" : " Value x2"));
         int skipped = tier - state.upgradeLevel(world, g, type);
-        ViewUpdates.setText((TextView) row.findViewById(R.id.upgrade_description),
-                (speed
-                        ? "Doubles how fast " + garden + " harvests."
-                        : "Doubles how much " + garden + " earns.")
-                        + (skipped > 0 ? " Includes " + skipped + " cheaper tier" + (skipped > 1 ? "s" : "") + "." : ""));
+        ViewUpdates.setText((TextView) row.findViewById(R.id.upgrade_description), (speed ? "Doubles how fast " + garden + " harvests." : "Doubles how much " + garden + " earns.") + (skipped > 0 ? " Includes " + skipped + " cheaper tier" + (skipped > 1 ? "s" : "") + "." : ""));
 
         double cost = state.upgradeCostAt(world, g, type, tier);
         ViewUpdates.setText((TextView) row.findViewById(R.id.activate_cost), NumberFormatter.money(world, cost));
 
         boolean available = state.upgradeLevel(world, g, type) <= tier && state.getCount(world, g) > 0;
         boolean affordable = available && state.getMoney(world) >= cost;
-        ViewUpdates.setBackgroundColor(row.findViewById(R.id.activate_button),
-                affordable ? ViewUpdates.themeColor(this, R.attr.accent) : ViewUpdates.color(this, R.color.disabled));
+        ViewUpdates.setBackgroundColor(row.findViewById(R.id.activate_button), affordable ? ViewUpdates.themeColor(this, R.attr.accent) : ViewUpdates.color(this, R.color.disabled));
     }
 }

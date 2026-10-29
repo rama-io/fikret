@@ -60,7 +60,6 @@ public class ManagersActivity extends ListScreenActivity {
                 }
             }
         }
-        // The guide bird always closes the list.
         if (!state.hasTravelManager(world)) {
             rows.add(new int[]{KIND_GUIDE, 0});
         }
@@ -125,7 +124,6 @@ public class ManagersActivity extends ListScreenActivity {
                     break;
             }
             if (hired) {
-                // The bought one leaves the list.
                 rebuildRows();
                 adapter.notifyDataSetChanged();
             }
@@ -160,7 +158,7 @@ public class ManagersActivity extends ListScreenActivity {
         String name;
         String description;
         String costLabel;
-        boolean coin = false;   // the farm's points are shown with the farm's coin in front
+        boolean coin = false;
         boolean affordable;
         switch (kind) {
             case KIND_GUIDE: {

@@ -19,10 +19,6 @@ import java.util.ArrayList;
 import java.util.List;
 import java.util.Locale;
 
-/**
- * What each active farm earns per second and where it comes from. A farm is active when it is
- * available and at least one of its gardens has a supervisor.
- */
 public class FinanceActivity extends ListScreenActivity {
     private static final int TYPE_FARM = 0;
     private static final int TYPE_SUMMARY = 1;
@@ -62,7 +58,6 @@ public class FinanceActivity extends ListScreenActivity {
         return getString(R.string.empty_finance);
     }
 
-    /** Returns true when the set of active farms changed. */
     private boolean refreshFarms() {
         int before = farms.size();
         int[] worldsBefore = new int[before];
@@ -217,7 +212,6 @@ public class FinanceActivity extends ListScreenActivity {
 
         for (int i = 0; i < h.sources.length; i++) {
             double value = f.bySource[i];
-            // Base is always shown; the others only once they add something.
             boolean show = i == FarmFinance.SOURCE_BASE || value > 0;
             h.sources[i].root.setVisibility(show ? View.VISIBLE : View.GONE);
             if (show) {

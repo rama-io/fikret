@@ -34,7 +34,6 @@ public class Main extends Activity {
 
     private GameState state;
     private TextView moneyText;
-    private TextView worldName;
     private Button multiplierButton;
     private BaseAdapter adapter;
     private ListView gardenList;
@@ -152,8 +151,7 @@ public class Main extends Activity {
                 refresh();
             }
         });
-        ((TextView) content.findViewById(R.id.ascend_have_label))
-                .setText(Worlds.ALL[state.getCurrentWorld()].name + " points");
+        ((TextView) content.findViewById(R.id.ascend_have_label)).setText(Worlds.ALL[state.getCurrentWorld()].name + " points");
         int coinSize = Math.round(((TextView) content.findViewById(R.id.ascend_have)).getTextSize());
         for (int id : new int[]{R.id.ascend_have, R.id.ascend_gain}) {
             TextView value = content.findViewById(id);
@@ -173,14 +171,10 @@ public class Main extends Activity {
         state.sync();
         double have = state.getAngels(state.getCurrentWorld());
         double gain = state.pendingAngels(state.getCurrentWorld());
-        ViewUpdates.setText((TextView) ascendDialog.findViewById(R.id.ascend_have),
-                NumberFormatter.number(have));
-        ViewUpdates.setText((TextView) ascendDialog.findViewById(R.id.ascend_bonus),
-                "+" + NumberFormatter.number(have * Worlds.ANGEL_BONUS * 100) + "%");
-        ViewUpdates.setText((TextView) ascendDialog.findViewById(R.id.ascend_gain),
-                "+" + NumberFormatter.number(gain));
-        ViewUpdates.setBackgroundColor(ascendDialog.findViewById(R.id.ascend_confirm),
-                gain > 0 ? ViewUpdates.themeColor(this, R.attr.accent) : ViewUpdates.color(this, R.color.disabled));
+        ViewUpdates.setText((TextView) ascendDialog.findViewById(R.id.ascend_have), NumberFormatter.number(have));
+        ViewUpdates.setText((TextView) ascendDialog.findViewById(R.id.ascend_bonus), "+" + NumberFormatter.number(have * Worlds.ANGEL_BONUS * 100) + "%");
+        ViewUpdates.setText((TextView) ascendDialog.findViewById(R.id.ascend_gain), "+" + NumberFormatter.number(gain));
+        ViewUpdates.setBackgroundColor(ascendDialog.findViewById(R.id.ascend_confirm), gain > 0 ? ViewUpdates.themeColor(this, R.attr.accent) : ViewUpdates.color(this, R.color.disabled));
     }
 
     private void bindMenuItem(final Dialog dialog, View content, int id, final Intent target) {
@@ -202,22 +196,16 @@ public class Main extends Activity {
         final int w = world < 0 ? state.getCurrentWorld() : world;
         int count = state.getCount(w, g);
 
-        ViewUpdates.setImageResource((ImageView) row.findViewById(R.id.garden_icon),
-                GardenIcons.forGarden(w, g));
-        ViewUpdates.setText((TextView) row.findViewById(R.id.garden_count),
-                count + " / " + GameState.nextMilestone(count));
+        ViewUpdates.setImageResource((ImageView) row.findViewById(R.id.garden_icon), GardenIcons.forGarden(w, g));
+        ViewUpdates.setText((TextView) row.findViewById(R.id.garden_count), count + " / " + GameState.nextMilestone(count));
 
         ProgressBar bar = row.findViewById(R.id.progress_bar);
         int progress = (int) Math.round(state.progress(w, g) * 1000);
         if (bar.getProgress() != progress) {
             bar.setProgress(progress);
         }
-        ViewUpdates.setText((TextView) row.findViewById(R.id.product_value),
-                count > 0 ? NumberFormatter.money(w, state.revenuePerCycle(w, g)) : "Not owned");
-        ViewUpdates.setText((TextView) row.findViewById(R.id.duration),
-                state.isRunning(w, g) && state.cycleSeconds(w, g) >= 0.25
-                        ? NumberFormatter.duration(state.timeLeft(w, g))
-                        : NumberFormatter.duration(state.cycleSeconds(w, g)));
+        ViewUpdates.setText((TextView) row.findViewById(R.id.product_value), count > 0 ? NumberFormatter.money(w, state.revenuePerCycle(w, g)) : "Not owned");
+        ViewUpdates.setText((TextView) row.findViewById(R.id.duration), state.isRunning(w, g) && state.cycleSeconds(w, g) >= 0.25 ? NumberFormatter.duration(state.timeLeft(w, g)) : NumberFormatter.duration(state.cycleSeconds(w, g)));
 
         int multiplier = MULTIPLIERS[multiplierIndex];
         GameState.Quote quote = state.quote(w, g, multiplier);
@@ -232,8 +220,7 @@ public class Main extends Activity {
         }
         ViewUpdates.setText((TextView) row.findViewById(R.id.buy_label), label);
         ViewUpdates.setText((TextView) row.findViewById(R.id.buy_cost), NumberFormatter.money(w, quote.cost));
-        ViewUpdates.setBackgroundColor(row.findViewById(R.id.buy_button),
-                affordable ? ViewUpdates.themeColor(this, R.attr.btnBg) : ViewUpdates.color(this, R.color.disabled));
+        ViewUpdates.setBackgroundColor(row.findViewById(R.id.buy_button), affordable ? ViewUpdates.themeColor(this, R.attr.btnBg) : ViewUpdates.color(this, R.color.disabled));
     }
 
     private final class GardenAdapter extends BaseAdapter {
@@ -272,7 +259,6 @@ public class Main extends Activity {
                 refresh();
             }
         });
-        // The picture harvests a garden that has no manager yet.
         row.findViewById(R.id.harvest_btn).setOnClickListener(v -> {
             int g = (Integer) row.getTag();
             if (state.harvest(state.getCurrentWorld(), g)) {

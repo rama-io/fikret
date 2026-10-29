@@ -25,7 +25,6 @@ import com.rama.fikret.managers.PrefsManager;
 
 public class GameActivity extends Activity {
     public static final String EXTRA_STAGE = "stage";
-    /** Set by the teleport menu so the goose plays its teleport pose on arrival. */
     public static final String EXTRA_TELEPORT_ARRIVAL = "teleport_arrival";
 
     private GameView gameView;
@@ -41,7 +40,6 @@ public class GameActivity extends Activity {
         if (getIntent().hasExtra(EXTRA_STAGE)) {
             stageId = getIntent().getIntExtra(EXTRA_STAGE, Maps.BEACH);
         } else {
-            // Resume where the player was.
             PrefsManager prefs = PrefsManager.getInstance(this);
             stageId = prefs.getCurrentStage(Maps.BEACH);
             startPosition = prefs.getArrivalPosition();
@@ -53,8 +51,7 @@ public class GameActivity extends Activity {
         }
 
         FrameLayout container = new FrameLayout(this);
-        container.addView(gameView, new FrameLayout.LayoutParams(
-                ViewGroup.LayoutParams.MATCH_PARENT, ViewGroup.LayoutParams.MATCH_PARENT));
+        container.addView(gameView, new FrameLayout.LayoutParams(ViewGroup.LayoutParams.MATCH_PARENT, ViewGroup.LayoutParams.MATCH_PARENT));
         ImageButton farmButton = createFarmButton();
         container.addView(farmButton, farmButtonParams());
         setContentView(container);
@@ -90,8 +87,7 @@ public class GameActivity extends Activity {
         float density = getResources().getDisplayMetrics().density;
         int size = Math.round(56 * density);
         int margin = Math.round(16 * density);
-        FrameLayout.LayoutParams lp = new FrameLayout.LayoutParams(size, size,
-                Gravity.BOTTOM | Gravity.END);
+        FrameLayout.LayoutParams lp = new FrameLayout.LayoutParams(size, size, Gravity.BOTTOM | Gravity.END);
         lp.setMargins(margin, margin, margin, margin);
         return lp;
     }

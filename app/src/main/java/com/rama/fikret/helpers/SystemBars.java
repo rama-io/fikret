@@ -95,10 +95,6 @@ public final class SystemBars {
         root.requestApplyInsets();
     }
 
-    /**
-     * Edge-to-edge fullscreen for the game: the content is drawn under the status bar, the
-     * navigation bar and the display cutout (notch). Works from Android 5 (API 21) up.
-     */
     @SuppressWarnings("deprecation")
     public static void applyFullscreen(Activity activity) {
         Window window = activity.getWindow();
@@ -130,10 +126,6 @@ public final class SystemBars {
         }
     }
 
-    /**
-     * Keeps a floating control (not the whole view) clear of the bars and the notch by adding the
-     * insets to its margins, so the rest of the screen can draw underneath them.
-     */
     @SuppressWarnings("deprecation")
     public static void applyInsetsAsMargins(final View view) {
         if (Build.VERSION.SDK_INT < 21) return;

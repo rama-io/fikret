@@ -38,7 +38,7 @@ public class Goose {
     public void update(long deltaMs, int dx, int dy, GameMap map) {
         if (!moving) {
             if (dx != 0 || dy != 0) {
-                if(dx != 0){
+                if (dx != 0) {
                     facing = dx < 0 ? Direction.LEFT : Direction.RIGHT;
                 }
 
