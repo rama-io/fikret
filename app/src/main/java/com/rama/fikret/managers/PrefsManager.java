@@ -95,6 +95,14 @@ public class PrefsManager {
         }
     }
 
+    public int getInt(String key, int defaultValue) {
+        return prefs.getInt(key, defaultValue);
+    }
+
+    public void setInt(String key, int value) {
+        prefs.edit().putInt(key, value).commit();
+    }
+
     public boolean getBoolean(String key, boolean defaultValue) {
         return prefs.getBoolean(key, defaultValue);
     }
