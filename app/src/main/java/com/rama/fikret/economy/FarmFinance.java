@@ -21,7 +21,13 @@ public final class FarmFinance {
     public final double pointsBonusPercent;
     public final double pendingPoints;
     public final double ascendFactor;
-    public final String bestBuy;
+    public static final int BEST_NONE = -1;
+    public static final int BEST_SUPERVISOR = 0;
+    public static final int BEST_SPEED = 1;
+    public static final int BEST_VALUE = 2;
+
+    public final int bestBuyKind;
+    public final int bestBuyGarden;
     public final double bestBuyPayback;
     public final double bestBuyWait;
 
@@ -33,7 +39,8 @@ public final class FarmFinance {
         double idle = 0;
         double money = s.getMoney(w);
 
-        String bestName = null;
+        int bestKind = BEST_NONE;
+        int bestGarden = -1;
         double bestCost = 0;
         double bestGain = 0;
         double bestRatio = Double.POSITIVE_INFINITY;
@@ -51,7 +58,8 @@ public final class FarmFinance {
                 double cost = s.managerCost(w, g);
                 if (cost / potential < bestRatio) {
                     bestRatio = cost / potential;
-                    bestName = def.name + " supervisor";
+                    bestKind = BEST_SUPERVISOR;
+                    bestGarden = g;
                     bestCost = cost;
                     bestGain = potential;
                 }
@@ -79,7 +87,8 @@ public final class FarmFinance {
                 double cost = s.upgradeCost(w, g, type);
                 if (cost / potential < bestRatio) {
                     bestRatio = cost / potential;
-                    bestName = def.name + (type == GameState.UPGRADE_SPEED ? " Speed x2" : " Value x2");
+                    bestKind = type == GameState.UPGRADE_SPEED ? BEST_SPEED : BEST_VALUE;
+                    bestGarden = g;
                     bestCost = cost;
                     bestGain = potential;
                 }
@@ -97,9 +106,10 @@ public final class FarmFinance {
         pendingPoints = s.pendingAngels(w);
         ascendFactor = (1 + Worlds.ANGEL_BONUS * (points + pendingPoints)) / pointsMultiplier;
 
-        bestBuy = bestName;
+        bestBuyKind = bestKind;
+        bestBuyGarden = bestGarden;
         bestBuyPayback = bestGain > 0 ? bestCost / bestGain : Double.POSITIVE_INFINITY;
-        bestBuyWait = bestName == null ? 0 : money >= bestCost ? 0 : total > 0 ? (bestCost - money) / total : Double.POSITIVE_INFINITY;
+        bestBuyWait = bestKind == BEST_NONE ? 0 : money >= bestCost ? 0 : total > 0 ? (bestCost - money) / total : Double.POSITIVE_INFINITY;
     }
 
     public static FarmFinance of(GameState state, int world) {

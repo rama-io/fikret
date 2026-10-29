@@ -109,9 +109,9 @@ public class UpgradesActivity extends ListScreenActivity {
         String garden = Worlds.ALL[world].gardens[g].name;
         ViewUpdates.setImageResource((ImageView) row.findViewById(R.id.garden_picture), GardenIcons.forGarden(world, g));
         boolean speed = type == GameState.UPGRADE_SPEED;
-        ViewUpdates.setText((TextView) row.findViewById(R.id.garden_name), garden + (speed ? " Speed x2" : " Value x2"));
+        ViewUpdates.setText((TextView) row.findViewById(R.id.garden_name), getString(speed ? R.string.upgrade_speed_name : R.string.upgrade_value_name, garden));
         int skipped = tier - state.upgradeLevel(world, g, type);
-        ViewUpdates.setText((TextView) row.findViewById(R.id.upgrade_description), (speed ? "Doubles how fast " + garden + " harvests." : "Doubles how much " + garden + " earns.") + (skipped > 0 ? " Includes " + skipped + " cheaper tier" + (skipped > 1 ? "s" : "") + "." : ""));
+        ViewUpdates.setText((TextView) row.findViewById(R.id.upgrade_description), getString(speed ? R.string.upgrade_speed_desc : R.string.upgrade_value_desc, garden) + (skipped > 0 ? " " + getResources().getQuantityString(R.plurals.upgrade_includes_tiers, skipped, skipped) : ""));
 
         double cost = state.upgradeCostAt(world, g, type, tier);
         ViewUpdates.setText((TextView) row.findViewById(R.id.activate_cost), NumberFormatter.money(world, cost));

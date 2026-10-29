@@ -50,7 +50,7 @@
     <TextView
         android:id="@+id/menu_about"
         style="@style/BTN"
-        android:text="About" />
+        android:text="@string/menu_about" />
 
     <View
         style="@style/SeparatorListVertical" />

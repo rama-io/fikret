@@ -347,15 +347,6 @@ public final class GameState {
         return true;
     }
 
-    public boolean hasAnyTravelManager() {
-        for (int w = 0; w < worlds.length; w++) {
-            if (hasTravelManager(w)) {
-                return true;
-            }
-        }
-        return false;
-    }
-
     public boolean hasAccountantList(int w) {
         return Worlds.ALL[w].accountantCosts != null;
     }
@@ -427,10 +418,6 @@ public final class GameState {
 
     public double upgradeCostAt(int w, int g, int type, int tier) {
         return Worlds.upgradePrice(w, tier, type == UPGRADE_SPEED, g);
-    }
-
-    public synchronized boolean buyUpgrade(int w, int g, int type) {
-        return buyUpgrade(w, g, type, upgradeLevel(w, g, type));
     }
 
     public synchronized boolean buyUpgrade(int w, int g, int type, int tier) {

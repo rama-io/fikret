@@ -10,12 +10,12 @@
         <TextView
             style="@style/H3"
             android:singleLine="true"
-            android:text="All farms"
+            android:text="@string/finance_all_farms"
             android:textColor="?attr/accent" />
 
         <TextView
             style="@style/Text"
-            android:text="Counted in Lake money"
+            android:text="@string/finance_counted_in_lake"
             android:textColor="@color/subtle"
             android:textSize="@dimen/small" />
     </LinearLayout>

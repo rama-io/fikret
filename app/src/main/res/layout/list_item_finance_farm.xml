@@ -39,7 +39,7 @@
 
     <TextView
         style="@style/Text"
-        android:text="By garden"
+        android:text="@string/finance_by_garden"
         android:textColor="@color/subtle"
         android:textSize="@dimen/small" />
 

@@ -94,14 +94,6 @@ public class Goose {
         this.teleporting = teleporting;
     }
 
-    public boolean isTeleporting() {
-        return teleporting;
-    }
-
-    public boolean isSwimming() {
-        return swimming;
-    }
-
     public void draw(Canvas canvas, Rect dst) {
         int frame = swimming
                 ? (walkToggle ? FRAME_SWIMMING_A : FRAME_SWIMMING_B)

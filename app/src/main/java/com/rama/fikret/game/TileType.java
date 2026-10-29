@@ -45,10 +45,6 @@ public enum TileType {
         }
     }
 
-    public boolean isWater() {
-        return this == WATER || this == DEEP_WATER;
-    }
-
     public static TileType fromId(int id) {
         for (TileType t : values()) {
             if (t.id == id) {

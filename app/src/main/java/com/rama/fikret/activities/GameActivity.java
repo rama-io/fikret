@@ -14,6 +14,7 @@ import android.widget.FrameLayout;
 import android.widget.ImageButton;
 import android.widget.ImageView;
 
+import com.rama.fikret.R;
 import com.rama.fikret.economy.GameState;
 import com.rama.fikret.game.GameView;
 import com.rama.fikret.game.ItemSheet;
@@ -78,7 +79,7 @@ public class GameActivity extends Activity {
         button.setScaleType(ImageView.ScaleType.FIT_CENTER);
         int pad = Math.round(8 * density);
         button.setPadding(pad, pad, pad, pad);
-        button.setContentDescription("Back to farm");
+        button.setContentDescription(getString(R.string.back_to_farm));
         button.setOnClickListener(v -> finish());
         return button;
     }

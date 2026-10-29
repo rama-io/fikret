@@ -8,7 +8,7 @@ public final class DeveloperMode {
 
     public static final boolean ENABLED = false;
 
-    public static final int AVAILABLE_FARMS = 1;
+    public static final int AVAILABLE_FARMS = 8;
 
     public static int availableFarms() {
         if (ENABLED) {

@@ -101,9 +101,9 @@ public class Main extends Activity {
         updateAscend();
     }
 
-    private static String multiplierLabel() {
+    private String multiplierLabel() {
         int m = MULTIPLIERS[multiplierIndex];
-        return m == GameState.BUY_MAX ? "Max" : m == GameState.BUY_NEXT ? "Next" : "x" + m;
+        return m == GameState.BUY_MAX ? getString(R.string.buy_max) : m == GameState.BUY_NEXT ? getString(R.string.multiplier_next) : getString(R.string.multiplier_x, m);
     }
 
     private void showMenu() {
@@ -197,14 +197,14 @@ public class Main extends Activity {
         int count = state.getCount(w, g);
 
         ViewUpdates.setImageResource((ImageView) row.findViewById(R.id.garden_icon), GardenIcons.forGarden(w, g));
-        ViewUpdates.setText((TextView) row.findViewById(R.id.garden_count), count + " / " + GameState.nextMilestone(count));
+        ViewUpdates.setText((TextView) row.findViewById(R.id.garden_count), getString(R.string.garden_count, count, GameState.nextMilestone(count)));
 
         ProgressBar bar = row.findViewById(R.id.progress_bar);
         int progress = (int) Math.round(state.progress(w, g) * 1000);
         if (bar.getProgress() != progress) {
             bar.setProgress(progress);
         }
-        ViewUpdates.setText((TextView) row.findViewById(R.id.product_value), count > 0 ? NumberFormatter.money(w, state.revenuePerCycle(w, g)) : "Not owned");
+        ViewUpdates.setText((TextView) row.findViewById(R.id.product_value), count > 0 ? NumberFormatter.money(w, state.revenuePerCycle(w, g)) : getString(R.string.not_owned));
         ViewUpdates.setText((TextView) row.findViewById(R.id.duration), state.isRunning(w, g) && state.cycleSeconds(w, g) >= 0.25 ? NumberFormatter.duration(state.timeLeft(w, g)) : NumberFormatter.duration(state.cycleSeconds(w, g)));
 
         int multiplier = MULTIPLIERS[multiplierIndex];
@@ -212,11 +212,11 @@ public class Main extends Activity {
         boolean affordable = quote.amount > 0 && quote.cost <= state.getMoney(w);
         String label;
         if (multiplier == GameState.BUY_MAX) {
-            label = "Buy Max" + (quote.amount > 0 ? " (" + quote.amount + ")" : "");
+            label = quote.amount > 0 ? getString(R.string.buy_max_amount, quote.amount) : getString(R.string.buy_max_label);
         } else if (multiplier == GameState.BUY_NEXT) {
-            label = "Buy Next (" + quote.amount + ")";
+            label = getString(R.string.buy_next_amount, quote.amount);
         } else {
-            label = "Buy x" + multiplier;
+            label = getString(R.string.buy_x, multiplier);
         }
         ViewUpdates.setText((TextView) row.findViewById(R.id.buy_label), label);
         ViewUpdates.setText((TextView) row.findViewById(R.id.buy_cost), NumberFormatter.money(w, quote.cost));

@@ -41,10 +41,6 @@ public class Bird {
         this.swimming = swimming;
     }
 
-    public boolean isSwimming() {
-        return swimming;
-    }
-
     public void teleportTo(int newRow, int newCol) {
         row = fromRow = newRow;
         col = fromCol = newCol;
