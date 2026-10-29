@@ -1,75 +1,190 @@
 <?xml version="1.0" encoding="utf-8"?>
-<LinearLayout xmlns:android="http://schemas.android.com/apk/res/android"
-    style="@style/VerticalList_BG2">
+<com.rama.fikret.widgets.WdCollapsibleSection xmlns:android="http://schemas.android.com/apk/res/android"
+    xmlns:app="http://schemas.android.com/apk/res-auto"
+    android:id="@+id/farm_section"
+    android:layout_width="match_parent"
+    android:layout_height="wrap_content"
+    app:defaultExpanded="true">
 
-    <LinearLayout style="@style/HorizontalList">
-
-        <TextView
-            android:id="@+id/farm_name"
-            android:layout_width="0dp"
-            android:layout_height="wrap_content"
-            android:layout_weight="1"
-            android:singleLine="true"
-            android:textColor="?attr/accent"
-            android:textSize="@dimen/h3" />
+    <LinearLayout
+        android:id="@+id/farm_best_group"
+        style="@style/VerticalList">
 
         <TextView
-            android:id="@+id/farm_income"
-            android:layout_width="wrap_content"
-            android:layout_height="wrap_content"
-            android:singleLine="true"
-            android:textColor="@color/text"
-            android:textSize="@dimen/h3" />
+            style="@style/Text"
+            android:text="@string/finance_best_buy_title" />
+
+        <View style="@style/SeparatorListVertical" />
+
+        <LinearLayout style="@style/VerticalList_BG2">
+
+            <TextView
+                android:id="@+id/best_buy_name"
+                android:textColor="?attr/accent"
+                style="@style/H3" />
+
+            <View style="@style/SeparatorListVertical" />
+
+            <LinearLayout style="@style/HorizontalList">
+
+                <TextView
+                    style="@style/Text"
+                    android:layout_width="wrap_content"
+                    android:text="@string/finance_afford_in" />
+
+                <TextView
+                    android:id="@+id/afford_timer"
+                    style="@style/Text"
+                    android:layout_width="0dp"
+                    android:layout_weight="1"
+                    android:gravity="end" />
+            </LinearLayout>
+
+            <View style="@style/SeparatorListVertical" />
+
+            <LinearLayout style="@style/HorizontalList">
+
+                <TextView
+                    style="@style/Text"
+                    android:layout_width="wrap_content"
+                    android:text="@string/finance_pays_back" />
+
+                <TextView
+                    android:id="@+id/pays_back"
+                    style="@style/Text"
+                    android:layout_width="0dp"
+                    android:layout_weight="1"
+                    android:gravity="end" />
+            </LinearLayout>
+        </LinearLayout>
     </LinearLayout>
 
+    <View style="@style/SeparatorListVertical" />
+
     <TextView
-        android:id="@+id/farm_rates"
         style="@style/Text"
-        android:gravity="end"
-        android:textColor="@color/subtle"
-        android:textSize="@dimen/small" />
+        android:text="@string/finance_summary" />
 
     <View style="@style/SeparatorListVertical" />
 
     <LinearLayout
         android:id="@+id/farm_sources"
-        style="@style/VerticalList" />
+        style="@style/VerticalList_BG2" />
 
     <View style="@style/SeparatorListVertical" />
 
     <TextView
         style="@style/Text"
-        android:text="By garden"
-        android:textColor="@color/subtle"
-        android:textSize="@dimen/small" />
+        android:text="@string/finance_gardens" />
+
+    <View style="@style/SeparatorListVertical" />
 
     <LinearLayout
         android:id="@+id/farm_gardens"
-        style="@style/VerticalList" />
+        style="@style/VerticalList_BG2" />
 
     <View style="@style/SeparatorListVertical" />
 
     <TextView
-        android:id="@+id/farm_points"
-        style="@style/Text" />
-
-    <TextView
-        android:id="@+id/farm_ascend"
         style="@style/Text"
-        android:textColor="@color/subtle" />
+        android:text="@string/finance_ascension" />
+
+    <View style="@style/SeparatorListVertical" />
+
+    <LinearLayout style="@style/VerticalList_BG2">
+
+        <LinearLayout style="@style/HorizontalList">
+
+            <TextView
+                style="@style/Text"
+                android:layout_width="wrap_content"
+                android:text="@string/finance_farm_points" />
+
+            <TextView
+                android:id="@+id/farm_points"
+                style="@style/Text"
+                android:layout_width="0dp"
+                android:layout_weight="1"
+                android:gravity="end" />
+        </LinearLayout>
+
+        <View style="@style/SeparatorListVertical" />
+
+        <LinearLayout style="@style/HorizontalList">
+
+            <TextView
+                style="@style/Text"
+                android:layout_width="wrap_content"
+                android:text="@string/finance_farm_points_profit" />
+
+            <TextView
+                android:id="@+id/farm_points_profit"
+                style="@style/Text"
+                android:layout_width="0dp"
+                android:layout_weight="1"
+                android:gravity="end" />
+        </LinearLayout>
+
+    </LinearLayout>
+
+    <View style="@style/SeparatorListVertical" />
 
     <TextView
-        android:id="@+id/farm_idle"
         style="@style/Text"
-        android:textColor="@color/warning" />
+        android:text="@string/finance_total" />
 
-    <TextView
-        android:id="@+id/farm_best"
-        style="@style/Text" />
+    <View style="@style/SeparatorListVertical" />
 
-    <TextView
-        android:id="@+id/farm_lifetime"
-        style="@style/Text"
-        android:textColor="@color/subtle"
-        android:textSize="@dimen/small" />
-</LinearLayout>
+    <LinearLayout style="@style/VerticalList_BG2">
+
+        <LinearLayout style="@style/HorizontalList">
+
+            <TextView
+                style="@style/Text"
+                android:layout_width="wrap_content"
+                android:text="@string/finance_gain_second" />
+
+            <TextView
+                android:id="@+id/gain_second"
+                style="@style/Text"
+                android:layout_width="0dp"
+                android:layout_weight="1"
+                android:gravity="end" />
+        </LinearLayout>
+
+        <View style="@style/SeparatorListVertical" />
+
+        <LinearLayout style="@style/HorizontalList">
+
+            <TextView
+                style="@style/Text"
+                android:layout_width="wrap_content"
+                android:text="@string/finance_gain_minute" />
+
+            <TextView
+                android:id="@+id/gain_minute"
+                style="@style/Text"
+                android:layout_width="0dp"
+                android:layout_weight="1"
+                android:gravity="end" />
+        </LinearLayout>
+
+        <View style="@style/SeparatorListVertical" />
+
+        <LinearLayout style="@style/HorizontalList">
+
+            <TextView
+                style="@style/Text"
+                android:layout_width="wrap_content"
+                android:text="@string/finance_gain_hour" />
+
+            <TextView
+                android:id="@+id/gain_hour"
+                style="@style/Text"
+                android:layout_width="0dp"
+                android:layout_weight="1"
+                android:gravity="end" />
+        </LinearLayout>
+
+    </LinearLayout>
+</com.rama.fikret.widgets.WdCollapsibleSection>

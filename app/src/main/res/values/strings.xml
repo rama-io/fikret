@@ -31,4 +31,60 @@
     <string name="rescued">Rescued</string>
     <string name="buy_max">Max</string>
     <string name="btn_go_back">Go back</string>
+
+    <string name="menu_about">About</string>
+    <string name="back_to_farm">Back to farm</string>
+    <string name="not_owned">Not owned</string>
+    <string name="garden_count">%1$d / %2$d</string>
+
+    <string name="multiplier_next">Next</string>
+    <string name="multiplier_x">x%1$d</string>
+    <string name="buy_max_label">Buy Max</string>
+    <string name="buy_max_amount">Buy Max (%1$d)</string>
+    <string name="buy_next_amount">Buy Next (%1$d)</string>
+    <string name="buy_x">Buy x%1$d</string>
+
+    <string name="guide_bird_name">Guide Bird</string>
+    <string name="guide_bird_desc">Leads you to the next world.</string>
+    <string name="supervisor_name">%1$s supervisor</string>
+    <string name="supervisor_desc">Harvests your %1$s automatically.</string>
+    <string name="accountant_name">%1$s accountant</string>
+    <string name="accountant_desc">Makes %1$s cost 10%% less.</string>
+    <string name="discount_name">%1$s discount</string>
+    <string name="discount_desc">Makes %1$s cost 99.999%% less.</string>
+
+    <string name="upgrade_speed_name">%1$s Speed x2</string>
+    <string name="upgrade_value_name">%1$s Value x2</string>
+    <string name="upgrade_speed_desc">Doubles how fast %1$s harvests.</string>
+    <string name="upgrade_value_desc">Doubles how much %1$s earns.</string>
+    <plurals name="upgrade_includes_tiers">
+        <item quantity="one">Includes %1$d cheaper tier.</item>
+        <item quantity="other">Includes %1$d cheaper tiers.</item>
+    </plurals>
+
+    <string name="finance_counted_in_lake">Counted in Lake money</string>
+    <string name="source_base">Base</string>
+    <string name="source_upgrades">Upgrades</string>
+    <string name="source_milestones">Milestones</string>
+    <string name="source_points">Farm Points</string>
+    <string name="per_second">%1$s/s</string>
+    <string name="duration_never">never</string>
+    <string name="duration_days">%1$s days</string>
+
+    <string name="label_collapse_indicator">[-]</string>
+    <string name="label_expand_indicator">[+]</string>
+    <string name="finance_summary">Summary</string>
+    <string name="finance_gardens">Gardens</string>
+    <string name="finance_ascension">Ascension</string>
+    <string name="finance_farm_points">Farm Points</string>
+    <string name="finance_farm_points_profit">Farm Points Profit</string>
+    <string name="finance_best_buy_title">Best Buy</string>
+    <string name="finance_afford_in">You can afford it in:</string>
+    <string name="finance_afford_now">Now</string>
+    <string name="finance_pays_back">Pays back in:</string>
+    <string name="finance_total">Total</string>
+    <string name="finance_gain_second">Gain per Second</string>
+    <string name="finance_gain_minute">Gain per Minute</string>
+    <string name="finance_gain_hour">Gain per Hour</string>
+    <string name="finance_profit_bonus">+%1$s%%</string>
 </resources>

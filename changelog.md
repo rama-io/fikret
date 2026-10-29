@@ -1,12 +1,17 @@
 # Changelog
 
-## 4
+## 5
 
 - Release forest farm
 
+## 4
+
+- Fix affordability issue. upgrades and gardens used to be lock at some point now if you can afford it you can buy it.
+- Redesign finance view.
+
 ## 3
 
-- Finance view
+- Add finance view
 
 ## 2
 

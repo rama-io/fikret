@@ -21,14 +21,7 @@ public final class BirdSheets {
             0xf87b1b, // beak
             0x652e03, // feet
     };
-    private static final int[] FARM_ATTRS = {
-            R.attr.supervisorBody,
-            R.attr.supervisorShade,
-            R.attr.supervisorLight,
-            R.attr.supervisorOutline,
-            R.attr.supervisorBeak,
-            R.attr.supervisorFeet,
-    };
+    private static final int[] FARM_ATTRS = {R.attr.supervisorBody, R.attr.supervisorShade, R.attr.supervisorLight, R.attr.supervisorOutline, R.attr.supervisorBeak, R.attr.supervisorFeet,};
 
     private static final int TOLERANCE_SQ = 30 * 30 * 3;
 

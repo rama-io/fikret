@@ -50,14 +50,13 @@
     <TextView
         android:id="@+id/menu_about"
         style="@style/BTN"
-        android:text="About" />
+        android:text="@string/menu_about" />
 
-    <View
-        style="@style/SeparatorListVertical" />
+    <View style="@style/Separator" />
 
     <TextView
         android:id="@+id/cancel"
         style="@style/BTN"
-        android:text="@string/cancel" />
+        android:text="@string/btn_go_back" />
 
 </LinearLayout>

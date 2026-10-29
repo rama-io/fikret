@@ -31,13 +31,6 @@ public class SpriteSheet {
         return new SpriteSheet(bitmap, columns, rows);
     }
 
-    public static SpriteSheet withSquareCellsByColumns(Resources res, int resId, int columns) {
-        Bitmap bitmap = decode(res, resId);
-        int cell = bitmap.getWidth() / columns;
-        int rows = Math.max(1, Math.round(bitmap.getHeight() / (float) cell));
-        return new SpriteSheet(bitmap, columns, rows);
-    }
-
     private static Bitmap decode(Resources res, int resId) {
         BitmapFactory.Options opts = new BitmapFactory.Options();
         opts.inScaled = false;

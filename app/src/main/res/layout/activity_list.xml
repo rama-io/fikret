@@ -11,27 +11,14 @@
 
     <LinearLayout style="@style/HorizontalList">
 
-        <FrameLayout
-            android:id="@+id/back"
-            android:layout_width="wrap_content"
-            android:layout_height="wrap_content"
-            android:padding="@dimen/space_between_elements"
-            >
-
-            <ImageView
-                style="@style/Icon18"
-                android:contentDescription="@null"
-                android:src="@drawable/px_times" />
-        </FrameLayout>
-
         <TextView
             android:id="@+id/title"
+            style="@style/H2"
             android:layout_width="0dp"
             android:layout_height="wrap_content"
             android:layout_weight="1"
             android:singleLine="true"
-            android:textColor="?attr/accent"
-            android:textSize="@dimen/h2" />
+            android:textColor="?attr/accent" />
 
         <TextView
             android:id="@+id/money"
@@ -62,5 +49,12 @@
             style="@style/H2_Center"
             android:layout_gravity="center" />
     </FrameLayout>
+
+    <View style="@style/Separator" />
+
+    <Button
+        android:id="@+id/back"
+        style="@style/BTN"
+        android:text="@string/btn_go_back" />
 
 </LinearLayout>
