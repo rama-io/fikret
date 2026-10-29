@@ -25,12 +25,15 @@ import com.rama.fikret.helpers.GardenIcons;
 import com.rama.fikret.helpers.SystemBars;
 import com.rama.fikret.helpers.ViewUpdates;
 import com.rama.fikret.managers.FontManager;
+import com.rama.fikret.managers.PrefsManager;
 
 public class Main extends Activity {
     private static final long TICK_MS = 100;
     private static final int[] MULTIPLIERS = {1, GameState.BUY_NEXT, GameState.BUY_MAX};
 
-    private static int multiplierIndex = 0;
+    private static final String PREF_MULTIPLIER = "main:multiplier";
+
+    private int multiplierIndex;
 
     private GameState state;
     private TextView moneyText;
@@ -62,10 +65,13 @@ public class Main extends Activity {
 
         moneyText = findViewById(R.id.money);
         multiplierButton = findViewById(R.id.multiplier);
+        int saved = PrefsManager.getInstance(this).getInt(PREF_MULTIPLIER, 0);
+        multiplierIndex = saved >= 0 && saved < MULTIPLIERS.length ? saved : 0;
 
         findViewById(R.id.menu).setOnClickListener(v -> showMenu());
         multiplierButton.setOnClickListener(v -> {
             multiplierIndex = (multiplierIndex + 1) % MULTIPLIERS.length;
+            PrefsManager.getInstance(this).setInt(PREF_MULTIPLIER, multiplierIndex);
             refresh();
         });
 

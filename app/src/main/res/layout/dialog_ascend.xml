@@ -69,11 +69,11 @@
         style="@style/BTN"
         android:text="@string/ascend_confirm" />
 
-    <View style="@style/SeparatorListVertical" />
+    <View style="@style/Separator" />
 
     <TextView
         android:id="@+id/ascend_cancel"
         style="@style/BTN"
-        android:text="@string/cancel" />
+        android:text="@string/btn_go_back" />
 
 </LinearLayout>

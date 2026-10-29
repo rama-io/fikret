@@ -62,23 +62,29 @@
         <item quantity="other">Includes %1$d cheaper tiers.</item>
     </plurals>
 
-    <string name="finance_by_garden">By garden</string>
-    <string name="finance_all_farms">All farms</string>
     <string name="finance_counted_in_lake">Counted in Lake money</string>
     <string name="source_base">Base</string>
     <string name="source_upgrades">Upgrades</string>
     <string name="source_milestones">Milestones</string>
-    <string name="source_points">Points</string>
+    <string name="source_points">Farm Points</string>
     <string name="per_second">%1$s/s</string>
-    <string name="income_rates">%1$s/min  ·  %2$s/h</string>
-    <string name="finance_points">Points: %1$s  (+%2$s%% profit)</string>
-    <string name="finance_ascend_gain">On ascend: +%1$s points, profit x%2$s</string>
-    <string name="finance_ascend_none">On ascend: nothing to gain yet</string>
-    <string name="finance_idle">Idle gardens: +%1$s/s with a supervisor</string>
-    <string name="finance_best_buy">Best buy: %1$s, pays back in %2$s. %3$s</string>
-    <string name="finance_afford_now">You can afford it now.</string>
-    <string name="finance_afford_in">Affordable in %1$s.</string>
-    <string name="finance_lifetime">Earned in total: %1$s</string>
     <string name="duration_never">never</string>
     <string name="duration_days">%1$s days</string>
+
+    <string name="label_collapse_indicator">[-]</string>
+    <string name="label_expand_indicator">[+]</string>
+    <string name="finance_summary">Summary</string>
+    <string name="finance_gardens">Gardens</string>
+    <string name="finance_ascension">Ascension</string>
+    <string name="finance_farm_points">Farm Points</string>
+    <string name="finance_farm_points_profit">Farm Points Profit</string>
+    <string name="finance_best_buy_title">Best Buy</string>
+    <string name="finance_afford_in">You can afford it in:</string>
+    <string name="finance_afford_now">Now</string>
+    <string name="finance_pays_back">Pays back in:</string>
+    <string name="finance_total">Total</string>
+    <string name="finance_gain_second">Gain per Second</string>
+    <string name="finance_gain_minute">Gain per Minute</string>
+    <string name="finance_gain_hour">Gain per Hour</string>
+    <string name="finance_profit_bonus">+%1$s%%</string>
 </resources>

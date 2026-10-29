@@ -7,6 +7,7 @@
 ## 4
 
 - Fix affordability issue. upgrades and gardens used to be lock at some point now if you can afford it you can buy it.
+- Redesign finance view.
 
 ## 3
 

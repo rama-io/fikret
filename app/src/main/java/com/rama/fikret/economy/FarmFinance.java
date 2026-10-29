@@ -13,14 +13,10 @@ public final class FarmFinance {
     public final double income;
     public final double[] bySource = new double[SOURCES];
     public final double[] byGarden = new double[Worlds.GARDENS_PER_WORLD];
-    public final double idleIncome;
     public final double lakeIncome;
-    public final double lifetime;
 
     public final double points;
     public final double pointsBonusPercent;
-    public final double pendingPoints;
-    public final double ascendFactor;
     public static final int BEST_NONE = -1;
     public static final int BEST_SUPERVISOR = 0;
     public static final int BEST_SPEED = 1;
@@ -36,7 +32,6 @@ public final class FarmFinance {
         double pointsMultiplier = s.angelBonus(w);
         double lnPoints = Math.log(pointsMultiplier);
         double total = 0;
-        double idle = 0;
         double money = s.getMoney(w);
 
         int bestKind = BEST_NONE;
@@ -54,7 +49,6 @@ public final class FarmFinance {
             double potential = s.revenuePerSecond(w, g);
 
             if (!s.hasManager(w, g)) {
-                idle += potential;
                 double cost = s.managerCost(w, g);
                 if (cost / potential < bestRatio) {
                     bestRatio = cost / potential;
@@ -97,14 +91,10 @@ public final class FarmFinance {
         bySource[SOURCE_BASE] = total - bySource[SOURCE_UPGRADES] - bySource[SOURCE_MILESTONES] - bySource[SOURCE_POINTS];
 
         income = total;
-        idleIncome = idle;
         lakeIncome = total * Worlds.START_MONEY / Worlds.ALL[w].startMoney;
-        lifetime = s.getLifetimeEarnings(w);
 
         points = s.getAngels(w);
         pointsBonusPercent = (pointsMultiplier - 1) * 100;
-        pendingPoints = s.pendingAngels(w);
-        ascendFactor = (1 + Worlds.ANGEL_BONUS * (points + pendingPoints)) / pointsMultiplier;
 
         bestBuyKind = bestKind;
         bestBuyGarden = bestGarden;
@@ -117,12 +107,10 @@ public final class FarmFinance {
     }
 
     public int[] gardensByIncome() {
-        int n = 0;
-        int[] order = new int[byGarden.length];
-        for (int g = 0; g < byGarden.length; g++) {
-            if (byGarden[g] > 0) {
-                order[n++] = g;
-            }
+        int n = byGarden.length;
+        int[] order = new int[n];
+        for (int g = 0; g < n; g++) {
+            order[g] = g;
         }
         for (int i = 1; i < n; i++) {
             int key = order[i];
@@ -133,6 +121,6 @@ public final class FarmFinance {
             }
             order[j + 1] = key;
         }
-        return java.util.Arrays.copyOf(order, n);
+        return order;
     }
 }

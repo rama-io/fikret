@@ -14,21 +14,20 @@ import com.rama.fikret.economy.NumberFormatter;
 import com.rama.fikret.economy.Worlds;
 import com.rama.fikret.helpers.DeveloperMode;
 import com.rama.fikret.helpers.ViewUpdates;
+import com.rama.fikret.widgets.WdCollapsibleSection;
 
 import java.util.ArrayList;
 import java.util.List;
 import java.util.Locale;
 
 public class FinanceActivity extends ListScreenActivity {
-    private static final int TYPE_FARM = 0;
-    private static final int TYPE_SUMMARY = 1;
-
     private static final int[] SOURCE_NAMES = {R.string.source_base, R.string.source_upgrades, R.string.source_milestones, R.string.source_points};
 
     private final List<FarmFinance> farms = new ArrayList<>();
 
     private static final class Bar {
         View root;
+        View gap;
         TextView label;
         TextView value;
         TextView percent;
@@ -36,16 +35,19 @@ public class FinanceActivity extends ListScreenActivity {
     }
 
     private static final class FarmHolder {
-        TextView name;
-        TextView income;
-        TextView rates;
-        TextView points;
-        TextView ascend;
-        TextView idle;
-        TextView best;
-        TextView lifetime;
+        WdCollapsibleSection section;
+        int world = -1;
         final Bar[] sources = new Bar[FarmFinance.SOURCES];
         final Bar[] gardens = new Bar[Worlds.GARDENS_PER_WORLD];
+        TextView points;
+        TextView pointsProfit;
+        View bestGroup;
+        TextView bestName;
+        TextView afford;
+        TextView paysBack;
+        TextView gainSecond;
+        TextView gainMinute;
+        TextView gainHour;
     }
 
     @Override
@@ -82,13 +84,8 @@ public class FinanceActivity extends ListScreenActivity {
         return false;
     }
 
-    private boolean hasSummary() {
-        return farms.size() >= 2;
-    }
-
     private FarmFinance farmAt(int position) {
-        int index = hasSummary() ? position - 1 : position;
-        return index >= 0 && index < farms.size() ? farms.get(index) : null;
+        return position >= 0 && position < farms.size() ? farms.get(position) : null;
     }
 
     @Override
@@ -104,7 +101,7 @@ public class FinanceActivity extends ListScreenActivity {
         return new BaseAdapter() {
             @Override
             public int getCount() {
-                return farms.size() + (hasSummary() ? 1 : 0);
+                return farms.size();
             }
 
             @Override
@@ -123,15 +120,10 @@ public class FinanceActivity extends ListScreenActivity {
             }
 
             @Override
-            public int getItemViewType(int position) {
-                return hasSummary() && position == 0 ? TYPE_SUMMARY : TYPE_FARM;
-            }
-
-            @Override
             public View getView(int position, View convertView, ViewGroup parent) {
                 View row = convertView;
                 if (row == null) {
-                    row = getItemViewType(position) == TYPE_SUMMARY ? inflateSummary(parent) : inflateFarm(parent);
+                    row = inflateFarm(parent);
                 }
                 bindRow(row, position);
                 return row;
@@ -139,63 +131,45 @@ public class FinanceActivity extends ListScreenActivity {
         };
     }
 
-    private View inflateSummary(ViewGroup parent) {
-        View row = LayoutInflater.from(this).inflate(R.layout.list_item_finance_summary, parent, false);
-        applyFont(row);
-        return row;
-    }
-
     private View inflateFarm(ViewGroup parent) {
         LayoutInflater inflater = LayoutInflater.from(this);
         View row = inflater.inflate(R.layout.list_item_finance_farm, parent, false);
         FarmHolder h = new FarmHolder();
-        h.name = row.findViewById(R.id.farm_name);
-        h.income = row.findViewById(R.id.farm_income);
-        h.rates = row.findViewById(R.id.farm_rates);
+        h.section = (WdCollapsibleSection) row;
         h.points = row.findViewById(R.id.farm_points);
-        h.ascend = row.findViewById(R.id.farm_ascend);
-        h.idle = row.findViewById(R.id.farm_idle);
-        h.best = row.findViewById(R.id.farm_best);
-        h.lifetime = row.findViewById(R.id.farm_lifetime);
-        LinearLayout sources = row.findViewById(R.id.farm_sources);
-        for (int i = 0; i < h.sources.length; i++) {
-            h.sources[i] = inflateBar(inflater, sources);
-        }
-        LinearLayout gardens = row.findViewById(R.id.farm_gardens);
-        for (int i = 0; i < h.gardens.length; i++) {
-            h.gardens[i] = inflateBar(inflater, gardens);
-        }
+        h.pointsProfit = row.findViewById(R.id.farm_points_profit);
+        h.bestGroup = row.findViewById(R.id.farm_best_group);
+        h.bestName = row.findViewById(R.id.best_buy_name);
+        h.afford = row.findViewById(R.id.afford_timer);
+        h.paysBack = row.findViewById(R.id.pays_back);
+        h.gainSecond = row.findViewById(R.id.gain_second);
+        h.gainMinute = row.findViewById(R.id.gain_minute);
+        h.gainHour = row.findViewById(R.id.gain_hour);
+        fillBars(inflater, (LinearLayout) row.findViewById(R.id.farm_sources), h.sources);
+        fillBars(inflater, (LinearLayout) row.findViewById(R.id.farm_gardens), h.gardens);
         applyFont(row);
         row.setTag(h);
         return row;
     }
 
-    private Bar inflateBar(LayoutInflater inflater, LinearLayout parent) {
-        Bar bar = new Bar();
-        bar.root = inflater.inflate(R.layout.list_item_finance_bar, parent, false);
-        bar.label = bar.root.findViewById(R.id.bar_label);
-        bar.value = bar.root.findViewById(R.id.bar_value);
-        bar.percent = bar.root.findViewById(R.id.bar_percent);
-        bar.fill = bar.root.findViewById(R.id.bar_fill);
-        parent.addView(bar.root);
-        return bar;
+    private void fillBars(LayoutInflater inflater, LinearLayout parent, Bar[] bars) {
+        for (int i = 0; i < bars.length; i++) {
+            Bar bar = new Bar();
+            View root = inflater.inflate(R.layout.list_item_finance_bar, parent, false);
+            bar.gap = root.findViewById(R.id.bar_gap);
+            bar.label = root.findViewById(R.id.bar_label);
+            bar.value = root.findViewById(R.id.bar_value);
+            bar.percent = root.findViewById(R.id.bar_percent);
+            bar.fill = root.findViewById(R.id.bar_fill);
+            bar.gap.setVisibility(i == 0 ? View.GONE : View.VISIBLE);
+            bar.root = root;
+            parent.addView(root);
+            bars[i] = bar;
+        }
     }
 
     @Override
     protected void bindRow(View row, int position) {
-        boolean summary = hasSummary() && position == 0;
-        if (summary) {
-            View income = row.findViewById(R.id.summary_income);
-            if (income != null) {
-                double lake = 0;
-                for (FarmFinance f : farms) {
-                    lake += f.lakeIncome;
-                }
-                ViewUpdates.setText((TextView) income,
-                        getString(R.string.per_second, NumberFormatter.money(Worlds.ANGEL_WORLD, lake)));
-            }
-            return;
-        }
         FarmFinance f = farmAt(position);
         if (f == null || !(row.getTag() instanceof FarmHolder)) {
             return;
@@ -205,10 +179,11 @@ public class FinanceActivity extends ListScreenActivity {
 
     private void bindFarm(FarmHolder h, FarmFinance f) {
         int w = f.world;
-        ViewUpdates.setText(h.name, Worlds.ALL[w].name);
-        ViewUpdates.setText(h.income, getString(R.string.per_second, NumberFormatter.money(w, f.income)));
-        ViewUpdates.setText(h.rates, getString(R.string.income_rates,
-                NumberFormatter.number(f.income * 60), NumberFormatter.number(f.income * 3600)));
+        if (h.world != w) {
+            h.world = w;
+            h.section.setHeader(Worlds.ALL[w].name);
+            h.section.setKey("finance:section:" + w, true);
+        }
 
         for (int i = 0; i < h.sources.length; i++) {
             double value = f.bySource[i];
@@ -221,36 +196,24 @@ public class FinanceActivity extends ListScreenActivity {
 
         int[] order = f.gardensByIncome();
         for (int i = 0; i < h.gardens.length; i++) {
-            boolean show = i < order.length;
-            h.gardens[i].root.setVisibility(show ? View.VISIBLE : View.GONE);
-            if (show) {
-                int g = order[i];
-                bindBar(h.gardens[i], Worlds.ALL[w].gardens[g].name, w, f.byGarden[g], f.income);
-            }
+            int g = order[i];
+            bindBar(h.gardens[i], Worlds.ALL[w].gardens[g].name, w, f.byGarden[g], f.income);
         }
 
-        ViewUpdates.setText(h.points, getString(R.string.finance_points,
-                NumberFormatter.number(f.points), NumberFormatter.number(f.pointsBonusPercent)));
-        ViewUpdates.setText(h.ascend, f.pendingPoints > 0
-                ? getString(R.string.finance_ascend_gain,
-                NumberFormatter.number(f.pendingPoints), NumberFormatter.number(f.ascendFactor))
-                : getString(R.string.finance_ascend_none));
+        ViewUpdates.setText(h.points, NumberFormatter.number(f.points));
+        ViewUpdates.setText(h.pointsProfit, getString(R.string.finance_profit_bonus, NumberFormatter.number(f.pointsBonusPercent)));
 
-        h.idle.setVisibility(f.idleIncome > 0 ? View.VISIBLE : View.GONE);
-        ViewUpdates.setText(h.idle, getString(R.string.finance_idle,
-                NumberFormatter.money(w, f.idleIncome)));
-
-        if (f.bestBuyKind == FarmFinance.BEST_NONE) {
-            h.best.setVisibility(View.GONE);
-        } else {
-            h.best.setVisibility(View.VISIBLE);
-            ViewUpdates.setText(h.best, getString(R.string.finance_best_buy,
-                    bestBuyName(f, w), longDuration(f.bestBuyPayback),
-                    f.bestBuyWait <= 0 ? getString(R.string.finance_afford_now)
-                            : getString(R.string.finance_afford_in, longDuration(f.bestBuyWait))));
+        boolean hasBest = f.bestBuyKind != FarmFinance.BEST_NONE;
+        h.bestGroup.setVisibility(hasBest ? View.VISIBLE : View.GONE);
+        if (hasBest) {
+            ViewUpdates.setText(h.bestName, bestBuyName(f, w));
+            ViewUpdates.setText(h.afford, f.bestBuyWait <= 0 ? getString(R.string.finance_afford_now) : longDuration(f.bestBuyWait));
+            ViewUpdates.setText(h.paysBack, longDuration(f.bestBuyPayback));
         }
 
-        ViewUpdates.setText(h.lifetime, getString(R.string.finance_lifetime, NumberFormatter.money(w, f.lifetime)));
+        ViewUpdates.setText(h.gainSecond, NumberFormatter.money(w, f.income));
+        ViewUpdates.setText(h.gainMinute, NumberFormatter.money(w, f.income * 60));
+        ViewUpdates.setText(h.gainHour, NumberFormatter.money(w, f.income * 3600));
     }
 
     private String bestBuyName(FarmFinance f, int w) {
@@ -268,7 +231,7 @@ public class FinanceActivity extends ListScreenActivity {
     private void bindBar(Bar bar, String label, int w, double value, double total) {
         double share = total > 0 ? value / total : 0;
         ViewUpdates.setText(bar.label, label);
-        ViewUpdates.setText(bar.value, getString(R.string.per_second, NumberFormatter.money(w, value)));
+        ViewUpdates.setText(bar.value, NumberFormatter.money(w, value));
         ViewUpdates.setText(bar.percent, percent(share));
         int progress = (int) Math.round(Math.min(1, share) * 1000);
         if (bar.fill.getProgress() != progress) {
