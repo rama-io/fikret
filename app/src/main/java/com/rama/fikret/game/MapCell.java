@@ -37,6 +37,7 @@ public class MapCell {
     public boolean hasBackground() {
         return backgroundTile != TileType.NONE;
     }
+
     public boolean hasItem() {
         return item != ItemType.NONE;
     }

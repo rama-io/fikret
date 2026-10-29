@@ -48,12 +48,10 @@ public abstract class ListScreenActivity extends Activity {
         return "";
     }
 
-    /** Text shown when the list has no rows. */
     protected String emptyText() {
         return "";
     }
 
-    /** Called every tick before the visible rows are rebound; screens whose row set changes on its own hook in here. */
     protected void onTick() {
     }
 

@@ -4,7 +4,6 @@ public class GameMap {
     public static final int TILE_SIZE = 64;
 
     private final MapCell[][] cells;
-    private final int[][] raw;
     private final int rows;
     private final int cols;
 
@@ -12,25 +11,14 @@ public class GameMap {
         this.rows = rawData.length;
         this.cols = rawData[0].length;
         this.cells = new MapCell[rows][cols];
-        this.raw = new int[rows][cols];
         for (int r = 0; r < rows; r++) {
             if (rawData[r].length != cols) {
                 throw new IllegalArgumentException("Map row " + r + " has a different length than row 0 - all rows must be the same length.");
             }
             for (int c = 0; c < cols; c++) {
-                raw[r][c] = rawData[r][c];
                 cells[r][c] = new MapCell(rawData[r][c]);
             }
         }
-    }
-
-    public boolean addItem(int row, int col, ItemType item) {
-        if (!isInBounds(row, col) || cells[row][col].hasItem()) {
-            return false;
-        }
-        raw[row][col] += item.id * 1000000;
-        cells[row][col] = new MapCell(raw[row][col]);
-        return true;
     }
 
     public MapCell getCell(int row, int col) {

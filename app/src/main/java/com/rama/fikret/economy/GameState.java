@@ -192,7 +192,6 @@ public final class GameState {
         return 1 + Worlds.ANGEL_BONUS * angels[w];
     }
 
-    /** Points a farm has earned in total, with its earnings converted to Lake money first. */
     public static double angelsForEarnings(int w, double lifetime) {
         double lakeMoney = Math.max(0, lifetime) * Worlds.START_MONEY / Worlds.ALL[w].startMoney;
         return Math.floor(Math.sqrt(lakeMoney / Worlds.ANGEL_DIVISOR));
@@ -202,7 +201,6 @@ public final class GameState {
         return Math.max(0, angelsForEarnings(w, lifetimeEarnings[w]) - angelsClaimed[w]);
     }
 
-    /** Restarts farm {@code w} in exchange for that farm's points. Supervisors, discount managers, accountants and guide birds stay. */
     public synchronized boolean ascend(int w) {
         sync();
         double gain = pendingAngels(w);
@@ -214,7 +212,6 @@ public final class GameState {
         money[w] = Worlds.ALL[w].startMoney;
         for (Garden garden : worlds[w].gardens) {
             garden.count = 0;
-            // garden.manager and garden.discount are kept: supervisors and discount managers are permanent.
             garden.speedLevel = 0;
             garden.valueLevel = 0;
             garden.elapsed = 0;
@@ -350,15 +347,6 @@ public final class GameState {
         return true;
     }
 
-    public boolean hasAnyTravelManager() {
-        for (int w = 0; w < worlds.length; w++) {
-            if (hasTravelManager(w)) {
-                return true;
-            }
-        }
-        return false;
-    }
-
     public boolean hasAccountantList(int w) {
         return Worlds.ALL[w].accountantCosts != null;
     }
@@ -432,9 +420,6 @@ public final class GameState {
         return Worlds.upgradePrice(w, tier, type == UPGRADE_SPEED, g);
     }
 
-    public synchronized boolean buyUpgrade(int w, int g, int type) {
-        return buyUpgrade(w, g, type, upgradeLevel(w, g, type));
-    }
     public synchronized boolean buyUpgrade(int w, int g, int type, int tier) {
         sync();
         int level = upgradeLevel(w, g, type);

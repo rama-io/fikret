@@ -43,7 +43,9 @@ public class GameView extends SurfaceView implements SurfaceHolder.Callback {
     private static final long CAMERA_GLIDE_MIN_MS = 250;
     private static final long CAMERA_GLIDE_MAX_MS = 600;
     private static final float CAMERA_GLIDE_SPEED = 4f;
-    private enum TeleportKind { HOME, ARRIVE }
+
+    private enum TeleportKind {HOME, ARRIVE}
+
     private boolean pendingArrival;
     private TeleportKind teleportKind;
     private boolean teleportArrived;

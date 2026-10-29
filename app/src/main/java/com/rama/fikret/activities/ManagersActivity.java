@@ -14,6 +14,8 @@ import com.rama.fikret.helpers.FarmArt;
 import com.rama.fikret.helpers.ViewUpdates;
 
 import java.util.ArrayList;
+import java.util.Collections;
+import java.util.Comparator;
 import java.util.List;
 
 public class ManagersActivity extends ListScreenActivity {
@@ -60,10 +62,48 @@ public class ManagersActivity extends ListScreenActivity {
                 }
             }
         }
-        // The guide bird always closes the list.
         if (!state.hasTravelManager(world)) {
             rows.add(new int[]{KIND_GUIDE, 0});
         }
+        Collections.sort(rows, new Comparator<int[]>() {
+            @Override
+            public int compare(int[] a, int[] b) {
+                boolean aPoints = paidInPoints(a[0]);
+                boolean bPoints = paidInPoints(b[0]);
+                if (aPoints != bPoints) {
+                    return aPoints ? 1 : -1;
+                }
+                boolean aAffordable = isAffordable(a[0], a[1]);
+                boolean bAffordable = isAffordable(b[0], b[1]);
+                if (aAffordable != bAffordable) {
+                    return aAffordable ? -1 : 1;
+                }
+                return Double.compare(cost(a[0], a[1]), cost(b[0], b[1]));
+            }
+        });
+    }
+
+    /** Accountants are bought with farm points; everything else costs money. */
+    private static boolean paidInPoints(int kind) {
+        return kind == KIND_ACCOUNTANT;
+    }
+
+    private double cost(int kind, int g) {
+        switch (kind) {
+            case KIND_GUIDE:
+                return state.travelManagerCost(world);
+            case KIND_ACCOUNTANT:
+                return state.accountantCost(world, g);
+            case KIND_DISCOUNT:
+                return state.discountCost(world, g);
+            default:
+                return state.managerCost(world, g);
+        }
+    }
+
+    private boolean isAffordable(int kind, int g) {
+        double cost = cost(kind, g);
+        return paidInPoints(kind) ? state.getAngels(world) >= cost : state.getMoney(world) >= cost;
     }
 
     @Override
@@ -125,7 +165,6 @@ public class ManagersActivity extends ListScreenActivity {
                     break;
             }
             if (hired) {
-                // The bought one leaves the list.
                 rebuildRows();
                 adapter.notifyDataSetChanged();
             }
@@ -160,13 +199,13 @@ public class ManagersActivity extends ListScreenActivity {
         String name;
         String description;
         String costLabel;
-        boolean coin = false;   // the farm's points are shown with the farm's coin in front
+        boolean coin = false;
         boolean affordable;
         switch (kind) {
             case KIND_GUIDE: {
                 double cost = state.travelManagerCost(world);
-                name = "Guide Bird";
-                description = "Leads you to the next world.";
+                name = getString(R.string.guide_bird_name);
+                description = getString(R.string.guide_bird_desc);
                 costLabel = NumberFormatter.money(world, cost);
                 affordable = state.getMoney(world) >= cost;
                 break;
@@ -174,8 +213,8 @@ public class ManagersActivity extends ListScreenActivity {
             case KIND_ACCOUNTANT: {
                 double cost = state.accountantCost(world, g);
                 String garden = def.gardens[g].name;
-                name = garden + " accountant";
-                description = "Makes " + garden + " cost 10% less.";
+                name = getString(R.string.accountant_name, garden);
+                description = getString(R.string.accountant_desc, garden);
                 costLabel = NumberFormatter.number(cost);
                 coin = true;
                 affordable = state.getAngels(world) >= cost;
@@ -184,8 +223,8 @@ public class ManagersActivity extends ListScreenActivity {
             case KIND_DISCOUNT: {
                 double cost = state.discountCost(world, g);
                 String garden = def.gardens[g].name;
-                name = garden + " discount";
-                description = "Makes " + garden + " cost 99.999% less.";
+                name = getString(R.string.discount_name, garden);
+                description = getString(R.string.discount_desc, garden);
                 costLabel = NumberFormatter.money(world, cost);
                 affordable = state.getMoney(world) >= cost;
                 break;
@@ -193,8 +232,8 @@ public class ManagersActivity extends ListScreenActivity {
             default: {
                 double cost = state.managerCost(world, g);
                 String garden = def.gardens[g].name;
-                name = garden + " supervisor";
-                description = "Harvests your " + garden + " automatically.";
+                name = getString(R.string.supervisor_name, garden);
+                description = getString(R.string.supervisor_desc, garden);
                 costLabel = NumberFormatter.money(world, cost);
                 affordable = state.getMoney(world) >= cost;
                 break;

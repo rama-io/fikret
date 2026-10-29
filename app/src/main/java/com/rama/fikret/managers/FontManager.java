@@ -6,9 +6,9 @@ import android.view.View;
 import android.view.ViewGroup;
 import android.widget.TextView;
 
-
 public class FontManager {
     private static Typeface jersey25;
+
     public static Typeface getJersey25(Context context) {
         if (jersey25 == null) {
             try {
