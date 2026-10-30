@@ -100,11 +100,9 @@ public class Main extends Activity {
 
     private void refresh() {
         world = state.getCurrentWorld();
-        Worlds.WorldDef def = Worlds.ALL[world];
         moneyText.setText(NumberFormatter.money(world, state.getMoney(world)));
         multiplierButton.setText(multiplierLabel());
         refreshRows();
-        updateAscend();
     }
 
     private String multiplierLabel() {
@@ -122,10 +120,6 @@ public class Main extends Activity {
         bindMenuItem(dialog, content, R.id.menu_managers, new Intent(this, ManagersActivity.class));
         bindMenuItem(dialog, content, R.id.menu_upgrades, new Intent(this, UpgradesActivity.class));
         bindMenuItem(dialog, content, R.id.menu_finance, new Intent(this, FinanceActivity.class));
-        content.findViewById(R.id.menu_ascend).setOnClickListener(v -> {
-            dialog.dismiss();
-            showAscend();
-        });
         bindMenuItem(dialog, content, R.id.menu_teleport, new Intent(this, TeleportActivity.class));
         bindMenuItem(dialog, content, R.id.menu_about, new Intent(this, About.class));
 
@@ -140,47 +134,6 @@ public class Main extends Activity {
         content.findViewById(R.id.menu_teleport_gap).setVisibility(visibility);
 
         dialog.show();
-    }
-
-    private Dialog ascendDialog;
-
-    private void showAscend() {
-        final Dialog dialog = new Dialog(this, R.style.AppDialog);
-        View content = LayoutInflater.from(this).inflate(R.layout.dialog_ascend, null);
-        FontManager.apply(content, FontManager.getJersey25(this));
-        dialog.setContentView(content);
-
-        content.findViewById(R.id.ascend_cancel).setOnClickListener(v -> dialog.dismiss());
-        content.findViewById(R.id.ascend_confirm).setOnClickListener(v -> {
-            if (state.ascend(state.getCurrentWorld())) {
-                dialog.dismiss();
-                refresh();
-            }
-        });
-        ((TextView) content.findViewById(R.id.ascend_have_label)).setText(Worlds.ALL[state.getCurrentWorld()].name + " points");
-        int coinSize = Math.round(((TextView) content.findViewById(R.id.ascend_have)).getTextSize());
-        for (int id : new int[]{R.id.ascend_have, R.id.ascend_gain}) {
-            TextView value = content.findViewById(id);
-            value.setCompoundDrawables(FarmArt.coin(this, state.getCurrentWorld(), coinSize), null, null, null);
-            value.setCompoundDrawablePadding(coinSize / 4);
-        }
-        dialog.setOnDismissListener(d -> ascendDialog = null);
-        ascendDialog = dialog;
-        dialog.show();
-        updateAscend();
-    }
-
-    private void updateAscend() {
-        if (ascendDialog == null) {
-            return;
-        }
-        state.sync();
-        double have = state.getAngels(state.getCurrentWorld());
-        double gain = state.pendingAngels(state.getCurrentWorld());
-        ViewUpdates.setText((TextView) ascendDialog.findViewById(R.id.ascend_have), NumberFormatter.number(have));
-        ViewUpdates.setText((TextView) ascendDialog.findViewById(R.id.ascend_bonus), "+" + NumberFormatter.number(have * Worlds.ANGEL_BONUS * 100) + "%");
-        ViewUpdates.setText((TextView) ascendDialog.findViewById(R.id.ascend_gain), "+" + NumberFormatter.number(gain));
-        ViewUpdates.setBackgroundColor(ascendDialog.findViewById(R.id.ascend_confirm), gain > 0 ? ViewUpdates.themeColor(this, R.attr.accent) : ViewUpdates.color(this, R.color.disabled));
     }
 
     private void bindMenuItem(final Dialog dialog, View content, int id, final Intent target) {

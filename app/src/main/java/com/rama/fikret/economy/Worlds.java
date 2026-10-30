@@ -8,7 +8,6 @@ public final class Worlds {
 
     public static final int GARDENS_PER_WORLD = 10;
 
-    public static final int ANGEL_WORLD = 0;
     public static final double ANGEL_DIVISOR = 4e11 / 9;
     public static final double ANGEL_BONUS = 0.02;
 

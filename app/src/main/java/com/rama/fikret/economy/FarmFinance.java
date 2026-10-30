@@ -13,7 +13,6 @@ public final class FarmFinance {
     public final double income;
     public final double[] bySource = new double[SOURCES];
     public final double[] byGarden = new double[Worlds.GARDENS_PER_WORLD];
-    public final double lakeIncome;
 
     public final double points;
     public final double pointsBonusPercent;
@@ -22,9 +21,11 @@ public final class FarmFinance {
     public static final int BEST_SUPERVISOR = 0;
     public static final int BEST_SPEED = 1;
     public static final int BEST_VALUE = 2;
+    public static final int BEST_MILESTONE = 3;
 
     public final int bestBuyKind;
     public final int bestBuyGarden;
+    public final int bestBuyTarget;
     public final double bestBuyPayback;
     public final double bestBuyWait;
 
@@ -37,6 +38,7 @@ public final class FarmFinance {
 
         int bestKind = BEST_NONE;
         int bestGarden = -1;
+        int bestTarget = 0;
         double bestCost = 0;
         double bestGain = 0;
         double bestRatio = Double.POSITIVE_INFINITY;
@@ -63,6 +65,21 @@ public final class FarmFinance {
 
             byGarden[g] = potential;
             total += potential;
+
+            GameState.Quote next = s.quote(w, g, GameState.BUY_NEXT);
+            if (next.amount > 0) {
+                int target = count + next.amount;
+                int newMilestones = GameState.milestonesReached(target) - GameState.milestonesReached(count);
+                double gain = potential * ((double) target / count * Math.pow(2, newMilestones) - 1);
+                if (gain > 0 && next.cost / gain < bestRatio) {
+                    bestRatio = next.cost / gain;
+                    bestKind = BEST_MILESTONE;
+                    bestGarden = g;
+                    bestTarget = target;
+                    bestCost = next.cost;
+                    bestGain = gain;
+                }
+            }
 
             double base = def.baseRevenue * count / def.cycleSeconds;
             double lnUpgrades = (s.upgradeLevel(w, g, GameState.UPGRADE_SPEED) + s.upgradeLevel(w, g, GameState.UPGRADE_VALUE)) * LN2;
@@ -92,14 +109,14 @@ public final class FarmFinance {
         bySource[SOURCE_BASE] = total - bySource[SOURCE_UPGRADES] - bySource[SOURCE_MILESTONES] - bySource[SOURCE_POINTS];
 
         income = total;
-        lakeIncome = total * Worlds.START_MONEY / Worlds.ALL[w].startMoney;
 
         points = s.getAngels(w);
         pointsBonusPercent = (pointsMultiplier - 1) * 100;
-        pointsGain = s.pendingAngels(s.getCurrentWorld());;
+        pointsGain = s.pendingAngels(w);
 
         bestBuyKind = bestKind;
         bestBuyGarden = bestGarden;
+        bestBuyTarget = bestTarget;
         bestBuyPayback = bestGain > 0 ? bestCost / bestGain : Double.POSITIVE_INFINITY;
         bestBuyWait = bestKind == BEST_NONE ? 0 : money >= bestCost ? 0 : total > 0 ? (bestCost - money) / total : Double.POSITIVE_INFINITY;
     }
