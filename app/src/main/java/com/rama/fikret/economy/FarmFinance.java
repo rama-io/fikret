@@ -17,6 +17,7 @@ public final class FarmFinance {
 
     public final double points;
     public final double pointsBonusPercent;
+    public final double pointsGain;
     public static final int BEST_NONE = -1;
     public static final int BEST_SUPERVISOR = 0;
     public static final int BEST_SPEED = 1;
@@ -95,6 +96,7 @@ public final class FarmFinance {
 
         points = s.getAngels(w);
         pointsBonusPercent = (pointsMultiplier - 1) * 100;
+        pointsGain = s.pendingAngels(s.getCurrentWorld());;
 
         bestBuyKind = bestKind;
         bestBuyGarden = bestGarden;

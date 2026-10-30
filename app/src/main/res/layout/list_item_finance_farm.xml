@@ -18,10 +18,9 @@
 
         <LinearLayout style="@style/VerticalList_BG2">
 
-            <TextView
+            <Button
                 android:id="@+id/best_buy_name"
-                android:textColor="?attr/accent"
-                style="@style/H3" />
+                style="@style/BTN" />
 
             <View style="@style/SeparatorListVertical" />
 
@@ -87,50 +86,6 @@
 
     <TextView
         style="@style/Text"
-        android:text="@string/finance_ascension" />
-
-    <View style="@style/SeparatorListVertical" />
-
-    <LinearLayout style="@style/VerticalList_BG2">
-
-        <LinearLayout style="@style/HorizontalList">
-
-            <TextView
-                style="@style/Text"
-                android:layout_width="wrap_content"
-                android:text="@string/finance_farm_points" />
-
-            <TextView
-                android:id="@+id/farm_points"
-                style="@style/Text"
-                android:layout_width="0dp"
-                android:layout_weight="1"
-                android:gravity="end" />
-        </LinearLayout>
-
-        <View style="@style/SeparatorListVertical" />
-
-        <LinearLayout style="@style/HorizontalList">
-
-            <TextView
-                style="@style/Text"
-                android:layout_width="wrap_content"
-                android:text="@string/finance_farm_points_profit" />
-
-            <TextView
-                android:id="@+id/farm_points_profit"
-                style="@style/Text"
-                android:layout_width="0dp"
-                android:layout_weight="1"
-                android:gravity="end" />
-        </LinearLayout>
-
-    </LinearLayout>
-
-    <View style="@style/SeparatorListVertical" />
-
-    <TextView
-        style="@style/Text"
         android:text="@string/finance_total" />
 
     <View style="@style/SeparatorListVertical" />
@@ -185,6 +140,81 @@
                 android:layout_weight="1"
                 android:gravity="end" />
         </LinearLayout>
+
+    </LinearLayout>
+
+    <View style="@style/SeparatorListVertical" />
+
+    <TextView
+        style="@style/Text"
+        android:text="@string/finance_ascension" />
+
+    <View style="@style/SeparatorListVertical" />
+
+    <TextView
+        style="@style/Text"
+        android:text="@string/ascend_warning"
+        android:textColor="@color/disabled" />
+
+    <View style="@style/SeparatorListVertical" />
+
+    <LinearLayout style="@style/VerticalList_BG2">
+
+        <LinearLayout style="@style/HorizontalList">
+
+            <TextView
+                style="@style/Text"
+                android:layout_width="wrap_content"
+                android:text="@string/finance_farm_points" />
+
+            <TextView
+                android:id="@+id/farm_points"
+                style="@style/Text"
+                android:layout_width="0dp"
+                android:layout_weight="1"
+                android:gravity="end" />
+        </LinearLayout>
+
+        <View style="@style/SeparatorListVertical" />
+
+        <LinearLayout style="@style/HorizontalList">
+
+            <TextView
+                style="@style/Text"
+                android:layout_width="wrap_content"
+                android:text="@string/finance_farm_points_profit" />
+
+            <TextView
+                android:id="@+id/farm_points_profit"
+                style="@style/Text"
+                android:layout_width="0dp"
+                android:layout_weight="1"
+                android:gravity="end" />
+        </LinearLayout>
+
+        <View style="@style/SeparatorListVertical" />
+
+        <LinearLayout style="@style/HorizontalList">
+
+            <TextView
+                style="@style/Text"
+                android:layout_width="wrap_content"
+                android:text="@string/finance_farm_points_gain" />
+
+            <TextView
+                android:id="@+id/farm_points_gain_on_ascend"
+                style="@style/Text"
+                android:layout_width="0dp"
+                android:layout_weight="1"
+                android:gravity="end" />
+        </LinearLayout>
+
+        <View style="@style/SeparatorListVertical" />
+
+        <Button
+            android:id="@+id/ascend_confirm"
+            style="@style/BTN"
+            android:text="@string/ascend_confirm" />
 
     </LinearLayout>
 </com.rama.fikret.widgets.WdCollapsibleSection>

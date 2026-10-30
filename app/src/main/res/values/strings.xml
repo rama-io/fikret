@@ -78,6 +78,7 @@
     <string name="finance_ascension">Ascension</string>
     <string name="finance_farm_points">Farm Points</string>
     <string name="finance_farm_points_profit">Farm Points Profit</string>
+    <string name="finance_farm_points_gain">Gain on ascend</string>
     <string name="finance_best_buy_title">Best Buy</string>
     <string name="finance_afford_in">You can afford it in:</string>
     <string name="finance_afford_now">Now</string>

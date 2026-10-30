@@ -41,6 +41,7 @@ public class FinanceActivity extends ListScreenActivity {
         final Bar[] gardens = new Bar[Worlds.GARDENS_PER_WORLD];
         TextView points;
         TextView pointsProfit;
+        TextView pointsGainOnAscend;
         View bestGroup;
         TextView bestName;
         TextView afford;
@@ -138,6 +139,7 @@ public class FinanceActivity extends ListScreenActivity {
         h.section = (WdCollapsibleSection) row;
         h.points = row.findViewById(R.id.farm_points);
         h.pointsProfit = row.findViewById(R.id.farm_points_profit);
+        h.pointsGainOnAscend = row.findViewById(R.id.farm_points_gain_on_ascend);
         h.bestGroup = row.findViewById(R.id.farm_best_group);
         h.bestName = row.findViewById(R.id.best_buy_name);
         h.afford = row.findViewById(R.id.afford_timer);
@@ -202,6 +204,7 @@ public class FinanceActivity extends ListScreenActivity {
 
         ViewUpdates.setText(h.points, NumberFormatter.number(f.points));
         ViewUpdates.setText(h.pointsProfit, getString(R.string.finance_profit_bonus, NumberFormatter.number(f.pointsBonusPercent)));
+        ViewUpdates.setText(h.pointsGainOnAscend, "+" + NumberFormatter.number(f.pointsGain));
 
         boolean hasBest = f.bestBuyKind != FarmFinance.BEST_NONE;
         h.bestGroup.setVisibility(hasBest ? View.VISIBLE : View.GONE);
