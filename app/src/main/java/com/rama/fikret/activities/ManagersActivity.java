@@ -171,21 +171,6 @@ public class ManagersActivity extends ListScreenActivity {
         });
     }
 
-    private void setCoin(TextView cost, boolean coin) {
-        Object last = cost.getTag(R.id.last_coin);
-        if (last instanceof Boolean && (Boolean) last == coin) {
-            return;
-        }
-        cost.setTag(R.id.last_coin, coin);
-        if (coin) {
-            int size = Math.round(cost.getTextSize());
-            cost.setCompoundDrawables(FarmArt.coin(this, world, size), null, null, null);
-            cost.setCompoundDrawablePadding(size / 4);
-        } else {
-            cost.setCompoundDrawables(null, null, null, null);
-        }
-    }
-
     @Override
     protected void bindRow(View row, int position) {
         row.setTag(position);
@@ -245,7 +230,6 @@ public class ManagersActivity extends ListScreenActivity {
         ViewUpdates.setText((TextView) row.findViewById(R.id.rescue_label), getString(R.string.rescue));
         TextView costView = (TextView) row.findViewById(R.id.rescue_cost);
         ViewUpdates.setText(costView, costLabel);
-        setCoin(costView, coin);
         ViewUpdates.setBackgroundColor(row.findViewById(R.id.rescue_button),
                 affordable ? ViewUpdates.themeColor(this, R.attr.accent) : ViewUpdates.color(this, R.color.disabled));
     }

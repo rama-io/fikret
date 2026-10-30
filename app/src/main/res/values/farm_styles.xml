@@ -1,11 +1,6 @@
 <?xml version="1.0" encoding="utf-8"?>
 <resources>
     <style name="Farm_Lake">
-        <item name="coinBase">#f1ae20</item>
-        <item name="coinOutline">#d88f04</item>
-        <item name="coinLight">#ffecc6</item>
-        <item name="coinMid">#fec654</item>
-        <item name="coinEdge">#e89c00</item>
         <item name="supervisorOutline">#27232a</item>
         <item name="supervisorBody">#e3e2a8</item>
         <item name="supervisorBeak">#f87b1b</item>
@@ -21,11 +16,6 @@
     </style>
 
     <style name="Farm_Forest">
-        <item name="coinBase">#3fae4a</item>
-        <item name="coinOutline">#1f7a2e</item>
-        <item name="coinLight">#d9f5dc</item>
-        <item name="coinMid">#6fd27a</item>
-        <item name="coinEdge">#2b9a3c</item>
         <item name="supervisorOutline">#232a27</item>
         <item name="supervisorBody">#26b739</item>
         <item name="supervisorBeak">#f8c81b</item>
@@ -41,11 +31,6 @@
     </style>
 
     <style name="Farm_Volcano">
-        <item name="coinBase">#e8481f</item>
-        <item name="coinOutline">#a82d0c</item>
-        <item name="coinLight">#ffd6c6</item>
-        <item name="coinMid">#ff7a54</item>
-        <item name="coinEdge">#c9380f</item>
         <item name="supervisorOutline">#2a2323</item>
         <item name="supervisorBody">#dc5555</item>
         <item name="supervisorBeak">#ffd01b</item>
@@ -61,11 +46,6 @@
     </style>
 
     <style name="Farm_Cave">
-        <item name="coinBase">#c2844f</item>
-        <item name="coinOutline">#a86734</item>
-        <item name="coinLight">#f2e1d3</item>
-        <item name="coinMid">#d8a57a</item>
-        <item name="coinEdge">#b46e34</item>
         <item name="supervisorOutline">#27232a</item>
         <item name="supervisorBody">#b78e26</item>
         <item name="supervisorBeak">#ffd01b</item>
@@ -81,11 +61,6 @@
     </style>
 
     <style name="Farm_Nuclear">
-        <item name="coinBase">#9bf120</item>
-        <item name="coinOutline">#86d804</item>
-        <item name="coinLight">#e8ffc6</item>
-        <item name="coinMid">#b9fe54</item>
-        <item name="coinEdge">#8ae800</item>
         <item name="supervisorOutline">#27232a</item>
         <item name="supervisorBody">#b9d522</item>
         <item name="supervisorBeak">#ffd01b</item>
@@ -101,11 +76,6 @@
     </style>
 
     <style name="Farm_Arctic">
-        <item name="coinBase">#47b5d9</item>
-        <item name="coinOutline">#21a5cb</item>
-        <item name="coinLight">#dbf2fa</item>
-        <item name="coinMid">#77cfeb</item>
-        <item name="coinEdge">#1facd8</item>
         <item name="supervisorOutline">#27232a</item>
         <item name="supervisorBody">#6fc6df</item>
         <item name="supervisorBeak">#376eb2</item>
@@ -121,11 +91,6 @@
     </style>
 
     <style name="Farm_Bubblegum">
-        <item name="coinBase">#f12078</item>
-        <item name="coinOutline">#d80462</item>
-        <item name="coinLight">#ffc6df</item>
-        <item name="coinMid">#fe549d</item>
-        <item name="coinEdge">#e80063</item>
         <item name="supervisorOutline">#27232a</item>
         <item name="supervisorBody">#dd6fdf</item>
         <item name="supervisorBeak">#ffd01b</item>
@@ -141,11 +106,6 @@
     </style>
 
     <style name="Farm_Space">
-        <item name="coinBase">#882ae7</item>
-        <item name="coinOutline">#690fcd</item>
-        <item name="coinLight">#e2c9fc</item>
-        <item name="coinMid">#a75cf6</item>
-        <item name="coinEdge">#720cdc</item>
         <item name="supervisorOutline">#27232a</item>
         <item name="supervisorBody">#a76fcc</item>
         <item name="supervisorBeak">#ffd01b</item>
@@ -161,11 +121,6 @@
     </style>
 
     <style name="Farm_Nightmare">
-        <item name="coinBase">#f12032</item>
-        <item name="coinOutline">#d8041c</item>
-        <item name="coinLight">#ffc6cc</item>
-        <item name="coinMid">#fe5464</item>
-        <item name="coinEdge">#e80016</item>
         <item name="supervisorOutline">#2a2323</item>
         <item name="supervisorBody">#a4271a</item>
         <item name="supervisorBeak">#ffd01b</item>

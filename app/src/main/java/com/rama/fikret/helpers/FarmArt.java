@@ -48,10 +48,4 @@ public final class FarmArt {
     public static Drawable supervisor(Context context, int world) {
         return load(context, world, R.drawable.supervisor);
     }
-
-    public static Drawable coin(Context context, int world, int sizePx) {
-        Drawable coin = load(context, world, R.drawable.coin);
-        coin.setBounds(0, 0, sizePx, sizePx);
-        return coin;
-    }
 }
