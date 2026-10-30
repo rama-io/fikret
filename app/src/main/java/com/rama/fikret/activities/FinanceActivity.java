@@ -10,6 +10,7 @@ import android.widget.TextView;
 
 import com.rama.fikret.R;
 import com.rama.fikret.economy.FarmFinance;
+import com.rama.fikret.economy.GameState;
 import com.rama.fikret.economy.NumberFormatter;
 import com.rama.fikret.economy.Worlds;
 import com.rama.fikret.helpers.DeveloperMode;
@@ -41,8 +42,12 @@ public class FinanceActivity extends ListScreenActivity {
         final Bar[] gardens = new Bar[Worlds.GARDENS_PER_WORLD];
         TextView points;
         TextView pointsProfit;
+        TextView pointsGainOnAscend;
+        View ascendButton;
         View bestGroup;
         TextView bestName;
+        int bestKind = FarmFinance.BEST_NONE;
+        int bestGarden;
         TextView afford;
         TextView paysBack;
         TextView gainSecond;
@@ -115,11 +120,6 @@ public class FinanceActivity extends ListScreenActivity {
             }
 
             @Override
-            public int getViewTypeCount() {
-                return 2;
-            }
-
-            @Override
             public View getView(int position, View convertView, ViewGroup parent) {
                 View row = convertView;
                 if (row == null) {
@@ -138,8 +138,20 @@ public class FinanceActivity extends ListScreenActivity {
         h.section = (WdCollapsibleSection) row;
         h.points = row.findViewById(R.id.farm_points);
         h.pointsProfit = row.findViewById(R.id.farm_points_profit);
+        h.pointsGainOnAscend = row.findViewById(R.id.farm_points_gain_on_ascend);
+        h.ascendButton = row.findViewById(R.id.ascend_confirm);
+        h.ascendButton.setOnClickListener(v -> {
+            if (h.world >= 0 && state.ascend(h.world)) {
+                adapter.notifyDataSetChanged();
+            }
+        });
         h.bestGroup = row.findViewById(R.id.farm_best_group);
         h.bestName = row.findViewById(R.id.best_buy_name);
+        h.bestName.setOnClickListener(v -> {
+            if (h.world >= 0 && buyBest(h)) {
+                adapter.notifyDataSetChanged();
+            }
+        });
         h.afford = row.findViewById(R.id.afford_timer);
         h.paysBack = row.findViewById(R.id.pays_back);
         h.gainSecond = row.findViewById(R.id.gain_second);
@@ -202,11 +214,17 @@ public class FinanceActivity extends ListScreenActivity {
 
         ViewUpdates.setText(h.points, NumberFormatter.number(f.points));
         ViewUpdates.setText(h.pointsProfit, getString(R.string.finance_profit_bonus, NumberFormatter.number(f.pointsBonusPercent)));
+        ViewUpdates.setText(h.pointsGainOnAscend, getString(R.string.finance_points_gain, NumberFormatter.number(f.pointsGain)));
+        ViewUpdates.setBackgroundColor(h.ascendButton, f.pointsGain > 0 ? ViewUpdates.themeColor(this, R.attr.accent) : ViewUpdates.color(this, R.color.disabled));
 
         boolean hasBest = f.bestBuyKind != FarmFinance.BEST_NONE;
         h.bestGroup.setVisibility(hasBest ? View.VISIBLE : View.GONE);
         if (hasBest) {
+            h.bestKind = f.bestBuyKind;
+            h.bestGarden = f.bestBuyGarden;
             ViewUpdates.setText(h.bestName, bestBuyName(f, w));
+            ViewUpdates.setBackgroundColor(h.bestName, f.bestBuyWait <= 0
+                    ? ViewUpdates.themeColor(this, R.attr.accent) : ViewUpdates.color(this, R.color.disabled));
             ViewUpdates.setText(h.afford, f.bestBuyWait <= 0 ? getString(R.string.finance_afford_now) : longDuration(f.bestBuyWait));
             ViewUpdates.setText(h.paysBack, longDuration(f.bestBuyPayback));
         }
@@ -216,6 +234,23 @@ public class FinanceActivity extends ListScreenActivity {
         ViewUpdates.setText(h.gainHour, NumberFormatter.money(w, f.income * 3600));
     }
 
+    private boolean buyBest(FarmHolder h) {
+        int w = h.world;
+        int g = h.bestGarden;
+        switch (h.bestKind) {
+            case FarmFinance.BEST_SUPERVISOR:
+                return state.hireManager(w, g);
+            case FarmFinance.BEST_SPEED:
+                return state.buyUpgrade(w, g, GameState.UPGRADE_SPEED, state.upgradeLevel(w, g, GameState.UPGRADE_SPEED));
+            case FarmFinance.BEST_VALUE:
+                return state.buyUpgrade(w, g, GameState.UPGRADE_VALUE, state.upgradeLevel(w, g, GameState.UPGRADE_VALUE));
+            case FarmFinance.BEST_MILESTONE:
+                return state.buy(w, g, GameState.BUY_NEXT);
+            default:
+                return false;
+        }
+    }
+
     private String bestBuyName(FarmFinance f, int w) {
         String garden = Worlds.ALL[w].gardens[f.bestBuyGarden].name;
         switch (f.bestBuyKind) {
@@ -223,6 +258,8 @@ public class FinanceActivity extends ListScreenActivity {
                 return getString(R.string.upgrade_speed_name, garden);
             case FarmFinance.BEST_VALUE:
                 return getString(R.string.upgrade_value_name, garden);
+            case FarmFinance.BEST_MILESTONE:
+                return getString(R.string.milestone_name, garden, f.bestBuyTarget);
             default:
                 return getString(R.string.supervisor_name, garden);
         }
