@@ -193,7 +193,6 @@ public class ManagersActivity extends ListScreenActivity {
         String name;
         String description;
         String costLabel;
-        boolean coin = false;
         boolean affordable;
         switch (kind) {
             case KIND_GUIDE: {
@@ -217,8 +216,7 @@ public class ManagersActivity extends ListScreenActivity {
                 String garden = def.gardens[g].name;
                 name = getString(R.string.accountant_name, garden);
                 description = getString(R.string.accountant_desc, garden);
-                costLabel = NumberFormatter.number(cost);
-                coin = true;
+                costLabel = getString(R.string.farm_points_cost, NumberFormatter.number(cost));
                 affordable = state.getAngels(world) >= cost;
                 break;
             }

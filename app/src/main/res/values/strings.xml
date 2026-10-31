@@ -80,6 +80,7 @@
     <string name="finance_gain_minute">Gain per Minute</string>
     <string name="finance_gain_hour">Gain per Hour</string>
     <string name="buyer_bird_name">Buyer</string>
+    <string name="farm_points_cost">FP %1$s</string>
     <string name="buyer_bird_desc">Buys fruits for you in the active garden whenever you can afford them.</string>
     <string name="buyer_toggle_desc">Buyer bird</string>
     <string name="milestone_name">%1$s to %2$d</string>
