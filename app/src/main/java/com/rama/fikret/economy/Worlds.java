@@ -8,7 +8,6 @@ public final class Worlds {
 
     public static final int GARDENS_PER_WORLD = 10;
 
-    public static final int ANGEL_WORLD = 0;
     public static final double ANGEL_DIVISOR = 4e11 / 9;
     public static final double ANGEL_BONUS = 0.02;
 
@@ -27,6 +26,8 @@ public final class Worlds {
     private static final double[] PLACEHOLDER_MANAGER_COSTS = {1e3, 1.5e4, 1e5, 5e5, 1.2e6, 1e7, 1.11e8, 5.55e8, 1e10, 1e11};
 
     private static final double GUIDE_BIRD_COST = 1e33;
+
+    private static final double BUYER_COST_LAKE = 1e20;
 
     public static final double ACCOUNTANT_COST_FACTOR = 0.9;
     private static final double[] LAKE_ACCOUNTANT_COSTS = {10, 100, 1e3, 9999, 1e5, 1e7, 1e8, 1e9, 1e10, 1e11};
@@ -63,6 +64,7 @@ public final class Worlds {
         public final String currency;
         public final double[] managerCosts;
         public final double travelManagerCost;
+        public final double buyerCost;
         public final double[] accountantCosts;
         public final double[] discountCosts;
         public final boolean placeholderPrices;
@@ -76,6 +78,8 @@ public final class Worlds {
             this.gardens = gardens;
             this.managerCosts = managerCosts;
             this.travelManagerCost = travelManagerCost;
+            GardenDef top = gardens[gardens.length - 1];
+            this.buyerCost = BUYER_COST_LAKE * (top.baseRevenue / top.cycleSeconds) / LAKE_TOP_INCOME;
             this.accountantCosts = accountantCosts;
             this.discountCosts = discountCosts;
             this.placeholderPrices = placeholderPrices;
@@ -83,6 +87,8 @@ public final class Worlds {
     }
 
     private static final double[][] LAKE_NUMBERS = {{3.7, 1.07, 0.6, 1}, {60, 1.15, 3, 60}, {720, 1.14, 6, 540}, {8640, 1.13, 12, 4320}, {103680, 1.12, 24, 51840}, {1244160, 1.11, 96, 622080}, {14929920, 1.1, 384, 7464960}, {179159040, 1.09, 1536, 89579520}, {2149908480d, 1.08, 6144, 1074954240d}, {25789901760d, 1.07, 36864, 29668737024d},};
+
+    private static final double LAKE_TOP_INCOME = LAKE_NUMBERS[GARDENS_PER_WORLD - 1][3] / LAKE_NUMBERS[GARDENS_PER_WORLD - 1][2];
 
     private static final String[] LAKE_NAMES = {"Yuca", "Mango", "Cajuil", "Guayaba", "Carambola", "Jobo", "Papaya", "Yautía", "Mamey", "Guanabana"};
 

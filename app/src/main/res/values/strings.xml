@@ -1,7 +1,6 @@
 <?xml version="1.0" encoding="utf-8"?>
 <resources>
     <string name="app_name">Fikret</string>
-    <string name="play">Play</string>
     <string name="app_desc">An idle garden adventure</string>
     <string name="app_version">%1$s v%2$d</string>
     <string name="app_claims_ads_desc">No Ads</string>
@@ -14,13 +13,8 @@
     <string name="menu_map">Map</string>
     <string name="menu_managers">Supervisor</string>
     <string name="menu_upgrades">Upgrades</string>
-    <string name="menu_ascend">Ascend</string>
-    <string name="ascend_have">Points</string>
-    <string name="ascend_bonus">Profit bonus</string>
-    <string name="ascend_gain">On ascend</string>
     <string name="ascend_warning">Ascending restarts this farm: money, gardens and upgrades are lost. Farm points and birds stay.</string>
     <string name="ascend_confirm">Ascend</string>
-    <string name="cancel">Cancel</string>
     <string name="menu_teleport">Teleport</string>
     <string name="menu_finance">Finance</string>
     <string name="empty_finance">No active farms yet. Hire a supervisor to start earning.</string>
@@ -28,7 +22,6 @@
     <string name="empty_managers">Everyone is hired.</string>
     <string name="rescue">Rescue</string>
     <string name="activate">Activate</string>
-    <string name="rescued">Rescued</string>
     <string name="buy_max">Max</string>
     <string name="btn_go_back">Go back</string>
 
@@ -44,7 +37,7 @@
     <string name="buy_next_amount">Buy Next (%1$d)</string>
     <string name="buy_x">Buy x%1$d</string>
 
-    <string name="guide_bird_name">Guide Bird</string>
+    <string name="guide_bird_name">Guide</string>
     <string name="guide_bird_desc">Leads you to the next world.</string>
     <string name="supervisor_name">%1$s supervisor</string>
     <string name="supervisor_desc">Harvests your %1$s automatically.</string>
@@ -62,12 +55,10 @@
         <item quantity="other">Includes %1$d cheaper tiers.</item>
     </plurals>
 
-    <string name="finance_counted_in_lake">Counted in Lake money</string>
     <string name="source_base">Base</string>
     <string name="source_upgrades">Upgrades</string>
     <string name="source_milestones">Milestones</string>
     <string name="source_points">Farm Points</string>
-    <string name="per_second">%1$s/s</string>
     <string name="duration_never">never</string>
     <string name="duration_days">%1$s days</string>
 
@@ -78,6 +69,8 @@
     <string name="finance_ascension">Ascension</string>
     <string name="finance_farm_points">Farm Points</string>
     <string name="finance_farm_points_profit">Farm Points Profit</string>
+    <string name="finance_farm_points_gain">Gain on ascend</string>
+    <string name="finance_points_gain">+%1$s</string>
     <string name="finance_best_buy_title">Best Buy</string>
     <string name="finance_afford_in">You can afford it in:</string>
     <string name="finance_afford_now">Now</string>
@@ -86,5 +79,10 @@
     <string name="finance_gain_second">Gain per Second</string>
     <string name="finance_gain_minute">Gain per Minute</string>
     <string name="finance_gain_hour">Gain per Hour</string>
+    <string name="buyer_bird_name">Buyer</string>
+    <string name="farm_points_cost">FP %1$s</string>
+    <string name="buyer_bird_desc">Buys fruits for you in the active garden whenever you can afford them.</string>
+    <string name="buyer_toggle_desc">Buyer bird</string>
+    <string name="milestone_name">%1$s to %2$d</string>
     <string name="finance_profit_bonus">+%1$s%%</string>
 </resources>

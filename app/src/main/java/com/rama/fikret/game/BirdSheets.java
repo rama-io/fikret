@@ -2,6 +2,9 @@ package com.rama.fikret.game;
 
 import android.content.Context;
 import android.graphics.Bitmap;
+import android.graphics.Rect;
+import android.graphics.drawable.BitmapDrawable;
+import android.graphics.drawable.Drawable;
 import android.util.SparseArray;
 import android.view.ContextThemeWrapper;
 
@@ -25,7 +28,10 @@ public final class BirdSheets {
 
     private static final int TOLERANCE_SQ = 30 * 30 * 3;
 
+    private static final int ICON_FRAME = 1;
+
     private static final SparseArray<SpriteSheet> CACHE = new SparseArray<>();
+    private static final SparseArray<Bitmap> ICONS = new SparseArray<>();
     private static Bitmap original;
 
     private BirdSheets() {
@@ -51,6 +57,20 @@ public final class BirdSheets {
         SpriteSheet sheet = new SpriteSheet(bitmap, COLUMNS, ROWS);
         CACHE.put(style, sheet);
         return sheet;
+    }
+
+    public static synchronized Drawable icon(Context context, int world) {
+        int style = FarmArt.styleOf(world);
+        Bitmap frame = ICONS.get(style);
+        if (frame == null) {
+            SpriteSheet sheet = forWorld(context, world);
+            Rect r = sheet.frameRect(Direction.RIGHT.column, ICON_FRAME);
+            frame = Bitmap.createBitmap(sheet.getBitmap(), r.left, r.top, r.width(), r.height());
+            ICONS.put(style, frame);
+        }
+        BitmapDrawable drawable = new BitmapDrawable(context.getResources(), frame);
+        drawable.setFilterBitmap(false);
+        return drawable;
     }
 
     private static Bitmap recolor(Bitmap source, int[] target) {

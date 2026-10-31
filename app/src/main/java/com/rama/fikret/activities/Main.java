@@ -19,6 +19,7 @@ import com.rama.fikret.R;
 import com.rama.fikret.economy.GameState;
 import com.rama.fikret.economy.NumberFormatter;
 import com.rama.fikret.economy.Worlds;
+import com.rama.fikret.game.BirdSheets;
 import com.rama.fikret.helpers.DeveloperMode;
 import com.rama.fikret.helpers.FarmArt;
 import com.rama.fikret.helpers.GardenIcons;
@@ -100,11 +101,9 @@ public class Main extends Activity {
 
     private void refresh() {
         world = state.getCurrentWorld();
-        Worlds.WorldDef def = Worlds.ALL[world];
         moneyText.setText(NumberFormatter.money(world, state.getMoney(world)));
         multiplierButton.setText(multiplierLabel());
         refreshRows();
-        updateAscend();
     }
 
     private String multiplierLabel() {
@@ -122,10 +121,6 @@ public class Main extends Activity {
         bindMenuItem(dialog, content, R.id.menu_managers, new Intent(this, ManagersActivity.class));
         bindMenuItem(dialog, content, R.id.menu_upgrades, new Intent(this, UpgradesActivity.class));
         bindMenuItem(dialog, content, R.id.menu_finance, new Intent(this, FinanceActivity.class));
-        content.findViewById(R.id.menu_ascend).setOnClickListener(v -> {
-            dialog.dismiss();
-            showAscend();
-        });
         bindMenuItem(dialog, content, R.id.menu_teleport, new Intent(this, TeleportActivity.class));
         bindMenuItem(dialog, content, R.id.menu_about, new Intent(this, About.class));
 
@@ -140,47 +135,6 @@ public class Main extends Activity {
         content.findViewById(R.id.menu_teleport_gap).setVisibility(visibility);
 
         dialog.show();
-    }
-
-    private Dialog ascendDialog;
-
-    private void showAscend() {
-        final Dialog dialog = new Dialog(this, R.style.AppDialog);
-        View content = LayoutInflater.from(this).inflate(R.layout.dialog_ascend, null);
-        FontManager.apply(content, FontManager.getJersey25(this));
-        dialog.setContentView(content);
-
-        content.findViewById(R.id.ascend_cancel).setOnClickListener(v -> dialog.dismiss());
-        content.findViewById(R.id.ascend_confirm).setOnClickListener(v -> {
-            if (state.ascend(state.getCurrentWorld())) {
-                dialog.dismiss();
-                refresh();
-            }
-        });
-        ((TextView) content.findViewById(R.id.ascend_have_label)).setText(Worlds.ALL[state.getCurrentWorld()].name + " points");
-        int coinSize = Math.round(((TextView) content.findViewById(R.id.ascend_have)).getTextSize());
-        for (int id : new int[]{R.id.ascend_have, R.id.ascend_gain}) {
-            TextView value = content.findViewById(id);
-            value.setCompoundDrawables(FarmArt.coin(this, state.getCurrentWorld(), coinSize), null, null, null);
-            value.setCompoundDrawablePadding(coinSize / 4);
-        }
-        dialog.setOnDismissListener(d -> ascendDialog = null);
-        ascendDialog = dialog;
-        dialog.show();
-        updateAscend();
-    }
-
-    private void updateAscend() {
-        if (ascendDialog == null) {
-            return;
-        }
-        state.sync();
-        double have = state.getAngels(state.getCurrentWorld());
-        double gain = state.pendingAngels(state.getCurrentWorld());
-        ViewUpdates.setText((TextView) ascendDialog.findViewById(R.id.ascend_have), NumberFormatter.number(have));
-        ViewUpdates.setText((TextView) ascendDialog.findViewById(R.id.ascend_bonus), "+" + NumberFormatter.number(have * Worlds.ANGEL_BONUS * 100) + "%");
-        ViewUpdates.setText((TextView) ascendDialog.findViewById(R.id.ascend_gain), "+" + NumberFormatter.number(gain));
-        ViewUpdates.setBackgroundColor(ascendDialog.findViewById(R.id.ascend_confirm), gain > 0 ? ViewUpdates.themeColor(this, R.attr.accent) : ViewUpdates.color(this, R.color.disabled));
     }
 
     private void bindMenuItem(final Dialog dialog, View content, int id, final Intent target) {
@@ -227,6 +181,21 @@ public class Main extends Activity {
         ViewUpdates.setText((TextView) row.findViewById(R.id.buy_label), label);
         ViewUpdates.setText((TextView) row.findViewById(R.id.buy_cost), NumberFormatter.money(w, quote.cost));
         ViewUpdates.setBackgroundColor(row.findViewById(R.id.buy_button), affordable ? ViewUpdates.themeColor(this, R.attr.btnBg) : ViewUpdates.color(this, R.color.disabled));
+
+        boolean hasBuyer = state.hasBuyer(w);
+        int buyerVisibility = hasBuyer ? View.VISIBLE : View.GONE;
+        row.findViewById(R.id.buy_bird_gap).setVisibility(buyerVisibility);
+        View birdButton = row.findViewById(R.id.buy_bird_btn);
+        birdButton.setVisibility(buyerVisibility);
+        if (hasBuyer) {
+            ImageView birdIcon = (ImageView) row.findViewById(R.id.bird_icon);
+            if (!Integer.valueOf(w).equals(birdIcon.getTag())) {
+                birdIcon.setTag(w);
+                birdIcon.setImageDrawable(BirdSheets.icon(this, w));
+            }
+            boolean active = state.getBuyerGarden(w) == g;
+            ViewUpdates.setBackgroundColor(birdButton, active ? ViewUpdates.themeColor(this, R.attr.accent) : ViewUpdates.color(this, R.color.disabled));
+        }
     }
 
     private final class GardenAdapter extends BaseAdapter {
@@ -264,6 +233,11 @@ public class Main extends Activity {
             if (state.buy(state.getCurrentWorld(), g, MULTIPLIERS[multiplierIndex])) {
                 refresh();
             }
+        });
+        row.findViewById(R.id.buy_bird_btn).setOnClickListener(v -> {
+            int g = (Integer) row.getTag();
+            state.toggleBuyer(state.getCurrentWorld(), g);
+            refresh();
         });
         row.findViewById(R.id.harvest_btn).setOnClickListener(v -> {
             int g = (Integer) row.getTag();

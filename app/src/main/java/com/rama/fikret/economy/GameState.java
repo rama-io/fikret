@@ -39,6 +39,8 @@ public final class GameState {
     private static final class World {
         final Garden[] gardens = new Garden[Worlds.GARDENS_PER_WORLD];
         boolean travelManager;
+        boolean buyer;
+        int buyerGarden = -1;
 
         World() {
             for (int i = 0; i < gardens.length; i++) {
@@ -91,6 +93,28 @@ public final class GameState {
                 advance(w, g, dt);
             }
         }
+        boolean bought = false;
+        for (int w = 0; w < worlds.length; w++) {
+            bought |= runBuyer(w);
+        }
+        if (bought) {
+            save();
+        }
+    }
+
+    private boolean runBuyer(int w) {
+        World world = worlds[w];
+        int g = world.buyerGarden;
+        if (!world.buyer || g < 0) {
+            return false;
+        }
+        Quote units = quote(w, g, BUY_MAX);
+        if (units.amount <= 0 || units.cost > money[w]) {
+            return false;
+        }
+        money[w] -= units.cost;
+        world.gardens[g].count += units.amount;
+        return true;
     }
 
     private void advance(int w, int g, double dt) {
@@ -343,6 +367,41 @@ public final class GameState {
         return true;
     }
 
+    public boolean hasBuyer(int w) {
+        return worlds[w].buyer;
+    }
+
+    public double buyerCost(int w) {
+        return Worlds.ALL[w].buyerCost;
+    }
+
+    public synchronized boolean hireBuyer(int w) {
+        sync();
+        World world = worlds[w];
+        double cost = buyerCost(w);
+        if (world.buyer || money[w] < cost) {
+            return false;
+        }
+        money[w] -= cost;
+        world.buyer = true;
+        world.buyerGarden = -1;
+        save();
+        return true;
+    }
+
+    public int getBuyerGarden(int w) {
+        return worlds[w].buyer ? worlds[w].buyerGarden : -1;
+    }
+
+    public synchronized void toggleBuyer(int w, int g) {
+        World world = worlds[w];
+        if (!world.buyer) {
+            return;
+        }
+        world.buyerGarden = world.buyerGarden == g ? -1 : g;
+        save();
+    }
+
     public boolean hasAccountantList(int w) {
         return Worlds.ALL[w].accountantCosts != null;
     }
@@ -470,7 +529,7 @@ public final class GameState {
         sb.append("world=").append(currentWorld).append('\n');
         for (int w = 0; w < worlds.length; w++) {
             World world = worlds[w];
-            sb.append(String.format(Locale.US, "w%d=%d\n", w, world.travelManager ? 1 : 0));
+            sb.append(String.format(Locale.US, "w%d=%d,%d,%d\n", w, world.travelManager ? 1 : 0, world.buyer ? 1 : 0, world.buyerGarden));
             for (int g = 0; g < world.gardens.length; g++) {
                 Garden garden = world.gardens[g];
                 sb.append(String.format(Locale.US, "g%d.%d=%d,%d,%d,%d,%d,%d,%d,%d\n", w, g,
@@ -526,6 +585,9 @@ public final class GameState {
                     String[] p = value.split(",");
                     if (w < worlds.length) {
                         worlds[w].travelManager = p[0].equals("1");
+                        worlds[w].buyer = p.length > 1 && p[1].equals("1");
+                        worlds[w].buyerGarden = p.length > 2 ? Integer.parseInt(p[2]) : -1;
+                        if (worlds[w].buyerGarden >= Worlds.GARDENS_PER_WORLD) worlds[w].buyerGarden = -1;
                     }
                 } else if (key.startsWith("g")) {
                     String[] ids = key.substring(1).split("\\.");

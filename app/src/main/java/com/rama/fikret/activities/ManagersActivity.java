@@ -23,6 +23,7 @@ public class ManagersActivity extends ListScreenActivity {
     private static final int KIND_GUIDE = 1;
     private static final int KIND_ACCOUNTANT = 2;
     private static final int KIND_DISCOUNT = 3;
+    private static final int KIND_BUYER = 4;
 
     private final List<int[]> rows = new ArrayList<>();
 
@@ -65,6 +66,9 @@ public class ManagersActivity extends ListScreenActivity {
         if (!state.hasTravelManager(world)) {
             rows.add(new int[]{KIND_GUIDE, 0});
         }
+        if (!state.hasBuyer(world)) {
+            rows.add(new int[]{KIND_BUYER, 0});
+        }
         Collections.sort(rows, new Comparator<int[]>() {
             @Override
             public int compare(int[] a, int[] b) {
@@ -92,6 +96,8 @@ public class ManagersActivity extends ListScreenActivity {
         switch (kind) {
             case KIND_GUIDE:
                 return state.travelManagerCost(world);
+            case KIND_BUYER:
+                return state.buyerCost(world);
             case KIND_ACCOUNTANT:
                 return state.accountantCost(world, g);
             case KIND_DISCOUNT:
@@ -154,6 +160,9 @@ public class ManagersActivity extends ListScreenActivity {
                 case KIND_GUIDE:
                     hired = state.hireTravelManager(world);
                     break;
+                case KIND_BUYER:
+                    hired = state.hireBuyer(world);
+                    break;
                 case KIND_ACCOUNTANT:
                     hired = state.hireAccountant(world, g);
                     break;
@@ -171,21 +180,6 @@ public class ManagersActivity extends ListScreenActivity {
         });
     }
 
-    private void setCoin(TextView cost, boolean coin) {
-        Object last = cost.getTag(R.id.last_coin);
-        if (last instanceof Boolean && (Boolean) last == coin) {
-            return;
-        }
-        cost.setTag(R.id.last_coin, coin);
-        if (coin) {
-            int size = Math.round(cost.getTextSize());
-            cost.setCompoundDrawables(FarmArt.coin(this, world, size), null, null, null);
-            cost.setCompoundDrawablePadding(size / 4);
-        } else {
-            cost.setCompoundDrawables(null, null, null, null);
-        }
-    }
-
     @Override
     protected void bindRow(View row, int position) {
         row.setTag(position);
@@ -199,7 +193,6 @@ public class ManagersActivity extends ListScreenActivity {
         String name;
         String description;
         String costLabel;
-        boolean coin = false;
         boolean affordable;
         switch (kind) {
             case KIND_GUIDE: {
@@ -210,13 +203,20 @@ public class ManagersActivity extends ListScreenActivity {
                 affordable = state.getMoney(world) >= cost;
                 break;
             }
+            case KIND_BUYER: {
+                double cost = state.buyerCost(world);
+                name = getString(R.string.buyer_bird_name);
+                description = getString(R.string.buyer_bird_desc);
+                costLabel = NumberFormatter.money(world, cost);
+                affordable = state.getMoney(world) >= cost;
+                break;
+            }
             case KIND_ACCOUNTANT: {
                 double cost = state.accountantCost(world, g);
                 String garden = def.gardens[g].name;
                 name = getString(R.string.accountant_name, garden);
                 description = getString(R.string.accountant_desc, garden);
-                costLabel = NumberFormatter.number(cost);
-                coin = true;
+                costLabel = getString(R.string.farm_points_cost, NumberFormatter.number(cost));
                 affordable = state.getAngels(world) >= cost;
                 break;
             }
@@ -245,7 +245,6 @@ public class ManagersActivity extends ListScreenActivity {
         ViewUpdates.setText((TextView) row.findViewById(R.id.rescue_label), getString(R.string.rescue));
         TextView costView = (TextView) row.findViewById(R.id.rescue_cost);
         ViewUpdates.setText(costView, costLabel);
-        setCoin(costView, coin);
         ViewUpdates.setBackgroundColor(row.findViewById(R.id.rescue_button),
                 affordable ? ViewUpdates.themeColor(this, R.attr.accent) : ViewUpdates.color(this, R.color.disabled));
     }
