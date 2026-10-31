@@ -64,8 +64,8 @@
                     android:layout_width="wrap_content"
                     android:layout_height="wrap_content"
                     android:layout_gravity="center"
-                    android:textSize="12dp"
-                    android:textColor="@color/base" />
+                    android:textColor="@color/base"
+                    android:textSize="12dp" />
             </FrameLayout>
         </LinearLayout>
 
@@ -105,9 +105,27 @@
                 android:id="@+id/duration"
                 android:layout_width="52dp"
                 android:layout_height="match_parent"
-                android:gravity="center"
-                android:background="?attr/timeBg" />
+                android:background="?attr/timeBg"
+                android:gravity="center" />
         </LinearLayout>
     </LinearLayout>
 
+    <View
+        android:id="@+id/buy_bird_gap"
+        style="@style/SeparatorListHorizontal" />
+
+    <FrameLayout
+        android:id="@+id/buy_bird_btn"
+        android:layout_width="45dp"
+        android:layout_height="65dp"
+        android:background="?attr/iconBg"
+        android:contentDescription="@string/buyer_toggle_desc"
+        android:padding="8dp">
+
+        <ImageView
+            android:id="@+id/bird_icon"
+            android:layout_width="match_parent"
+            android:layout_height="match_parent"
+            android:contentDescription="@null" />
+    </FrameLayout>
 </LinearLayout>

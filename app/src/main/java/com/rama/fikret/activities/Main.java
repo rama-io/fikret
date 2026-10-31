@@ -19,6 +19,7 @@ import com.rama.fikret.R;
 import com.rama.fikret.economy.GameState;
 import com.rama.fikret.economy.NumberFormatter;
 import com.rama.fikret.economy.Worlds;
+import com.rama.fikret.game.BirdSheets;
 import com.rama.fikret.helpers.DeveloperMode;
 import com.rama.fikret.helpers.FarmArt;
 import com.rama.fikret.helpers.GardenIcons;
@@ -180,6 +181,21 @@ public class Main extends Activity {
         ViewUpdates.setText((TextView) row.findViewById(R.id.buy_label), label);
         ViewUpdates.setText((TextView) row.findViewById(R.id.buy_cost), NumberFormatter.money(w, quote.cost));
         ViewUpdates.setBackgroundColor(row.findViewById(R.id.buy_button), affordable ? ViewUpdates.themeColor(this, R.attr.btnBg) : ViewUpdates.color(this, R.color.disabled));
+
+        boolean hasBuyer = state.hasBuyer(w);
+        int buyerVisibility = hasBuyer ? View.VISIBLE : View.GONE;
+        row.findViewById(R.id.buy_bird_gap).setVisibility(buyerVisibility);
+        View birdButton = row.findViewById(R.id.buy_bird_btn);
+        birdButton.setVisibility(buyerVisibility);
+        if (hasBuyer) {
+            ImageView birdIcon = (ImageView) row.findViewById(R.id.bird_icon);
+            if (!Integer.valueOf(w).equals(birdIcon.getTag())) {
+                birdIcon.setTag(w);
+                birdIcon.setImageDrawable(BirdSheets.icon(this, w));
+            }
+            boolean active = state.getBuyerGarden(w) == g;
+            ViewUpdates.setBackgroundColor(birdButton, active ? ViewUpdates.themeColor(this, R.attr.accent) : ViewUpdates.color(this, R.color.disabled));
+        }
     }
 
     private final class GardenAdapter extends BaseAdapter {
@@ -217,6 +233,11 @@ public class Main extends Activity {
             if (state.buy(state.getCurrentWorld(), g, MULTIPLIERS[multiplierIndex])) {
                 refresh();
             }
+        });
+        row.findViewById(R.id.buy_bird_btn).setOnClickListener(v -> {
+            int g = (Integer) row.getTag();
+            state.toggleBuyer(state.getCurrentWorld(), g);
+            refresh();
         });
         row.findViewById(R.id.harvest_btn).setOnClickListener(v -> {
             int g = (Integer) row.getTag();
