@@ -7,6 +7,7 @@
 ## 5
 
 - Integrate ascend modal into finance
+- Add buyer bird
 
 ## 4
 
