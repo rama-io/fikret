@@ -11,7 +11,7 @@ android {
         minSdk 21
         targetSdk 37
 
-        versionCode 5
+        versionCode 6
         versionName "${currentYear}.${versionCode}"
 
         resConfigs "en"

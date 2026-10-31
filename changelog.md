@@ -1,8 +1,12 @@
 # Changelog
 
-## 6
+## 7
 
 - Release forest farm
+
+## 6
+
+- Buyer gets better increase income while offline.
 
 ## 5
 

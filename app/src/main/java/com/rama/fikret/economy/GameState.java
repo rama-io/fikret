@@ -15,6 +15,8 @@ public final class GameState {
     public static final int UPGRADE_VALUE = 1;
 
     private static final String PREF_KEY = "economy:state";
+    private static final int MAX_SYNC_STEPS = 1000;
+    private static final double MIN_SYNC_STEP_SECONDS = 1;
 
     private static GameState instance;
 
@@ -88,14 +90,18 @@ public final class GameState {
         if (dt <= 0) {
             return;
         }
-        for (int w = 0; w < worlds.length; w++) {
-            for (int g = 0; g < Worlds.GARDENS_PER_WORLD; g++) {
-                advance(w, g, dt);
-            }
-        }
+        int steps = (int) Math.min(MAX_SYNC_STEPS, Math.max(1, Math.ceil(dt / MIN_SYNC_STEP_SECONDS)));
+        double stepSeconds = dt / steps;
         boolean bought = false;
-        for (int w = 0; w < worlds.length; w++) {
-            bought |= runBuyer(w);
+        for (int i = 0; i < steps; i++) {
+            for (int w = 0; w < worlds.length; w++) {
+                for (int g = 0; g < Worlds.GARDENS_PER_WORLD; g++) {
+                    advance(w, g, stepSeconds);
+                }
+            }
+            for (int w = 0; w < worlds.length; w++) {
+                bought |= runBuyer(w);
+            }
         }
         if (bought) {
             save();
