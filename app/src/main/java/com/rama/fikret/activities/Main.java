@@ -189,12 +189,17 @@ public class Main extends Activity {
         birdButton.setVisibility(buyerVisibility);
         if (hasBuyer) {
             ImageView birdIcon = (ImageView) row.findViewById(R.id.bird_icon);
-            if (!Integer.valueOf(w).equals(birdIcon.getTag())) {
-                birdIcon.setTag(w);
-                birdIcon.setImageDrawable(BirdSheets.icon(this, w));
-            }
             boolean active = state.getBuyerGarden(w) == g;
-            ViewUpdates.setBackgroundColor(birdButton, active ? ViewUpdates.themeColor(this, R.attr.accent) : ViewUpdates.color(this, R.color.disabled));
+            ViewUpdates.setBackgroundColor(birdButton, active
+                    ? ViewUpdates.themeColor(this, R.attr.accent)
+                    : ViewUpdates.color(this, R.color.disabled));
+            if (active) {
+                if (birdIcon.getDrawable() == null) {
+                    birdIcon.setImageDrawable(BirdSheets.icon(this, w));
+                }
+            } else {
+                birdIcon.setImageDrawable(null);
+            }
         }
     }
 
