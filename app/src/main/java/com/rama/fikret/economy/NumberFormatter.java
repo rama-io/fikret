@@ -6,7 +6,7 @@ public final class NumberFormatter {
     private NumberFormatter() {
     }
 
-    private static final double SCIENTIFIC_FROM = 1e6;
+    private static final double SCIENTIFIC_FROM = 1e5;
 
     public static String money(int world, double value) {
         return Worlds.currencyOf(world) + " " + number(value);
