@@ -6,7 +6,8 @@
 
 ## 6
 
-- Buyer gets better increase income while offline.
+- Buyer increase income while offline.
+- Scientific form start from 100,000 as 1e5
 
 ## 5
 
