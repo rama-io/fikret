@@ -2,6 +2,7 @@
 <LinearLayout xmlns:android="http://schemas.android.com/apk/res/android"
     android:id="@+id/garden_list_item"
     style="@style/HorizontalList"
+    android:background="@color/base"
     android:clickable="false"
     android:focusable="false">
 

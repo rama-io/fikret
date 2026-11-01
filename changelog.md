@@ -8,6 +8,7 @@
 
 - Buyer increase income while offline.
 - Scientific form start from 100,000 as 1e5
+- Fix selection bug
 
 ## 5
 
