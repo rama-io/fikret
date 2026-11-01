@@ -30,7 +30,7 @@ public final class Worlds {
     private static final double BUYER_COST_LAKE = 1e20;
 
     public static final double ACCOUNTANT_COST_FACTOR = 0.9;
-    private static final double[] LAKE_ACCOUNTANT_COSTS = {10, 100, 1e3, 9999, 1e5, 1e7, 1e8, 1e9, 1e10, 1e11};
+    private static final double[] LAKE_ACCOUNTANT_COSTS = {10, 100, 1e3, 1e4, 1e5, 1e7, 1e8, 1e9, 1e10, 1e11};
 
     public static final double DISCOUNT_COST_DIVISOR = 100000;
     private static final double[] LAKE_DISCOUNT_COSTS = {10e102, 75e105, 250e108, 100e111, 50e114, 3e117, 750e117, 3e120, 33e123, 9e126};

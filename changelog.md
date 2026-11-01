@@ -1,8 +1,13 @@
 # Changelog
 
-## 6
+## 7
 
 - Release forest farm
+
+## 6
+
+- Buyer increase income while offline.
+- Scientific form start from 100,000 as 1e5
 
 ## 5
 
