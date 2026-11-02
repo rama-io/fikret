@@ -134,6 +134,14 @@ public class Main extends Activity {
         content.findViewById(R.id.menu_teleport).setVisibility(visibility);
         content.findViewById(R.id.menu_teleport_gap).setVisibility(visibility);
 
+        int w = state.getCurrentWorld();
+        int managersVisibility = state.hasRemainingSupervisors(w) ? View.VISIBLE : View.GONE;
+        content.findViewById(R.id.menu_managers).setVisibility(managersVisibility);
+        content.findViewById(R.id.menu_managers_gap).setVisibility(managersVisibility);
+        int upgradesVisibility = state.hasRemainingUpgrades(w) ? View.VISIBLE : View.GONE;
+        content.findViewById(R.id.menu_upgrades).setVisibility(upgradesVisibility);
+        content.findViewById(R.id.menu_upgrades_gap).setVisibility(upgradesVisibility);
+
         dialog.show();
     }
 

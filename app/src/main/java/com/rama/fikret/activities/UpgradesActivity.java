@@ -36,6 +36,31 @@ public class UpgradesActivity extends ListScreenActivity {
         return Worlds.ALL[state.getCurrentWorld()].name;
     }
 
+    private static final int VIEW_UPGRADE = 0;
+    private static final int VIEW_QUICK_BUY = 1;
+
+    private boolean hasHeader() {
+        return state.hasQuickBuy(world) && !rows.isEmpty();
+    }
+
+    private int headerCount() {
+        return hasHeader() ? 1 : 0;
+    }
+
+    private boolean isHeader(int position) {
+        return position == 0 && hasHeader();
+    }
+
+    private boolean anyAffordable() {
+        for (int[] r : rows) {
+            if (state.getCount(world, r[2]) > 0 && r[0] == state.upgradeLevel(world, r[2], r[1])
+                    && state.getMoney(world) >= state.upgradeCostAt(world, r[2], r[1], r[0])) {
+                return true;
+            }
+        }
+        return false;
+    }
+
     private void rebuildRows() {
         rows.clear();
         for (int tier = 0; tier < Worlds.UPGRADE_MAX_LEVEL; tier++) {
@@ -55,7 +80,17 @@ public class UpgradesActivity extends ListScreenActivity {
         return new BaseAdapter() {
             @Override
             public int getCount() {
-                return rows.size();
+                return rows.size() + headerCount();
+            }
+
+            @Override
+            public int getViewTypeCount() {
+                return 2;
+            }
+
+            @Override
+            public int getItemViewType(int position) {
+                return isHeader(position) ? VIEW_QUICK_BUY : VIEW_UPGRADE;
             }
 
             @Override
@@ -72,9 +107,20 @@ public class UpgradesActivity extends ListScreenActivity {
             public View getView(int position, View convertView, ViewGroup parent) {
                 View row = convertView;
                 if (row == null) {
-                    row = LayoutInflater.from(UpgradesActivity.this).inflate(R.layout.list_item_upgrade, parent, false);
-                    applyFont(row);
-                    wireListener(row);
+                    if (isHeader(position)) {
+                        row = LayoutInflater.from(UpgradesActivity.this).inflate(R.layout.list_item_quick_buy, parent, false);
+                        applyFont(row);
+                        row.findViewById(R.id.quick_buy_button).setOnClickListener(v -> {
+                            if (state.buyAllUpgrades(world) > 0) {
+                                rebuildRows();
+                                adapter.notifyDataSetChanged();
+                            }
+                        });
+                    } else {
+                        row = LayoutInflater.from(UpgradesActivity.this).inflate(R.layout.list_item_upgrade, parent, false);
+                        applyFont(row);
+                        wireListener(row);
+                    }
                 }
                 bindRow(row, position);
                 return row;
@@ -84,8 +130,8 @@ public class UpgradesActivity extends ListScreenActivity {
 
     private void wireListener(final View row) {
         row.findViewById(R.id.activate_button).setOnClickListener(v -> {
-            int position = (Integer) row.getTag();
-            if (position >= rows.size()) {
+            int position = (Integer) row.getTag() - headerCount();
+            if (position < 0 || position >= rows.size()) {
                 return;
             }
             int[] upgrade = rows.get(position);
@@ -99,7 +145,13 @@ public class UpgradesActivity extends ListScreenActivity {
     @Override
     protected void bindRow(View row, int position) {
         row.setTag(position);
-        if (position >= rows.size()) {
+        if (isHeader(position)) {
+            ViewUpdates.setBackgroundColor(row.findViewById(R.id.quick_buy_button),
+                    anyAffordable() ? ViewUpdates.themeColor(this, R.attr.accent) : ViewUpdates.color(this, R.color.disabled));
+            return;
+        }
+        position -= headerCount();
+        if (position < 0 || position >= rows.size()) {
             return;
         }
         int tier = rows.get(position)[0];

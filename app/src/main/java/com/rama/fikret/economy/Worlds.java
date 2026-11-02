@@ -29,6 +29,8 @@ public final class Worlds {
 
     private static final double BUYER_COST_LAKE = 1e20;
 
+    private static final double QUICK_BUY_COST = 1e25;
+
     public static final double ACCOUNTANT_COST_FACTOR = 0.9;
     private static final double[] LAKE_ACCOUNTANT_COSTS = {10, 100, 1e3, 1e4, 1e5, 1e7, 1e8, 1e9, 1e10, 1e11};
 
@@ -65,6 +67,7 @@ public final class Worlds {
         public final double[] managerCosts;
         public final double travelManagerCost;
         public final double buyerCost;
+        public final double quickBuyCost;
         public final double[] accountantCosts;
         public final double[] discountCosts;
         public final boolean placeholderPrices;
@@ -80,6 +83,7 @@ public final class Worlds {
             this.travelManagerCost = travelManagerCost;
             GardenDef top = gardens[gardens.length - 1];
             this.buyerCost = BUYER_COST_LAKE * (top.baseRevenue / top.cycleSeconds) / LAKE_TOP_INCOME;
+            this.quickBuyCost = QUICK_BUY_COST * (startMoney / START_MONEY);
             this.accountantCosts = accountantCosts;
             this.discountCosts = discountCosts;
             this.placeholderPrices = placeholderPrices;
