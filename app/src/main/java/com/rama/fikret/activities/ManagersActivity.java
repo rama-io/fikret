@@ -24,6 +24,7 @@ public class ManagersActivity extends ListScreenActivity {
     private static final int KIND_ACCOUNTANT = 2;
     private static final int KIND_DISCOUNT = 3;
     private static final int KIND_BUYER = 4;
+    private static final int KIND_QUICK_BUY = 5;
 
     private final List<int[]> rows = new ArrayList<>();
 
@@ -69,6 +70,9 @@ public class ManagersActivity extends ListScreenActivity {
         if (!state.hasBuyer(world)) {
             rows.add(new int[]{KIND_BUYER, 0});
         }
+        if (!state.hasQuickBuy(world)) {
+            rows.add(new int[]{KIND_QUICK_BUY, 0});
+        }
         Collections.sort(rows, new Comparator<int[]>() {
             @Override
             public int compare(int[] a, int[] b) {
@@ -98,6 +102,8 @@ public class ManagersActivity extends ListScreenActivity {
                 return state.travelManagerCost(world);
             case KIND_BUYER:
                 return state.buyerCost(world);
+            case KIND_QUICK_BUY:
+                return state.quickBuyCost(world);
             case KIND_ACCOUNTANT:
                 return state.accountantCost(world, g);
             case KIND_DISCOUNT:
@@ -163,6 +169,9 @@ public class ManagersActivity extends ListScreenActivity {
                 case KIND_BUYER:
                     hired = state.hireBuyer(world);
                     break;
+                case KIND_QUICK_BUY:
+                    hired = state.hireQuickBuy(world);
+                    break;
                 case KIND_ACCOUNTANT:
                     hired = state.hireAccountant(world, g);
                     break;
@@ -207,6 +216,14 @@ public class ManagersActivity extends ListScreenActivity {
                 double cost = state.buyerCost(world);
                 name = getString(R.string.buyer_bird_name);
                 description = getString(R.string.buyer_bird_desc);
+                costLabel = NumberFormatter.money(world, cost);
+                affordable = state.getMoney(world) >= cost;
+                break;
+            }
+            case KIND_QUICK_BUY: {
+                double cost = state.quickBuyCost(world);
+                name = getString(R.string.quick_buy_bird_name);
+                description = getString(R.string.quick_buy_bird_desc);
                 costLabel = NumberFormatter.money(world, cost);
                 affordable = state.getMoney(world) >= cost;
                 break;

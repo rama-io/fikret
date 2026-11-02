@@ -79,7 +79,7 @@ public class GameView extends SurfaceView implements SurfaceHolder.Callback {
     private boolean pinching;
 
     public GameView(Context context) {
-        this(context, Maps.BEACH);
+        this(context, Maps.LAKE);
     }
 
     public GameView(Context context, int stageId) {
@@ -110,7 +110,7 @@ public class GameView extends SurfaceView implements SurfaceHolder.Callback {
         try {
             stage = Maps.get(stageId);
         } catch (IllegalArgumentException unknownStage) {
-            stageId = Maps.BEACH;
+            stageId = Maps.LAKE;
             stage = Maps.get(stageId);
             this.startPosition = null;
         }
@@ -539,11 +539,11 @@ public class GameView extends SurfaceView implements SurfaceHolder.Callback {
     }
 
     private void performTeleport() {
-        if (stageId == Maps.BEACH) {
+        if (stageId == Maps.LAKE) {
             beginCameraGlide();
             moveGooseTo(stage.spawnRow, stage.spawnCol);
         } else {
-            changeStage(Maps.BEACH, true);
+            changeStage(Maps.LAKE, true);
         }
     }
 

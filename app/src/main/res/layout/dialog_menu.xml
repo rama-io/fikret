@@ -7,14 +7,18 @@
         style="@style/BTN"
         android:text="@string/menu_map" />
 
-    <View style="@style/SeparatorListVertical" />
+    <View
+        android:id="@+id/menu_managers_gap"
+        style="@style/SeparatorListVertical" />
 
     <TextView
         android:id="@+id/menu_managers"
         style="@style/BTN"
         android:text="@string/menu_managers" />
 
-    <View style="@style/SeparatorListVertical" />
+    <View
+        android:id="@+id/menu_upgrades_gap"
+        style="@style/SeparatorListVertical" />
 
     <TextView
         android:id="@+id/menu_upgrades"

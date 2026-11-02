@@ -39,10 +39,10 @@ public class GameActivity extends Activity {
         int stageId;
         int[] startPosition = null;
         if (getIntent().hasExtra(EXTRA_STAGE)) {
-            stageId = getIntent().getIntExtra(EXTRA_STAGE, Maps.BEACH);
+            stageId = getIntent().getIntExtra(EXTRA_STAGE, Maps.LAKE);
         } else {
             PrefsManager prefs = PrefsManager.getInstance(this);
-            stageId = prefs.getCurrentStage(Maps.BEACH);
+            stageId = prefs.getCurrentStage(Maps.LAKE);
             startPosition = prefs.getArrivalPosition();
         }
         gameView = new GameView(this, stageId, startPosition);

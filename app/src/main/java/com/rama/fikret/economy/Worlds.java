@@ -29,6 +29,8 @@ public final class Worlds {
 
     private static final double BUYER_COST_LAKE = 1e20;
 
+    private static final double QUICK_BUY_COST = 1e25;
+
     public static final double ACCOUNTANT_COST_FACTOR = 0.9;
     private static final double[] LAKE_ACCOUNTANT_COSTS = {10, 100, 1e3, 1e4, 1e5, 1e7, 1e8, 1e9, 1e10, 1e11};
 
@@ -65,6 +67,7 @@ public final class Worlds {
         public final double[] managerCosts;
         public final double travelManagerCost;
         public final double buyerCost;
+        public final double quickBuyCost;
         public final double[] accountantCosts;
         public final double[] discountCosts;
         public final boolean placeholderPrices;
@@ -80,6 +83,7 @@ public final class Worlds {
             this.travelManagerCost = travelManagerCost;
             GardenDef top = gardens[gardens.length - 1];
             this.buyerCost = BUYER_COST_LAKE * (top.baseRevenue / top.cycleSeconds) / LAKE_TOP_INCOME;
+            this.quickBuyCost = QUICK_BUY_COST * (startMoney / START_MONEY);
             this.accountantCosts = accountantCosts;
             this.discountCosts = discountCosts;
             this.placeholderPrices = placeholderPrices;
@@ -152,7 +156,7 @@ public final class Worlds {
     private static final double SCALE_JPY = 1.6;
     private static final double SCALE_EUR = 0.12;
 
-    public static final WorldDef[] ALL = {new WorldDef(Maps.BEACH, "Lake", CURRENCY_LAKE, build(LAKE_NAMES, LAKE_NUMBERS), PLACEHOLDER_MANAGER_COSTS, GUIDE_BIRD_COST, LAKE_ACCOUNTANT_COSTS, LAKE_DISCOUNT_COSTS, false, START_MONEY), farm(Maps.FOREST, "Forest", CURRENCY_FOREST, FOREST_NAMES, SCALE_BRL, 1.1, 0), farm(Maps.CAVE, "Cave", CURRENCY_CAVE, CAVE_NAMES, SCALE_VND, 1.2, 0), farm(Maps.VOLCANO, "Volcano", CURRENCY_VOLCANO, VOLCANO_NAMES, SCALE_IDR, 1.3, 0.005), farm(Maps.NUCLEAR, "Nuclear", CURRENCY_NUCLEAR, NUCLEAR_NAMES, SCALE_CNY, 1.4, 0.005), farm(Maps.ARCTIC, "Arctic", CURRENCY_ARCTIC, ARCTIC_NAMES, SCALE_RUB, 1.5, 0.01), farm(Maps.BUBBLEGUM_LAND, "Bubblegum land", CURRENCY_BUBBLEGUM, BUBBLEGUM_NAMES, SCALE_BSD, 1.6, 0.01), farm(Maps.SPACE, "Space", CURRENCY_SPACE, SPACE_NAMES, SCALE_JPY, 1.7, 0.015), farm(Maps.NIGHTMARE, "Nightmare", CURRENCY_NIGHTMARE, NIGHTMARE_NAMES, SCALE_EUR, 1.8, 0.02),};
+    public static final WorldDef[] ALL = {new WorldDef(Maps.LAKE, "Lake", CURRENCY_LAKE, build(LAKE_NAMES, LAKE_NUMBERS), PLACEHOLDER_MANAGER_COSTS, GUIDE_BIRD_COST, LAKE_ACCOUNTANT_COSTS, LAKE_DISCOUNT_COSTS, false, START_MONEY), farm(Maps.FOREST, "Forest", CURRENCY_FOREST, FOREST_NAMES, SCALE_BRL, 1.1, 0), farm(Maps.CAVE, "Cave", CURRENCY_CAVE, CAVE_NAMES, SCALE_VND, 1.2, 0), farm(Maps.VOLCANO, "Volcano", CURRENCY_VOLCANO, VOLCANO_NAMES, SCALE_IDR, 1.3, 0.005), farm(Maps.NUCLEAR, "Nuclear", CURRENCY_NUCLEAR, NUCLEAR_NAMES, SCALE_CNY, 1.4, 0.005), farm(Maps.ARCTIC, "Arctic", CURRENCY_ARCTIC, ARCTIC_NAMES, SCALE_RUB, 1.5, 0.01), farm(Maps.BUBBLEGUM_LAND, "Bubblegum land", CURRENCY_BUBBLEGUM, BUBBLEGUM_NAMES, SCALE_BSD, 1.6, 0.01), farm(Maps.SPACE, "Space", CURRENCY_SPACE, SPACE_NAMES, SCALE_JPY, 1.7, 0.015), farm(Maps.NIGHTMARE, "Nightmare", CURRENCY_NIGHTMARE, NIGHTMARE_NAMES, SCALE_EUR, 1.8, 0.02),};
 
     private static WorldDef farm(int stageId, String name, String currency, String[] names, double currencyScale, double timeScale, double coefficientOffset) {
         return new WorldDef(stageId, name, currency, buildFromLake(names, currencyScale, timeScale, coefficientOffset), scaled(PLACEHOLDER_MANAGER_COSTS, currencyScale), GUIDE_BIRD_COST * currencyScale, LAKE_ACCOUNTANT_COSTS, scaled(LAKE_DISCOUNT_COSTS, currencyScale), true, START_MONEY * currencyScale);
@@ -198,7 +202,7 @@ public final class Worlds {
 
     public static String stageName(int stageId) {
         switch (stageId) {
-            case Maps.BEACH:
+            case Maps.LAKE:
                 return "Lake";
             case Maps.FOREST:
                 return "Forest";
@@ -221,5 +225,5 @@ public final class Worlds {
         }
     }
 
-    public static final int[] ALL_STAGE_IDS = {Maps.BEACH, Maps.FOREST, Maps.CAVE, Maps.VOLCANO, Maps.NUCLEAR, Maps.ARCTIC, Maps.BUBBLEGUM_LAND, Maps.SPACE, Maps.NIGHTMARE};
+    public static final int[] ALL_STAGE_IDS = {Maps.LAKE, Maps.FOREST, Maps.CAVE, Maps.VOLCANO, Maps.NUCLEAR, Maps.ARCTIC, Maps.BUBBLEGUM_LAND, Maps.SPACE, Maps.NIGHTMARE};
 }

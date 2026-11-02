@@ -42,6 +42,7 @@ public final class GameState {
         final Garden[] gardens = new Garden[Worlds.GARDENS_PER_WORLD];
         boolean travelManager;
         boolean buyer;
+        boolean quickBuy;
         int buyerGarden = -1;
 
         World() {
@@ -395,6 +396,83 @@ public final class GameState {
         return true;
     }
 
+    public boolean hasQuickBuy(int w) {
+        return worlds[w].quickBuy;
+    }
+
+    public double quickBuyCost(int w) {
+        return Worlds.ALL[w].quickBuyCost;
+    }
+
+    public synchronized boolean hireQuickBuy(int w) {
+        sync();
+        World world = worlds[w];
+        double cost = quickBuyCost(w);
+        if (world.quickBuy || money[w] < cost) {
+            return false;
+        }
+        money[w] -= cost;
+        world.quickBuy = true;
+        save();
+        return true;
+    }
+
+    public boolean hasRemainingSupervisors(int w) {
+        World world = worlds[w];
+        if (!world.travelManager || !world.buyer || !world.quickBuy) {
+            return true;
+        }
+        for (int g = 0; g < Worlds.GARDENS_PER_WORLD; g++) {
+            if (!hasManager(w, g)) return true;
+            if (hasAccountantList(w) && !hasAccountant(w, g)) return true;
+            if (hasDiscountList(w) && !hasDiscount(w, g)) return true;
+        }
+        return false;
+    }
+
+    public boolean hasRemainingUpgrades(int w) {
+        for (int g = 0; g < Worlds.GARDENS_PER_WORLD; g++) {
+            if (!upgradeMaxed(w, g, UPGRADE_SPEED) || !upgradeMaxed(w, g, UPGRADE_VALUE)) {
+                return true;
+            }
+        }
+        return false;
+    }
+
+    public synchronized int buyAllUpgrades(int w) {
+        sync();
+        if (!worlds[w].quickBuy) {
+            return 0;
+        }
+        int bought = 0;
+        while (true) {
+            Garden best = null;
+            boolean bestSpeed = false;
+            double bestCost = Double.MAX_VALUE;
+            for (int g = 0; g < Worlds.GARDENS_PER_WORLD; g++) {
+                Garden garden = worlds[w].gardens[g];
+                if (garden.count <= 0) continue;
+                for (int type = 0; type < 2; type++) {
+                    boolean speed = type == UPGRADE_SPEED;
+                    int level = speed ? garden.speedLevel : garden.valueLevel;
+                    if (level >= Worlds.UPGRADE_MAX_LEVEL) continue;
+                    double cost = Worlds.upgradePrice(w, level, speed, g);
+                    if (cost <= money[w] && cost < bestCost) {
+                        best = garden;
+                        bestSpeed = speed;
+                        bestCost = cost;
+                    }
+                }
+            }
+            if (best == null) break;
+            money[w] -= bestCost;
+            if (bestSpeed) best.speedLevel++; else best.valueLevel++;
+            bought++;
+        }
+        if (bought > 0) save();
+        return bought;
+    }
+
     public int getBuyerGarden(int w) {
         return worlds[w].buyer ? worlds[w].buyerGarden : -1;
     }
@@ -535,7 +613,7 @@ public final class GameState {
         sb.append("world=").append(currentWorld).append('\n');
         for (int w = 0; w < worlds.length; w++) {
             World world = worlds[w];
-            sb.append(String.format(Locale.US, "w%d=%d,%d,%d\n", w, world.travelManager ? 1 : 0, world.buyer ? 1 : 0, world.buyerGarden));
+            sb.append(String.format(Locale.US, "w%d=%d,%d,%d,%d\n", w, world.travelManager ? 1 : 0, world.buyer ? 1 : 0, world.buyerGarden, world.quickBuy ? 1 : 0));
             for (int g = 0; g < world.gardens.length; g++) {
                 Garden garden = world.gardens[g];
                 sb.append(String.format(Locale.US, "g%d.%d=%d,%d,%d,%d,%d,%d,%d,%d\n", w, g,
@@ -593,6 +671,7 @@ public final class GameState {
                         worlds[w].travelManager = p[0].equals("1");
                         worlds[w].buyer = p.length > 1 && p[1].equals("1");
                         worlds[w].buyerGarden = p.length > 2 ? Integer.parseInt(p[2]) : -1;
+                        worlds[w].quickBuy = p.length > 3 && p[3].equals("1");
                         if (worlds[w].buyerGarden >= Worlds.GARDENS_PER_WORLD) worlds[w].buyerGarden = -1;
                     }
                 } else if (key.startsWith("g")) {

@@ -57,7 +57,7 @@ public final class Maps {
     static final int SPACE_LAKE = 16;
     static final int BLOOD_LAKE = 17;
 
-    public static final int BEACH = 0;
+    public static final int LAKE = 0;
     public static final int FOREST = 1;
     public static final int CAVE = 2;
     public static final int VOLCANO = 3;
@@ -141,7 +141,7 @@ public final class Maps {
 
     public static Stage get(int stageId) {
         switch (stageId) {
-            case BEACH:
+            case LAKE:
                 return lake();
             case FOREST:
                 return forest();

@@ -2,7 +2,9 @@
 
 ## 7
 
-- Release forest farm
+- Release forest farm (Based on Brazil)
+- Add quick buy bird and quick buy button in the upgrades
+- Completed sections will now disappear from the menu
 
 ## 6
 
