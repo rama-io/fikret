@@ -129,7 +129,7 @@ public class Main extends Activity {
             cancelButton.setOnClickListener(v -> dialog.dismiss());
         }
 
-        boolean teleportAvailable = DeveloperMode.availableFarms() > 1;
+        boolean teleportAvailable = state.unlockedFarmCount() > 1;
         int visibility = teleportAvailable ? View.VISIBLE : View.GONE;
         content.findViewById(R.id.menu_teleport).setVisibility(visibility);
         content.findViewById(R.id.menu_teleport_gap).setVisibility(visibility);

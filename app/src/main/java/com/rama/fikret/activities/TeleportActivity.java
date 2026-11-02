@@ -11,7 +11,6 @@ import com.rama.fikret.R;
 import com.rama.fikret.economy.Worlds;
 import com.rama.fikret.game.Maps;
 import com.rama.fikret.game.Stage;
-import com.rama.fikret.helpers.DeveloperMode;
 import com.rama.fikret.managers.PrefsManager;
 
 public class TeleportActivity extends ListScreenActivity {
@@ -26,17 +25,25 @@ public class TeleportActivity extends ListScreenActivity {
         // static rows, nothing to refresh
     }
 
+    private final java.util.List<Integer> stages = new java.util.ArrayList<>();
+
     @Override
     protected BaseAdapter createAdapter() {
+        stages.clear();
+        for (int w = 0; w < Worlds.ALL.length; w++) {
+            if (state.isFarmUnlocked(w)) {
+                stages.add(Worlds.ALL[w].stageId);
+            }
+        }
         return new BaseAdapter() {
             @Override
             public int getCount() {
-                return DeveloperMode.availableFarms();
+                return stages.size();
             }
 
             @Override
             public Object getItem(int position) {
-                return Worlds.ALL_STAGE_IDS[position];
+                return stages.get(position);
             }
 
             @Override
@@ -51,7 +58,7 @@ public class TeleportActivity extends ListScreenActivity {
                     row = (TextView) LayoutInflater.from(TeleportActivity.this).inflate(R.layout.list_item_teleport, parent, false);
                     applyFont(row);
                 }
-                final int stageId = Worlds.ALL_STAGE_IDS[position];
+                final int stageId = stages.get(position);
                 row.setText(Worlds.stageName(stageId));
                 row.setOnClickListener(v -> teleportTo(stageId));
                 return row;

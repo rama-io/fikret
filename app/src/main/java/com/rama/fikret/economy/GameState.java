@@ -357,6 +357,21 @@ public final class GameState {
         return DeveloperMode.ENABLED || worlds[w].travelManager;
     }
 
+    public boolean isFarmUnlocked(int w) {
+        if (!DeveloperMode.isFarmAvailable(w)) {
+            return false;
+        }
+        return w == 0 || DeveloperMode.ENABLED || worlds[w - 1].travelManager;
+    }
+
+    public int unlockedFarmCount() {
+        int count = 0;
+        for (int w = 0; w < Worlds.ALL.length; w++) {
+            if (isFarmUnlocked(w)) count++;
+        }
+        return count;
+    }
+
     public double travelManagerCost(int w) {
         return Worlds.ALL[w].travelManagerCost;
     }
