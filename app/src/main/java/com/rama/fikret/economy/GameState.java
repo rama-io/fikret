@@ -34,6 +34,7 @@ public final class GameState {
         boolean discount;
         int speedLevel;
         int valueLevel;
+        int milestones;
         double elapsed;
         boolean running;
     }
@@ -70,8 +71,9 @@ public final class GameState {
     private final double[] angelsClaimed = new double[Worlds.ALL.length];
     private final long[] superBought = new long[Worlds.ALL.length];
     private final double[] superProfit = new double[Worlds.ALL.length];
-    private final boolean[][] profitBought = new boolean[Worlds.ALL.length][Worlds.PROFIT_UPGRADE_COUNT];
+    private final boolean[][] medalUnlocked = new boolean[Worlds.ALL.length][Worlds.MEDAL_COUNT];
     private final boolean[][] efficiencyBought = new boolean[Worlds.ALL.length][Worlds.EFFICIENCY_BIRD_COUNT];
+    private boolean medalsDirty;
     private final double[] upgradeProfit = new double[Worlds.ALL.length];
     private final double[] angelRate = new double[Worlds.ALL.length];
     private long lastSync;
@@ -85,6 +87,7 @@ public final class GameState {
         }
         load();
         for (int i = 0; i < worlds.length; i++) {
+            unlockMedals(i);
             refreshSuper(i);
         }
         if (lastSync <= 0) {
@@ -113,7 +116,8 @@ public final class GameState {
                 bought |= runBuyer(w);
             }
         }
-        if (bought) {
+        if (bought || medalsDirty) {
+            medalsDirty = false;
             save();
         }
     }
@@ -130,6 +134,7 @@ public final class GameState {
         }
         money[w] -= units.cost;
         world.gardens[g].count += units.amount;
+        noteMilestones(world.gardens[g]);
         return true;
     }
 
@@ -161,6 +166,7 @@ public final class GameState {
     private void earn(int w, double amount) {
         money[w] += amount;
         lifetimeEarnings[w] += amount;
+        unlockMedals(w);
     }
 
     public synchronized double getMoney(int w) {
@@ -207,34 +213,31 @@ public final class GameState {
 
     public double speedMultiplier(int w, int g) {
         Garden garden = worlds[w].gardens[g];
-        return Math.pow(2, garden.speedLevel + milestonesReached(garden.count));
+        return Math.pow(2, garden.speedLevel + garden.milestones);
+    }
+
+    private static void noteMilestones(Garden garden) {
+        garden.milestones = Math.max(garden.milestones, milestonesReached(garden.count));
+    }
+
+    public int milestones(int w, int g) {
+        return worlds[w].gardens[g].milestones;
+    }
+
+    public double gardenValueMultiplier(int w, int g) {
+        return Math.pow(2, worlds[w].gardens[g].valueLevel);
     }
 
     public double valueMultiplier(int w, int g) {
-        return Math.pow(2, worlds[w].gardens[g].valueLevel) * upgradeProfit[w];
+        return gardenValueMultiplier(w, g) * upgradeProfit[w];
     }
 
     public double upgradeProfitMultiplier(int w) {
         return upgradeProfit[w];
     }
 
-    public synchronized double[] medals(int w) {
-        int n = 0;
-        for (int i = 0; i < Worlds.PROFIT_UPGRADE_COUNT; i++) {
-            if (profitBought[w][i]) n++;
-        }
-        for (int i = 0; i < Worlds.SUPER_UPGRADE_COUNT; i++) {
-            if (hasSuperUpgrade(w, i) && Worlds.superKind(i) == Worlds.SUPER_PROFIT) n++;
-        }
-        double[] result = new double[n];
-        int k = 0;
-        for (int i = 0; i < Worlds.PROFIT_UPGRADE_COUNT; i++) {
-            if (profitBought[w][i]) result[k++] = Worlds.profitUpgradeValue(i);
-        }
-        for (int i = 0; i < Worlds.SUPER_UPGRADE_COUNT; i++) {
-            if (hasSuperUpgrade(w, i) && Worlds.superKind(i) == Worlds.SUPER_PROFIT) result[k++] = Worlds.superValue(i);
-        }
-        return result;
+    public double medalMultiplier(int w) {
+        return upgradeProfit[w] * superProfit[w];
     }
 
     public double revenuePerCycle(int w, int g) {
@@ -274,8 +277,8 @@ public final class GameState {
         }
         superProfit[w] = profit;
         double upgrades = 1;
-        for (int i = 0; i < Worlds.PROFIT_UPGRADE_COUNT; i++) {
-            if (profitBought[w][i]) upgrades *= Worlds.profitUpgradeValue(i);
+        for (int i = 0; i < Worlds.MEDAL_COUNT; i++) {
+            if (medalUnlocked[w][i]) upgrades *= Worlds.medalValue(i);
         }
         for (int i = 0; i < Worlds.EFFICIENCY_BIRD_COUNT; i++) {
             if (efficiencyBought[w][i]) rate += Worlds.efficiencyBirdValue(i);
@@ -284,35 +287,26 @@ public final class GameState {
         angelRate[w] = rate;
     }
 
-    public boolean hasProfitUpgrade(int w, int index) {
-        return profitBought[w][index];
+    public boolean hasMedal(int w, int index) {
+        return medalUnlocked[w][index];
     }
 
-    public double profitUpgradeCost(int w, int index) {
-        return Worlds.ALL[w].profitUpgradeCosts[index];
+    public double medalThreshold(int w, int index) {
+        return Worlds.ALL[w].medalThresholds[index];
     }
 
-    public boolean hasRemainingProfitUpgrades(int w) {
-        for (int i = 0; i < Worlds.PROFIT_UPGRADE_COUNT; i++) {
-            if (!profitBought[w][i]) return true;
+    private void unlockMedals(int w) {
+        boolean unlocked = false;
+        for (int i = 0; i < Worlds.MEDAL_COUNT; i++) {
+            if (!medalUnlocked[w][i] && money[w] >= medalThreshold(w, i)) {
+                medalUnlocked[w][i] = true;
+                unlocked = true;
+            }
         }
-        return false;
-    }
-
-    public synchronized boolean buyProfitUpgrade(int w, int index) {
-        sync();
-        if (index < 0 || index >= Worlds.PROFIT_UPGRADE_COUNT || profitBought[w][index]) {
-            return false;
+        if (unlocked) {
+            refreshSuper(w);
+            medalsDirty = true;
         }
-        double cost = profitUpgradeCost(w, index);
-        if (money[w] < cost) {
-            return false;
-        }
-        money[w] -= cost;
-        profitBought[w][index] = true;
-        refreshSuper(w);
-        save();
-        return true;
     }
 
     public boolean hasEfficiencyBird(int w, int index) {
@@ -464,6 +458,7 @@ public final class GameState {
         }
         money[w] -= q.cost;
         worlds[w].gardens[g].count += q.amount;
+        noteMilestones(worlds[w].gardens[g]);
         save();
         return true;
     }
@@ -799,7 +794,7 @@ public final class GameState {
             sb.append("su.").append(w).append('=').append(superBought[w]).append('\n');
         }
         for (int w = 0; w < worlds.length; w++) {
-            sb.append("pu.").append(w).append('=').append(bits(profitBought[w])).append('\n');
+            sb.append("pu.").append(w).append('=').append(bits(medalUnlocked[w])).append('\n');
             sb.append("eb.").append(w).append('=').append(bits(efficiencyBought[w])).append('\n');
         }
         sb.append("time=").append(lastSync).append('\n');
@@ -809,10 +804,10 @@ public final class GameState {
             sb.append(String.format(Locale.US, "w%d=%d,%d,%d,%d\n", w, world.travelManager ? 1 : 0, world.buyer ? 1 : 0, world.buyerGarden, world.quickBuy ? 1 : 0));
             for (int g = 0; g < world.gardens.length; g++) {
                 Garden garden = world.gardens[g];
-                sb.append(String.format(Locale.US, "g%d.%d=%d,%d,%d,%d,%d,%d,%d,%d\n", w, g,
+                sb.append(String.format(Locale.US, "g%d.%d=%d,%d,%d,%d,%d,%d,%d,%d,%d\n", w, g,
                         garden.count, garden.manager ? 1 : 0, garden.speedLevel, garden.valueLevel,
                         garden.running ? 1 : 0, Double.doubleToLongBits(garden.elapsed),
-                        garden.accountant ? 1 : 0, garden.discount ? 1 : 0));
+                        garden.accountant ? 1 : 0, garden.discount ? 1 : 0, garden.milestones));
             }
         }
         prefs.putString(PREF_KEY, sb.toString());
@@ -869,7 +864,7 @@ public final class GameState {
                 } else if (key.startsWith("pu.") || key.startsWith("eb.")) {
                     int w = Integer.parseInt(key.substring(3));
                     if (w >= 0 && w < worlds.length) {
-                        readBits(value, key.startsWith("pu.") ? profitBought[w] : efficiencyBought[w]);
+                        readBits(value, key.startsWith("pu.") ? medalUnlocked[w] : efficiencyBought[w]);
                     }
                 } else if (key.startsWith("su.")) {
                     int w = Integer.parseInt(key.substring(3));
@@ -906,6 +901,8 @@ public final class GameState {
                         garden.elapsed = Double.longBitsToDouble(Long.parseLong(p[5]));
                         garden.accountant = p.length > 6 && p[6].equals("1");
                         garden.discount = p.length > 7 && p[7].equals("1");
+                        garden.milestones = p.length > 8 ? Integer.parseInt(p[8]) : 0;
+                        noteMilestones(garden);
                     }
                 }
             }

@@ -40,7 +40,10 @@ public final class NumberFormatter {
     }
 
     public static String multiplier(double value) {
-        return value == Math.rint(value) && value < 1e9
+        if (value >= SCIENTIFIC_FROM) {
+            return number(value);
+        }
+        return value == Math.rint(value)
                 ? String.format(Locale.US, "%.0f", value)
                 : trim(String.format(Locale.US, "%.2f", value));
     }

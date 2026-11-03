@@ -120,7 +120,6 @@ public class Main extends Activity {
         bindMenuItem(dialog, content, R.id.menu_map, new Intent(this, GameActivity.class));
         bindMenuItem(dialog, content, R.id.menu_managers, new Intent(this, ManagersActivity.class));
         bindMenuItem(dialog, content, R.id.menu_super_managers, new Intent(this, SuperSupervisorsActivity.class));
-        bindMenuItem(dialog, content, R.id.menu_medals, new Intent(this, MedalsActivity.class));
         bindMenuItem(dialog, content, R.id.menu_upgrades, new Intent(this, UpgradesActivity.class));
         bindMenuItem(dialog, content, R.id.menu_finance, new Intent(this, FinanceActivity.class));
         bindMenuItem(dialog, content, R.id.menu_teleport, new Intent(this, TeleportActivity.class));
@@ -143,9 +142,6 @@ public class Main extends Activity {
         int superVisibility = state.hasRemainingSuperSupervisors(w) ? View.VISIBLE : View.GONE;
         content.findViewById(R.id.menu_super_managers).setVisibility(superVisibility);
         content.findViewById(R.id.menu_super_managers_gap).setVisibility(superVisibility);
-        int medalsVisibility = state.hasRemainingProfitUpgrades(w) ? View.VISIBLE : View.GONE;
-        content.findViewById(R.id.menu_medals).setVisibility(medalsVisibility);
-        content.findViewById(R.id.menu_medals_gap).setVisibility(medalsVisibility);
         int upgradesVisibility = state.hasRemainingUpgrades(w) ? View.VISIBLE : View.GONE;
         content.findViewById(R.id.menu_upgrades).setVisibility(upgradesVisibility);
         content.findViewById(R.id.menu_upgrades_gap).setVisibility(upgradesVisibility);
