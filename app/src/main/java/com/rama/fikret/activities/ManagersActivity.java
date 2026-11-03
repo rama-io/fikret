@@ -27,6 +27,7 @@ public class ManagersActivity extends ListScreenActivity {
     private static final int KIND_BUYER = 4;
     private static final int KIND_QUICK_BUY = 5;
     private static final int KIND_SUPER = 6;
+    private static final int KIND_EFFICIENCY = 7;
 
     private final List<int[]> rows = new ArrayList<>();
 
@@ -86,6 +87,11 @@ public class ManagersActivity extends ListScreenActivity {
             if (!state.hasQuickBuy(world)) {
                 rows.add(new int[]{KIND_QUICK_BUY, 0});
             }
+            for (int i = 0; i < Worlds.EFFICIENCY_BIRD_COUNT; i++) {
+                if (!state.hasEfficiencyBird(world, i)) {
+                    rows.add(new int[]{KIND_EFFICIENCY, i});
+                }
+            }
         }
         Collections.sort(rows, new Comparator<int[]>() {
             @Override
@@ -122,6 +128,8 @@ public class ManagersActivity extends ListScreenActivity {
                 return state.accountantCost(world, g);
             case KIND_SUPER:
                 return state.superUpgradeCost(g);
+            case KIND_EFFICIENCY:
+                return state.efficiencyBirdCost(world, g);
             case KIND_DISCOUNT:
                 return state.discountCost(world, g);
             default:
@@ -194,6 +202,9 @@ public class ManagersActivity extends ListScreenActivity {
                 case KIND_SUPER:
                     hired = state.buySuperUpgrade(world, g);
                     break;
+                case KIND_EFFICIENCY:
+                    hired = state.hireEfficiencyBird(world, g);
+                    break;
                 case KIND_DISCOUNT:
                     hired = state.hireDiscountManager(world, g);
                     break;
@@ -254,6 +265,15 @@ public class ManagersActivity extends ListScreenActivity {
                 description = getString(R.string.accountant_desc, garden);
                 costLabel = getString(R.string.farm_points_cost, NumberFormatter.number(cost));
                 affordable = state.getAngels(world) >= cost;
+                break;
+            }
+            case KIND_EFFICIENCY: {
+                double cost = state.efficiencyBirdCost(world, g);
+                String pct = NumberFormatter.number(Worlds.efficiencyBirdValue(g) * 100);
+                name = getString(R.string.bird_efficiency_name, pct);
+                description = getString(R.string.super_efficiency_desc, pct);
+                costLabel = NumberFormatter.money(world, cost);
+                affordable = state.getMoney(world) >= cost;
                 break;
             }
             case KIND_SUPER: {

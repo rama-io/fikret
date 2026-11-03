@@ -82,7 +82,8 @@ public final class FarmFinance {
             }
 
             double base = def.baseRevenue * count / def.cycleSeconds;
-            double lnUpgrades = (s.upgradeLevel(w, g, GameState.UPGRADE_SPEED) + s.upgradeLevel(w, g, GameState.UPGRADE_VALUE)) * LN2;
+            double lnUpgrades = (s.upgradeLevel(w, g, GameState.UPGRADE_SPEED) + s.upgradeLevel(w, g, GameState.UPGRADE_VALUE)) * LN2
+                    + Math.log(s.upgradeProfitMultiplier(w));
             double lnMilestones = GameState.milestonesReached(count) * LN2;
             double lnAll = lnUpgrades + lnMilestones + lnPoints;
             double extra = Math.max(0, potential - base);

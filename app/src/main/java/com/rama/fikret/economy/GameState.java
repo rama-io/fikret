@@ -13,6 +13,7 @@ public final class GameState {
     public static final int BUY_NEXT = -2;
     public static final int UPGRADE_SPEED = 0;
     public static final int UPGRADE_VALUE = 1;
+    public static final int UPGRADE_PROFIT = 2;
 
     private static final String PREF_KEY = "economy:state";
     private static final int MAX_SYNC_STEPS = 1000;
@@ -70,6 +71,9 @@ public final class GameState {
     private final double[] angelsClaimed = new double[Worlds.ALL.length];
     private final long[] superBought = new long[Worlds.ALL.length];
     private final double[] superProfit = new double[Worlds.ALL.length];
+    private final boolean[][] profitBought = new boolean[Worlds.ALL.length][Worlds.PROFIT_UPGRADE_COUNT];
+    private final boolean[][] efficiencyBought = new boolean[Worlds.ALL.length][Worlds.EFFICIENCY_BIRD_COUNT];
+    private final double[] upgradeProfit = new double[Worlds.ALL.length];
     private final double[] angelRate = new double[Worlds.ALL.length];
     private long lastSync;
     private int currentWorld = 0;
@@ -208,7 +212,11 @@ public final class GameState {
     }
 
     public double valueMultiplier(int w, int g) {
-        return Math.pow(2, worlds[w].gardens[g].valueLevel);
+        return Math.pow(2, worlds[w].gardens[g].valueLevel) * upgradeProfit[w];
+    }
+
+    public double upgradeProfitMultiplier(int w) {
+        return upgradeProfit[w];
     }
 
     public double revenuePerCycle(int w, int g) {
@@ -247,7 +255,77 @@ public final class GameState {
             }
         }
         superProfit[w] = profit;
+        double upgrades = 1;
+        for (int i = 0; i < Worlds.PROFIT_UPGRADE_COUNT; i++) {
+            if (profitBought[w][i]) upgrades *= Worlds.profitUpgradeValue(i);
+        }
+        for (int i = 0; i < Worlds.EFFICIENCY_BIRD_COUNT; i++) {
+            if (efficiencyBought[w][i]) rate += Worlds.efficiencyBirdValue(i);
+        }
+        upgradeProfit[w] = upgrades;
         angelRate[w] = rate;
+    }
+
+    public boolean hasProfitUpgrade(int w, int index) {
+        return profitBought[w][index];
+    }
+
+    public double profitUpgradeCost(int w, int index) {
+        return Worlds.ALL[w].profitUpgradeCosts[index];
+    }
+
+    public boolean hasRemainingProfitUpgrades(int w) {
+        for (int i = 0; i < Worlds.PROFIT_UPGRADE_COUNT; i++) {
+            if (!profitBought[w][i]) return true;
+        }
+        return false;
+    }
+
+    public synchronized boolean buyProfitUpgrade(int w, int index) {
+        sync();
+        if (index < 0 || index >= Worlds.PROFIT_UPGRADE_COUNT || profitBought[w][index]) {
+            return false;
+        }
+        double cost = profitUpgradeCost(w, index);
+        if (money[w] < cost) {
+            return false;
+        }
+        money[w] -= cost;
+        profitBought[w][index] = true;
+        refreshSuper(w);
+        save();
+        return true;
+    }
+
+    public boolean hasEfficiencyBird(int w, int index) {
+        return efficiencyBought[w][index];
+    }
+
+    public double efficiencyBirdCost(int w, int index) {
+        return Worlds.ALL[w].efficiencyBirdCosts[index];
+    }
+
+    public boolean hasRemainingEfficiencyBirds(int w) {
+        for (int i = 0; i < Worlds.EFFICIENCY_BIRD_COUNT; i++) {
+            if (!efficiencyBought[w][i]) return true;
+        }
+        return false;
+    }
+
+    public synchronized boolean hireEfficiencyBird(int w, int index) {
+        sync();
+        if (index < 0 || index >= Worlds.EFFICIENCY_BIRD_COUNT || efficiencyBought[w][index]) {
+            return false;
+        }
+        double cost = efficiencyBirdCost(w, index);
+        if (money[w] < cost) {
+            return false;
+        }
+        money[w] -= cost;
+        efficiencyBought[w][index] = true;
+        refreshSuper(w);
+        save();
+        return true;
     }
 
     public boolean hasSuperUpgrade(int w, int index) {
@@ -503,7 +581,7 @@ public final class GameState {
             if (!hasManager(w, g)) return true;
             if (hasDiscountList(w) && !hasDiscount(w, g)) return true;
         }
-        return false;
+        return hasRemainingEfficiencyBirds(w);
     }
 
     /** Anything still to buy with farm points: accountants and super upgrades. */
@@ -520,6 +598,9 @@ public final class GameState {
     }
 
     public boolean hasRemainingUpgrades(int w) {
+        if (hasRemainingProfitUpgrades(w)) {
+            return true;
+        }
         for (int g = 0; g < Worlds.GARDENS_PER_WORLD; g++) {
             if (!upgradeMaxed(w, g, UPGRADE_SPEED) || !upgradeMaxed(w, g, UPGRADE_VALUE)) {
                 return true;
@@ -536,6 +617,7 @@ public final class GameState {
         int bought = 0;
         while (true) {
             Garden best = null;
+            int bestProfit = -1;
             boolean bestSpeed = false;
             double bestCost = Double.MAX_VALUE;
             for (int g = 0; g < Worlds.GARDENS_PER_WORLD; g++) {
@@ -553,9 +635,21 @@ public final class GameState {
                     }
                 }
             }
-            if (best == null) break;
+            for (int i = 0; i < Worlds.PROFIT_UPGRADE_COUNT; i++) {
+                if (profitBought[w][i]) continue;
+                double cost = profitUpgradeCost(w, i);
+                if (cost <= money[w] && cost < bestCost) {
+                    best = null;
+                    bestProfit = i;
+                    bestCost = cost;
+                }
+            }
+            if (best == null && bestProfit < 0) break;
             money[w] -= bestCost;
-            if (bestSpeed) best.speedLevel++; else best.valueLevel++;
+            if (bestProfit >= 0) {
+                profitBought[w][bestProfit] = true;
+                refreshSuper(w);
+            } else if (bestSpeed) best.speedLevel++; else best.valueLevel++;
             bought++;
         }
         if (bought > 0) save();
@@ -701,6 +795,10 @@ public final class GameState {
         for (int w = 0; w < superBought.length; w++) {
             sb.append("su.").append(w).append('=').append(superBought[w]).append('\n');
         }
+        for (int w = 0; w < worlds.length; w++) {
+            sb.append("pu.").append(w).append('=').append(bits(profitBought[w])).append('\n');
+            sb.append("eb.").append(w).append('=').append(bits(efficiencyBought[w])).append('\n');
+        }
         sb.append("time=").append(lastSync).append('\n');
         sb.append("world=").append(currentWorld).append('\n');
         for (int w = 0; w < worlds.length; w++) {
@@ -715,6 +813,20 @@ public final class GameState {
             }
         }
         prefs.putString(PREF_KEY, sb.toString());
+    }
+
+    private static String bits(boolean[] flags) {
+        StringBuilder sb = new StringBuilder();
+        for (boolean flag : flags) {
+            sb.append(flag ? '1' : '0');
+        }
+        return sb.toString();
+    }
+
+    private static void readBits(String value, boolean[] flags) {
+        for (int i = 0; i < flags.length; i++) {
+            flags[i] = i < value.length() && value.charAt(i) == '1';
+        }
     }
 
     private void load() {
@@ -750,6 +862,11 @@ public final class GameState {
                     int w = key.equals("claimed") ? 0 : Integer.parseInt(key.substring(8));
                     if (w >= 0 && w < angelsClaimed.length) {
                         angelsClaimed[w] = Double.longBitsToDouble(Long.parseLong(value));
+                    }
+                } else if (key.startsWith("pu.") || key.startsWith("eb.")) {
+                    int w = Integer.parseInt(key.substring(3));
+                    if (w >= 0 && w < worlds.length) {
+                        readBits(value, key.startsWith("pu.") ? profitBought[w] : efficiencyBought[w]);
                     }
                 } else if (key.startsWith("su.")) {
                     int w = Integer.parseInt(key.substring(3));

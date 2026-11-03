@@ -40,6 +40,101 @@ public final class Worlds {
             {2e138, SUPER_PROFIT, 19},
     };
 
+    private static final double[][] PROFIT_UPGRADES = {
+            {1e12, 3},
+            {50e15, 3},
+            {500e18, 3},
+            {900e21, 3},
+            {1e42, 7},
+            {100e45, 3},
+            {1e51, 7},
+            {1e54, 5},
+            {1e60, 7},
+            {1e66, 9},
+            {1e72, 11},
+            {1e75, 13},
+            {1e78, 15},
+            {1e84, 3},
+            {3e87, 3},
+            {500e93, 2},
+            {10e99, 3},
+            {20e99, 6},
+            {500e99, 2},
+            {1e102, 5},
+            {600e105, 3},
+            {1e111, 3},
+            {450e114, 3},
+            {350e117, 5},
+            {500e117, 3},
+            {700e120, 7},
+            {1e123, 3},
+            {10e126, 5},
+            {900e129, 2},
+            {5e138, 3},
+            {3e141, 3},
+            {2e144, 3},
+            {450e144, 3},
+            {500e153, 5},
+            {514e156, 3},
+            {900e159, 3},
+            {250e162, 2},
+            {750e162, 2},
+            {250e165, 2},
+            {750e165, 2},
+            {250e168, 2},
+            {750e168, 2},
+            {250e171, 2},
+            {750e171, 2},
+            {250e174, 2},
+            {1e177, 9},
+            {5e183, 10},
+            {5e189, 5},
+            {27e192, 3},
+            {13e195, 4},
+            {2e198, 5},
+            {600e207, 5},
+            {555e216, 5},
+            {100e228, 5},
+            {100e231, 2},
+            {10e237, 4},
+    };
+
+    private static final double[][] EFFICIENCY_BIRDS = {
+            {100e15, 0.01},
+            {1e21, 0.01},
+            {10e24, 0.01},
+            {1e207, 0.021},
+            {1e213, 0.015},
+            {1e216, 0.01},
+            {1e219, 0.02},
+            {1e222, 0.005},
+            {1e225, 0.02},
+            {1e228, 0.012},
+            {1e231, 0.013},
+            {10e231, 0.007},
+            {1e237, 0.02},
+            {1e240, 0.003},
+    };
+
+    public static final int PROFIT_UPGRADE_COUNT = PROFIT_UPGRADES.length;
+    public static final int EFFICIENCY_BIRD_COUNT = EFFICIENCY_BIRDS.length;
+
+    public static double profitUpgradeValue(int index) {
+        return PROFIT_UPGRADES[index][1];
+    }
+
+    public static double efficiencyBirdValue(int index) {
+        return EFFICIENCY_BIRDS[index][1];
+    }
+
+    private static double[] column(double[][] table, double factor) {
+        double[] result = new double[table.length];
+        for (int i = 0; i < table.length; i++) {
+            result[i] = table[i][0] * factor;
+        }
+        return result;
+    }
+
     public static final int SUPER_UPGRADE_COUNT = SUPER_UPGRADES.length;
 
     public static double superCost(int index) {
@@ -113,11 +208,15 @@ public final class Worlds {
         public final double quickBuyCost;
         public final double[] accountantCosts;
         public final double[] discountCosts;
+        public final double[] profitUpgradeCosts;
+        public final double[] efficiencyBirdCosts;
         public final boolean placeholderPrices;
         public final double startMoney;
 
-        WorldDef(int stageId, String name, String currency, GardenDef[] gardens, double[] managerCosts, double travelManagerCost, double[] accountantCosts, double[] discountCosts, boolean placeholderPrices, double startMoney) {
+        WorldDef(int stageId, String name, String currency, GardenDef[] gardens, double[] managerCosts, double travelManagerCost, double[] accountantCosts, double[] discountCosts, double currencyScale, boolean placeholderPrices, double startMoney) {
             this.startMoney = startMoney;
+            this.profitUpgradeCosts = column(PROFIT_UPGRADES, currencyScale);
+            this.efficiencyBirdCosts = column(EFFICIENCY_BIRDS, currencyScale);
             this.stageId = stageId;
             this.name = name;
             this.currency = currency;
@@ -199,10 +298,10 @@ public final class Worlds {
     private static final double SCALE_JPY = 1.6;
     private static final double SCALE_EUR = 0.12;
 
-    public static final WorldDef[] ALL = {new WorldDef(Maps.LAKE, "Lake", CURRENCY_LAKE, build(LAKE_NAMES, LAKE_NUMBERS), PLACEHOLDER_MANAGER_COSTS, GUIDE_BIRD_COST, LAKE_ACCOUNTANT_COSTS, LAKE_DISCOUNT_COSTS, false, START_MONEY), farm(Maps.FOREST, "Forest", CURRENCY_FOREST, FOREST_NAMES, SCALE_BRL, 1.1, 0), farm(Maps.CAVE, "Cave", CURRENCY_CAVE, CAVE_NAMES, SCALE_VND, 1.2, 0), farm(Maps.VOLCANO, "Volcano", CURRENCY_VOLCANO, VOLCANO_NAMES, SCALE_IDR, 1.3, 0.005), farm(Maps.NUCLEAR, "Nuclear", CURRENCY_NUCLEAR, NUCLEAR_NAMES, SCALE_CNY, 1.4, 0.005), farm(Maps.ARCTIC, "Arctic", CURRENCY_ARCTIC, ARCTIC_NAMES, SCALE_RUB, 1.5, 0.01), farm(Maps.BUBBLEGUM_LAND, "Bubblegum land", CURRENCY_BUBBLEGUM, BUBBLEGUM_NAMES, SCALE_BSD, 1.6, 0.01), farm(Maps.SPACE, "Space", CURRENCY_SPACE, SPACE_NAMES, SCALE_JPY, 1.7, 0.015), farm(Maps.NIGHTMARE, "Nightmare", CURRENCY_NIGHTMARE, NIGHTMARE_NAMES, SCALE_EUR, 1.8, 0.02),};
+    public static final WorldDef[] ALL = {new WorldDef(Maps.LAKE, "Lake", CURRENCY_LAKE, build(LAKE_NAMES, LAKE_NUMBERS), PLACEHOLDER_MANAGER_COSTS, GUIDE_BIRD_COST, LAKE_ACCOUNTANT_COSTS, LAKE_DISCOUNT_COSTS, 1, false, START_MONEY), farm(Maps.FOREST, "Forest", CURRENCY_FOREST, FOREST_NAMES, SCALE_BRL, 1.1, 0), farm(Maps.CAVE, "Cave", CURRENCY_CAVE, CAVE_NAMES, SCALE_VND, 1.2, 0), farm(Maps.VOLCANO, "Volcano", CURRENCY_VOLCANO, VOLCANO_NAMES, SCALE_IDR, 1.3, 0.005), farm(Maps.NUCLEAR, "Nuclear", CURRENCY_NUCLEAR, NUCLEAR_NAMES, SCALE_CNY, 1.4, 0.005), farm(Maps.ARCTIC, "Arctic", CURRENCY_ARCTIC, ARCTIC_NAMES, SCALE_RUB, 1.5, 0.01), farm(Maps.BUBBLEGUM_LAND, "Bubblegum land", CURRENCY_BUBBLEGUM, BUBBLEGUM_NAMES, SCALE_BSD, 1.6, 0.01), farm(Maps.SPACE, "Space", CURRENCY_SPACE, SPACE_NAMES, SCALE_JPY, 1.7, 0.015), farm(Maps.NIGHTMARE, "Nightmare", CURRENCY_NIGHTMARE, NIGHTMARE_NAMES, SCALE_EUR, 1.8, 0.02),};
 
     private static WorldDef farm(int stageId, String name, String currency, String[] names, double currencyScale, double timeScale, double coefficientOffset) {
-        return new WorldDef(stageId, name, currency, buildFromLake(names, currencyScale, timeScale, coefficientOffset), scaled(PLACEHOLDER_MANAGER_COSTS, currencyScale), GUIDE_BIRD_COST * currencyScale, LAKE_ACCOUNTANT_COSTS, scaled(LAKE_DISCOUNT_COSTS, currencyScale), true, START_MONEY * currencyScale);
+        return new WorldDef(stageId, name, currency, buildFromLake(names, currencyScale, timeScale, coefficientOffset), scaled(PLACEHOLDER_MANAGER_COSTS, currencyScale), GUIDE_BIRD_COST * currencyScale, LAKE_ACCOUNTANT_COSTS, scaled(LAKE_DISCOUNT_COSTS, currencyScale), currencyScale, true, START_MONEY * currencyScale);
     }
 
     private static final double[][][][] UPGRADE_PRICES = buildUpgradePrices();
