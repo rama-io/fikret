@@ -68,6 +68,9 @@ public final class GameState {
     private final double[] angels = new double[Worlds.ALL.length];
     private final double[] lifetimeEarnings = new double[Worlds.ALL.length];
     private final double[] angelsClaimed = new double[Worlds.ALL.length];
+    private final long[] superBought = new long[Worlds.ALL.length];
+    private final double[] superProfit = new double[Worlds.ALL.length];
+    private final double[] angelRate = new double[Worlds.ALL.length];
     private long lastSync;
     private int currentWorld = 0;
 
@@ -78,6 +81,9 @@ public final class GameState {
             money[i] = Worlds.ALL[i].startMoney;
         }
         load();
+        for (int i = 0; i < worlds.length; i++) {
+            refreshSuper(i);
+        }
         if (lastSync <= 0) {
             lastSync = System.currentTimeMillis();
         }
@@ -208,7 +214,7 @@ public final class GameState {
     public double revenuePerCycle(int w, int g) {
         Garden garden = worlds[w].gardens[g];
         return Worlds.ALL[w].gardens[g].baseRevenue * garden.count * valueMultiplier(w, g)
-                * angelBonus(w);
+                * angelBonus(w) * superProfit[w];
     }
 
     public double revenuePerSecond(int w, int g) {
@@ -216,7 +222,63 @@ public final class GameState {
     }
 
     public synchronized double angelBonus(int w) {
-        return 1 + Worlds.ANGEL_BONUS * angels[w];
+        return 1 + angelRate[w] * angels[w];
+    }
+
+    /** Profit multiplier from the farm point upgrades bought on this farm. */
+    public synchronized double superProfitMultiplier(int w) {
+        return superProfit[w];
+    }
+
+    /** Profit given by each farm point, 0.02 = 2%. */
+    public synchronized double pointsEfficiency(int w) {
+        return angelRate[w];
+    }
+
+    private void refreshSuper(int w) {
+        double profit = 1;
+        double rate = Worlds.ANGEL_BONUS;
+        for (int i = 0; i < Worlds.SUPER_UPGRADE_COUNT; i++) {
+            if ((superBought[w] & (1L << i)) == 0) continue;
+            if (Worlds.superKind(i) == Worlds.SUPER_PROFIT) {
+                profit *= Worlds.superValue(i);
+            } else {
+                rate += Worlds.superValue(i);
+            }
+        }
+        superProfit[w] = profit;
+        angelRate[w] = rate;
+    }
+
+    public boolean hasSuperUpgrade(int w, int index) {
+        return (superBought[w] & (1L << index)) != 0;
+    }
+
+    public double superUpgradeCost(int index) {
+        return Worlds.superCost(index);
+    }
+
+    public boolean hasRemainingSuperUpgrades(int w) {
+        for (int i = 0; i < Worlds.SUPER_UPGRADE_COUNT; i++) {
+            if (!hasSuperUpgrade(w, i)) return true;
+        }
+        return false;
+    }
+
+    public synchronized boolean buySuperUpgrade(int w, int index) {
+        sync();
+        if (index < 0 || index >= Worlds.SUPER_UPGRADE_COUNT || hasSuperUpgrade(w, index)) {
+            return false;
+        }
+        double cost = Worlds.superCost(index);
+        if (angels[w] < cost) {
+            return false;
+        }
+        angels[w] -= cost;
+        superBought[w] |= 1L << index;
+        refreshSuper(w);
+        save();
+        return true;
     }
 
     public static double angelsForEarnings(int w, double lifetime) {
@@ -439,8 +501,20 @@ public final class GameState {
         }
         for (int g = 0; g < Worlds.GARDENS_PER_WORLD; g++) {
             if (!hasManager(w, g)) return true;
-            if (hasAccountantList(w) && !hasAccountant(w, g)) return true;
             if (hasDiscountList(w) && !hasDiscount(w, g)) return true;
+        }
+        return false;
+    }
+
+    /** Anything still to buy with farm points: accountants and super upgrades. */
+    public boolean hasRemainingSuperSupervisors(int w) {
+        if (hasRemainingSuperUpgrades(w)) {
+            return true;
+        }
+        if (hasAccountantList(w)) {
+            for (int g = 0; g < Worlds.GARDENS_PER_WORLD; g++) {
+                if (!hasAccountant(w, g)) return true;
+            }
         }
         return false;
     }
@@ -624,6 +698,9 @@ public final class GameState {
             sb.append(w == 0 ? "claimed" : "claimed." + w).append('=')
                     .append(Double.doubleToLongBits(angelsClaimed[w])).append('\n');
         }
+        for (int w = 0; w < superBought.length; w++) {
+            sb.append("su.").append(w).append('=').append(superBought[w]).append('\n');
+        }
         sb.append("time=").append(lastSync).append('\n');
         sb.append("world=").append(currentWorld).append('\n');
         for (int w = 0; w < worlds.length; w++) {
@@ -673,6 +750,11 @@ public final class GameState {
                     int w = key.equals("claimed") ? 0 : Integer.parseInt(key.substring(8));
                     if (w >= 0 && w < angelsClaimed.length) {
                         angelsClaimed[w] = Double.longBitsToDouble(Long.parseLong(value));
+                    }
+                } else if (key.startsWith("su.")) {
+                    int w = Integer.parseInt(key.substring(3));
+                    if (w >= 0 && w < superBought.length) {
+                        superBought[w] = Long.parseLong(value);
                     }
                 } else if (key.equals("time")) {
                     lastSync = Long.parseLong(value);

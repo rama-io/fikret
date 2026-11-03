@@ -17,6 +17,15 @@
         android:text="@string/menu_managers" />
 
     <View
+        android:id="@+id/menu_super_managers_gap"
+        style="@style/SeparatorListVertical" />
+
+    <TextView
+        android:id="@+id/menu_super_managers"
+        style="@style/BTN"
+        android:text="@string/menu_super_managers" />
+
+    <View
         android:id="@+id/menu_upgrades_gap"
         style="@style/SeparatorListVertical" />
 

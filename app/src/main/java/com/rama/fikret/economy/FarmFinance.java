@@ -31,7 +31,7 @@ public final class FarmFinance {
 
     private FarmFinance(GameState s, int w) {
         world = w;
-        double pointsMultiplier = s.angelBonus(w);
+        double pointsMultiplier = s.angelBonus(w) * s.superProfitMultiplier(w);
         double lnPoints = Math.log(pointsMultiplier);
         double total = 0;
         double money = s.getMoney(w);

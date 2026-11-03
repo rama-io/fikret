@@ -111,6 +111,10 @@
             android:exported="false" />
 
         <activity
+            android:name=".activities.SuperSupervisorsActivity"
+            android:exported="false" />
+
+        <activity
             android:name=".activities.UpgradesActivity"
             android:exported="false" />
 

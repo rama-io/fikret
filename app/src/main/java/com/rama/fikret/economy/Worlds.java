@@ -11,6 +11,49 @@ public final class Worlds {
     public static final double ANGEL_DIVISOR = 4e11 / 9;
     public static final double ANGEL_BONUS = 0.02;
 
+    public static final int SUPER_PROFIT = 0;
+    public static final int SUPER_EFFICIENCY = 1;
+
+    private static final double[][] SUPER_UPGRADES = {
+            {1e4, SUPER_PROFIT, 3},
+            {1e5, SUPER_EFFICIENCY, 0.02},
+            {1e8, SUPER_EFFICIENCY, 0.02},
+            {1e9, SUPER_PROFIT, 5},
+            {1e11, SUPER_PROFIT, 9},
+            {1e12, SUPER_PROFIT, 11},
+            {1e21, SUPER_PROFIT, 15},
+            {1e33, SUPER_EFFICIENCY, 0.10},
+            {10e33, SUPER_PROFIT, 15},
+            {1e36, SUPER_PROFIT, 3},
+            {10e39, SUPER_PROFIT, 5},
+            {1e42, SUPER_PROFIT, 5},
+            {500e51, SUPER_EFFICIENCY, 0.10},
+            {100e60, SUPER_PROFIT, 5},
+            {100e63, SUPER_PROFIT, 7},
+            {777e66, SUPER_PROFIT, 8},
+            {3e84, SUPER_PROFIT, 13.11},
+            {13e87, SUPER_PROFIT, 5},
+            {3e90, SUPER_PROFIT, 3},
+            {13e93, SUPER_PROFIT, 4},
+            {24e96, SUPER_PROFIT, 5},
+            {333e108, SUPER_PROFIT, 3},
+            {2e138, SUPER_PROFIT, 19},
+    };
+
+    public static final int SUPER_UPGRADE_COUNT = SUPER_UPGRADES.length;
+
+    public static double superCost(int index) {
+        return SUPER_UPGRADES[index][0];
+    }
+
+    public static int superKind(int index) {
+        return (int) SUPER_UPGRADES[index][1];
+    }
+
+    public static double superValue(int index) {
+        return SUPER_UPGRADES[index][2];
+    }
+
     public static final String CURRENCY_LAKE = "DOP";
     public static final String CURRENCY_FOREST = "BRL";
     public static final String CURRENCY_CAVE = "VND";
