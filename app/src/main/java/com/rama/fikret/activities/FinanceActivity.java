@@ -35,12 +35,20 @@ public class FinanceActivity extends ListScreenActivity {
         ProgressBar fill;
     }
 
+    private static final class MultiplierRow {
+        TextView name;
+        TextView value;
+        TextView speed;
+    }
+
     private static final class FarmHolder {
         WdCollapsibleSection section;
         int world = -1;
         final Bar[] sources = new Bar[FarmFinance.SOURCES];
         final Bar[] gardens = new Bar[Worlds.GARDENS_PER_WORLD];
+        final MultiplierRow[] multipliers = new MultiplierRow[Worlds.GARDENS_PER_WORLD];
         TextView points;
+        TextView pointsMultiplier;
         TextView pointsProfit;
         TextView pointsGainOnAscend;
         View ascendButton;
@@ -137,6 +145,7 @@ public class FinanceActivity extends ListScreenActivity {
         FarmHolder h = new FarmHolder();
         h.section = (WdCollapsibleSection) row;
         h.points = row.findViewById(R.id.farm_points);
+        h.pointsMultiplier = row.findViewById(R.id.farm_points_multiplier);
         h.pointsProfit = row.findViewById(R.id.farm_points_profit);
         h.pointsGainOnAscend = row.findViewById(R.id.farm_points_gain_on_ascend);
         h.ascendButton = row.findViewById(R.id.ascend_confirm);
@@ -159,6 +168,7 @@ public class FinanceActivity extends ListScreenActivity {
         h.gainHour = row.findViewById(R.id.gain_hour);
         fillBars(inflater, (LinearLayout) row.findViewById(R.id.farm_sources), h.sources);
         fillBars(inflater, (LinearLayout) row.findViewById(R.id.farm_gardens), h.gardens);
+        fillMultipliers(inflater, (LinearLayout) row.findViewById(R.id.farm_multipliers), h.multipliers);
         applyFont(row);
         row.setTag(h);
         return row;
@@ -177,6 +187,19 @@ public class FinanceActivity extends ListScreenActivity {
             bar.root = root;
             parent.addView(root);
             bars[i] = bar;
+        }
+    }
+
+    private void fillMultipliers(LayoutInflater inflater, LinearLayout parent, MultiplierRow[] rows) {
+        for (int i = 0; i < rows.length; i++) {
+            View root = inflater.inflate(R.layout.list_item_finance_multiplier, parent, false);
+            MultiplierRow m = new MultiplierRow();
+            m.name = root.findViewById(R.id.mult_name);
+            m.value = root.findViewById(R.id.mult_value);
+            m.speed = root.findViewById(R.id.mult_speed);
+            root.findViewById(R.id.mult_gap).setVisibility(i == 0 ? View.GONE : View.VISIBLE);
+            parent.addView(root);
+            rows[i] = m;
         }
     }
 
@@ -206,13 +229,16 @@ public class FinanceActivity extends ListScreenActivity {
             }
         }
 
-        int[] order = f.gardensByIncome();
-        for (int i = 0; i < h.gardens.length; i++) {
-            int g = order[i];
-            bindBar(h.gardens[i], Worlds.ALL[w].gardens[g].name, w, f.byGarden[g], f.income);
+        for (int g = 0; g < h.gardens.length; g++) {
+            bindBar(h.gardens[g], Worlds.ALL[w].gardens[g].name, w, f.byGarden[g], f.income);
+            MultiplierRow m = h.multipliers[g];
+            ViewUpdates.setText(m.name, Worlds.ALL[w].gardens[g].name);
+            ViewUpdates.setText(m.value, getString(R.string.finance_multiplier_value, NumberFormatter.number(state.valueMultiplier(w, g))));
+            ViewUpdates.setText(m.speed, getString(R.string.finance_multiplier_speed, NumberFormatter.number(state.speedMultiplier(w, g))));
         }
 
         ViewUpdates.setText(h.points, NumberFormatter.number(f.points));
+        ViewUpdates.setText(h.pointsMultiplier, getString(R.string.finance_points_efficiency, NumberFormatter.number(state.pointsEfficiency(w) * 100)));
         ViewUpdates.setText(h.pointsProfit, getString(R.string.finance_profit_bonus, NumberFormatter.number(f.pointsBonusPercent)));
         ViewUpdates.setText(h.pointsGainOnAscend, getString(R.string.finance_points_gain, NumberFormatter.number(f.pointsGain)));
         ViewUpdates.setBackgroundColor(h.ascendButton, f.pointsGain > 0 ? ViewUpdates.themeColor(this, R.attr.accent) : ViewUpdates.color(this, R.color.disabled));

@@ -124,22 +124,4 @@ public final class FarmFinance {
     public static FarmFinance of(GameState state, int world) {
         return new FarmFinance(state, world);
     }
-
-    public int[] gardensByIncome() {
-        int n = byGarden.length;
-        int[] order = new int[n];
-        for (int g = 0; g < n; g++) {
-            order[g] = g;
-        }
-        for (int i = 1; i < n; i++) {
-            int key = order[i];
-            int j = i - 1;
-            while (j >= 0 && byGarden[order[j]] < byGarden[key]) {
-                order[j + 1] = order[j];
-                j--;
-            }
-            order[j + 1] = key;
-        }
-        return order;
-    }
 }

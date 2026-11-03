@@ -31,7 +31,7 @@ public final class Worlds {
             {100e60, SUPER_PROFIT, 5},
             {100e63, SUPER_PROFIT, 7},
             {777e66, SUPER_PROFIT, 8},
-            {3e84, SUPER_PROFIT, 13.11},
+            {3e84, SUPER_PROFIT, 13},
             {13e87, SUPER_PROFIT, 5},
             {3e90, SUPER_PROFIT, 3},
             {13e93, SUPER_PROFIT, 4},
