@@ -269,7 +269,7 @@ public class FinanceActivity extends ListScreenActivity {
         ViewUpdates.setText(h.gainHour, NumberFormatter.money(w, f.income * 3600));
     }
 
-    private static final int MEDAL_COLUMNS = 5;
+    private static final int MEDAL_COLUMNS = 4;
 
     private static final class Tile {
         final int icon;
@@ -290,9 +290,6 @@ public class FinanceActivity extends ListScreenActivity {
     private List<Tile> achievementTiles(int w) {
         List<Tile> tiles = new ArrayList<>();
         double medals = state.medalMultiplier(w);
-        if (medals > 1) {
-            tiles.add(new Tile(R.drawable.medal, getString(R.string.tile_profit), tileValue(medals)));
-        }
         for (int g = 0; g < Worlds.GARDENS_PER_WORLD; g++) {
             int icon = GardenIcons.forGarden(w, g);
             double value = state.gardenValueMultiplier(w, g);
@@ -304,10 +301,12 @@ public class FinanceActivity extends ListScreenActivity {
                 tiles.add(new Tile(icon, getString(R.string.tile_speed), tileValue(speed)));
             }
         }
+        if (medals > 1) {
+            tiles.add(new Tile(R.drawable.medal, getString(R.string.tile_profit), tileValue(medals)));
+        }
         return tiles;
     }
 
-    /** Rebuilds the gallery only when it changes, since rows are refreshed every tick. */
     private void bindMedals(FarmHolder h, int w) {
         List<Tile> tiles = achievementTiles(w);
         StringBuilder key = new StringBuilder();

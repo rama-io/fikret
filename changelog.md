@@ -1,5 +1,9 @@
 # Changelog
 
+## 10
+
+- Finance/achievements redesign. the profits_badge now sits at the bottom and the number of columns is even so the badges align nicely
+
 ## 9
 
 - Adding milestones to the achievements section
