@@ -4,6 +4,7 @@ import android.view.LayoutInflater;
 import android.view.View;
 import android.view.ViewGroup;
 import android.widget.BaseAdapter;
+import android.widget.GridLayout;
 import android.widget.LinearLayout;
 import android.widget.ProgressBar;
 import android.widget.TextView;
@@ -18,6 +19,7 @@ import com.rama.fikret.helpers.ViewUpdates;
 import com.rama.fikret.widgets.WdCollapsibleSection;
 
 import java.util.ArrayList;
+import java.util.Arrays;
 import java.util.List;
 import java.util.Locale;
 
@@ -47,6 +49,9 @@ public class FinanceActivity extends ListScreenActivity {
         final Bar[] sources = new Bar[FarmFinance.SOURCES];
         final Bar[] gardens = new Bar[Worlds.GARDENS_PER_WORLD];
         final MultiplierRow[] multipliers = new MultiplierRow[Worlds.GARDENS_PER_WORLD];
+        GridLayout medals;
+        View medalsEmpty;
+        int medalsKey;
         TextView points;
         TextView pointsMultiplier;
         TextView pointsProfit;
@@ -145,6 +150,8 @@ public class FinanceActivity extends ListScreenActivity {
         FarmHolder h = new FarmHolder();
         h.section = (WdCollapsibleSection) row;
         h.points = row.findViewById(R.id.farm_points);
+        h.medals = row.findViewById(R.id.farm_medals);
+        h.medalsEmpty = row.findViewById(R.id.farm_medals_empty);
         h.pointsMultiplier = row.findViewById(R.id.farm_points_multiplier);
         h.pointsProfit = row.findViewById(R.id.farm_points_profit);
         h.pointsGainOnAscend = row.findViewById(R.id.farm_points_gain_on_ascend);
@@ -238,6 +245,7 @@ public class FinanceActivity extends ListScreenActivity {
         }
 
         ViewUpdates.setText(h.points, NumberFormatter.number(f.points));
+        bindMedals(h, state.medals(w));
         ViewUpdates.setText(h.pointsMultiplier, getString(R.string.finance_points_efficiency, NumberFormatter.number(state.pointsEfficiency(w) * 100)));
         ViewUpdates.setText(h.pointsProfit, getString(R.string.finance_profit_bonus, NumberFormatter.number(f.pointsBonusPercent)));
         ViewUpdates.setText(h.pointsGainOnAscend, getString(R.string.finance_points_gain, NumberFormatter.number(f.pointsGain)));
@@ -258,6 +266,29 @@ public class FinanceActivity extends ListScreenActivity {
         ViewUpdates.setText(h.gainSecond, NumberFormatter.money(w, f.income));
         ViewUpdates.setText(h.gainMinute, NumberFormatter.money(w, f.income * 60));
         ViewUpdates.setText(h.gainHour, NumberFormatter.money(w, f.income * 3600));
+    }
+
+    private static final int MEDAL_COLUMNS = 5;
+
+    private void bindMedals(FarmHolder h, double[] medals) {
+        int key = Arrays.hashCode(medals);
+        if (key == h.medalsKey && h.medals.getChildCount() == medals.length) {
+            return;
+        }
+        h.medalsKey = key;
+        h.medals.removeAllViews();
+        LayoutInflater inflater = LayoutInflater.from(this);
+        for (int i = 0; i < medals.length; i++) {
+            View medal = inflater.inflate(R.layout.list_item_medal, h.medals, false);
+            ((TextView) medal.findViewById(R.id.medal_value)).setText(getString(R.string.medal_multiplier, NumberFormatter.multiplier(medals[i])));
+            applyFont(medal);
+            GridLayout.LayoutParams params = new GridLayout.LayoutParams(
+                    GridLayout.spec(i / MEDAL_COLUMNS), GridLayout.spec(i % MEDAL_COLUMNS, 1f));
+            params.width = 0;
+            h.medals.addView(medal, params);
+        }
+        h.medalsEmpty.setVisibility(medals.length == 0 ? View.VISIBLE : View.GONE);
+        h.medals.setVisibility(medals.length == 0 ? View.GONE : View.VISIBLE);
     }
 
     private boolean buyBest(FarmHolder h) {

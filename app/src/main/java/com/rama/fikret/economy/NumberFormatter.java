@@ -39,6 +39,12 @@ public final class NumberFormatter {
         return String.format(Locale.US, "%,d", Math.round(value));
     }
 
+    public static String multiplier(double value) {
+        return value == Math.rint(value) && value < 1e9
+                ? String.format(Locale.US, "%.0f", value)
+                : trim(String.format(Locale.US, "%.2f", value));
+    }
+
     private static String trim(String s) {
         if (s.indexOf('.') < 0) {
             return s;

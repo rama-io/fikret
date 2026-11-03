@@ -14,6 +14,8 @@
     <string name="menu_managers">Birds</string>
     <string name="menu_super_managers">Celestial birds</string>
     <string name="menu_upgrades">Upgrades</string>
+    <string name="menu_medals">Medals</string>
+    <string name="empty_medals">All medals earned.</string>
     <string name="ascend_warning">Ascending restarts this farm: money, gardens and upgrades are lost. Farm points and birds stay.</string>
     <string name="ascend_confirm">Ascend</string>
     <string name="menu_teleport">Teleport</string>
@@ -77,6 +79,9 @@
     <string name="finance_gardens">Gardens</string>
     <string name="finance_ascension">Ascension</string>
     <string name="finance_farm_points">Farm Points</string>
+    <string name="finance_achievements">Achievements</string>
+    <string name="finance_no_medals">No medals yet.</string>
+    <string name="medal_multiplier">x%1$s</string>
     <string name="finance_farm_points_multiplier">Multiplier</string>
     <string name="finance_points_efficiency">%1$s%%</string>
     <string name="finance_garden_multipliers">Garden multipliers</string>

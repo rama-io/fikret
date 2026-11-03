@@ -13,7 +13,6 @@ public final class GameState {
     public static final int BUY_NEXT = -2;
     public static final int UPGRADE_SPEED = 0;
     public static final int UPGRADE_VALUE = 1;
-    public static final int UPGRADE_PROFIT = 2;
 
     private static final String PREF_KEY = "economy:state";
     private static final int MAX_SYNC_STEPS = 1000;
@@ -217,6 +216,25 @@ public final class GameState {
 
     public double upgradeProfitMultiplier(int w) {
         return upgradeProfit[w];
+    }
+
+    public synchronized double[] medals(int w) {
+        int n = 0;
+        for (int i = 0; i < Worlds.PROFIT_UPGRADE_COUNT; i++) {
+            if (profitBought[w][i]) n++;
+        }
+        for (int i = 0; i < Worlds.SUPER_UPGRADE_COUNT; i++) {
+            if (hasSuperUpgrade(w, i) && Worlds.superKind(i) == Worlds.SUPER_PROFIT) n++;
+        }
+        double[] result = new double[n];
+        int k = 0;
+        for (int i = 0; i < Worlds.PROFIT_UPGRADE_COUNT; i++) {
+            if (profitBought[w][i]) result[k++] = Worlds.profitUpgradeValue(i);
+        }
+        for (int i = 0; i < Worlds.SUPER_UPGRADE_COUNT; i++) {
+            if (hasSuperUpgrade(w, i) && Worlds.superKind(i) == Worlds.SUPER_PROFIT) result[k++] = Worlds.superValue(i);
+        }
+        return result;
     }
 
     public double revenuePerCycle(int w, int g) {
@@ -598,9 +616,7 @@ public final class GameState {
     }
 
     public boolean hasRemainingUpgrades(int w) {
-        if (hasRemainingProfitUpgrades(w)) {
-            return true;
-        }
+
         for (int g = 0; g < Worlds.GARDENS_PER_WORLD; g++) {
             if (!upgradeMaxed(w, g, UPGRADE_SPEED) || !upgradeMaxed(w, g, UPGRADE_VALUE)) {
                 return true;
@@ -617,7 +633,6 @@ public final class GameState {
         int bought = 0;
         while (true) {
             Garden best = null;
-            int bestProfit = -1;
             boolean bestSpeed = false;
             double bestCost = Double.MAX_VALUE;
             for (int g = 0; g < Worlds.GARDENS_PER_WORLD; g++) {
@@ -635,21 +650,9 @@ public final class GameState {
                     }
                 }
             }
-            for (int i = 0; i < Worlds.PROFIT_UPGRADE_COUNT; i++) {
-                if (profitBought[w][i]) continue;
-                double cost = profitUpgradeCost(w, i);
-                if (cost <= money[w] && cost < bestCost) {
-                    best = null;
-                    bestProfit = i;
-                    bestCost = cost;
-                }
-            }
-            if (best == null && bestProfit < 0) break;
+            if (best == null) break;
             money[w] -= bestCost;
-            if (bestProfit >= 0) {
-                profitBought[w][bestProfit] = true;
-                refreshSuper(w);
-            } else if (bestSpeed) best.speedLevel++; else best.valueLevel++;
+            if (bestSpeed) best.speedLevel++; else best.valueLevel++;
             bought++;
         }
         if (bought > 0) save();

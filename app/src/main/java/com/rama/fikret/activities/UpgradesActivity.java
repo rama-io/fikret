@@ -15,10 +15,7 @@ import com.rama.fikret.helpers.GardenIcons;
 import com.rama.fikret.helpers.ViewUpdates;
 
 import java.util.ArrayList;
-import java.util.Collections;
-import java.util.Comparator;
 import java.util.List;
-import java.util.Locale;
 
 public class UpgradesActivity extends ListScreenActivity {
     private static final int[] TYPE_ORDER = {GameState.UPGRADE_VALUE, GameState.UPGRADE_SPEED};
@@ -54,24 +51,8 @@ public class UpgradesActivity extends ListScreenActivity {
         return position == 0 && hasHeader();
     }
 
-    private double rowCost(int[] r) {
-        return r[1] == GameState.UPGRADE_PROFIT
-                ? state.profitUpgradeCost(world, r[2])
-                : state.upgradeCostAt(world, r[2], r[1], r[0]);
-    }
-
-    private static String multiplierText(double value) {
-        return value == Math.rint(value) ? String.format(Locale.US, "%.0f", value) : String.format(Locale.US, "%.2f", value);
-    }
-
     private boolean anyAffordable() {
         for (int[] r : rows) {
-            if (r[1] == GameState.UPGRADE_PROFIT) {
-                if (state.getMoney(world) >= rowCost(r)) {
-                    return true;
-                }
-                continue;
-            }
             if (state.getCount(world, r[2]) > 0 && r[0] == state.upgradeLevel(world, r[2], r[1])
                     && state.getMoney(world) >= state.upgradeCostAt(world, r[2], r[1], r[0])) {
                 return true;
@@ -91,17 +72,6 @@ public class UpgradesActivity extends ListScreenActivity {
                 }
             }
         }
-        for (int i = 0; i < Worlds.PROFIT_UPGRADE_COUNT; i++) {
-            if (!state.hasProfitUpgrade(world, i)) {
-                rows.add(new int[]{0, GameState.UPGRADE_PROFIT, i});
-            }
-        }
-        Collections.sort(rows, new Comparator<int[]>() {
-            @Override
-            public int compare(int[] a, int[] b) {
-                return Double.compare(rowCost(a), rowCost(b));
-            }
-        });
     }
 
     @Override
@@ -165,13 +135,6 @@ public class UpgradesActivity extends ListScreenActivity {
                 return;
             }
             int[] upgrade = rows.get(position);
-            if (upgrade[1] == GameState.UPGRADE_PROFIT) {
-                if (state.buyProfitUpgrade(world, upgrade[2])) {
-                    rebuildRows();
-                    adapter.notifyDataSetChanged();
-                }
-                return;
-            }
             if (state.getCount(world, upgrade[2]) > 0 && state.buyUpgrade(world, upgrade[2], upgrade[1], upgrade[0])) {
                 rebuildRows();
                 adapter.notifyDataSetChanged();
@@ -194,18 +157,6 @@ public class UpgradesActivity extends ListScreenActivity {
         int tier = rows.get(position)[0];
         int type = rows.get(position)[1];
         int g = rows.get(position)[2];
-
-        if (type == GameState.UPGRADE_PROFIT) {
-            String x = multiplierText(Worlds.profitUpgradeValue(g));
-            double profitCost = state.profitUpgradeCost(world, g);
-            ViewUpdates.setImageResource((ImageView) row.findViewById(R.id.garden_picture), R.drawable.medal);
-            ViewUpdates.setText((TextView) row.findViewById(R.id.garden_name), getString(R.string.upgrade_profit_name, x));
-            ViewUpdates.setText((TextView) row.findViewById(R.id.upgrade_description), getString(R.string.upgrade_profit_desc, x));
-            ViewUpdates.setText((TextView) row.findViewById(R.id.activate_cost), NumberFormatter.money(world, profitCost));
-            ViewUpdates.setBackgroundColor(row.findViewById(R.id.activate_button),
-                    state.getMoney(world) >= profitCost ? ViewUpdates.themeColor(this, R.attr.accent) : ViewUpdates.color(this, R.color.disabled));
-            return;
-        }
 
         String garden = Worlds.ALL[world].gardens[g].name;
         ViewUpdates.setImageResource((ImageView) row.findViewById(R.id.garden_picture), GardenIcons.forGarden(world, g));

@@ -115,6 +115,10 @@
             android:exported="false" />
 
         <activity
+            android:name=".activities.MedalsActivity"
+            android:exported="false" />
+
+        <activity
             android:name=".activities.UpgradesActivity"
             android:exported="false" />
 
