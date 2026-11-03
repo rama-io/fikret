@@ -40,7 +40,7 @@ public final class Worlds {
             {2e138, SUPER_PROFIT, 19},
     };
 
-    private static final double[][] PROFIT_UPGRADES = {
+    private static final double[][] MEDALS = {
             {1e12, 3},
             {50e15, 3},
             {500e18, 3},
@@ -116,11 +116,11 @@ public final class Worlds {
             {1e240, 0.003},
     };
 
-    public static final int PROFIT_UPGRADE_COUNT = PROFIT_UPGRADES.length;
+    public static final int MEDAL_COUNT = MEDALS.length;
     public static final int EFFICIENCY_BIRD_COUNT = EFFICIENCY_BIRDS.length;
 
-    public static double profitUpgradeValue(int index) {
-        return PROFIT_UPGRADES[index][1];
+    public static double medalValue(int index) {
+        return MEDALS[index][1];
     }
 
     public static double efficiencyBirdValue(int index) {
@@ -208,14 +208,14 @@ public final class Worlds {
         public final double quickBuyCost;
         public final double[] accountantCosts;
         public final double[] discountCosts;
-        public final double[] profitUpgradeCosts;
+        public final double[] medalThresholds;
         public final double[] efficiencyBirdCosts;
         public final boolean placeholderPrices;
         public final double startMoney;
 
         WorldDef(int stageId, String name, String currency, GardenDef[] gardens, double[] managerCosts, double travelManagerCost, double[] accountantCosts, double[] discountCosts, double currencyScale, boolean placeholderPrices, double startMoney) {
             this.startMoney = startMoney;
-            this.profitUpgradeCosts = column(PROFIT_UPGRADES, currencyScale);
+            this.medalThresholds = column(MEDALS, currencyScale);
             this.efficiencyBirdCosts = column(EFFICIENCY_BIRDS, currencyScale);
             this.stageId = stageId;
             this.name = name;

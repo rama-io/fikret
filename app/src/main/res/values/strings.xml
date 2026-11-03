@@ -12,11 +12,9 @@
 
     <string name="menu_map">Map</string>
     <string name="menu_managers">Birds</string>
-    <string name="menu_super_managers">Celestial birds</string>
+    <string name="menu_super_managers">Celestial Birds</string>
     <string name="menu_upgrades">Upgrades</string>
-    <string name="menu_medals">Medals</string>
-    <string name="empty_medals">All medals earned.</string>
-    <string name="ascend_warning">Ascending restarts this farm: money, gardens and upgrades are lost. Farm points and birds stay.</string>
+    <string name="ascend_warning">Ascending restarts this farm: money, gardens and upgrades are lost. Farm points, milestones and birds stay.</string>
     <string name="ascend_confirm">Ascend</string>
     <string name="menu_teleport">Teleport</string>
     <string name="menu_finance">Finance</string>
@@ -54,8 +52,6 @@
     <string name="discount_name">%1$s discount</string>
     <string name="discount_desc">Makes %1$s cost 99.999%% less.</string>
 
-    <string name="upgrade_profit_name">All profits x%1$s</string>
-    <string name="upgrade_profit_desc">Every garden earns x%1$s more.</string>
     <string name="bird_efficiency_name">Efficiency bird +%1$s%%</string>
     <string name="upgrade_speed_name">%1$s Speed x2</string>
     <string name="upgrade_value_name">%1$s Value x2</string>
@@ -80,7 +76,6 @@
     <string name="finance_ascension">Ascension</string>
     <string name="finance_farm_points">Farm Points</string>
     <string name="finance_achievements">Achievements</string>
-    <string name="finance_no_medals">No medals yet.</string>
     <string name="medal_multiplier">x%1$s</string>
     <string name="finance_farm_points_multiplier">Multiplier</string>
     <string name="finance_points_efficiency">%1$s%%</string>

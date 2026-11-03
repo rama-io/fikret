@@ -31,8 +31,9 @@ public final class FarmFinance {
 
     private FarmFinance(GameState s, int w) {
         world = w;
-        double pointsMultiplier = s.angelBonus(w) * s.superProfitMultiplier(w);
+        double pointsMultiplier = s.angelBonus(w);
         double lnPoints = Math.log(pointsMultiplier);
+        double lnMedals = Math.log(s.medalMultiplier(w));
         double total = 0;
         double money = s.getMoney(w);
 
@@ -69,7 +70,7 @@ public final class FarmFinance {
             GameState.Quote next = s.quote(w, g, GameState.BUY_NEXT);
             if (next.amount > 0) {
                 int target = count + next.amount;
-                int newMilestones = GameState.milestonesReached(target) - GameState.milestonesReached(count);
+                int newMilestones = Math.max(0, GameState.milestonesReached(target) - s.milestones(w, g));
                 double gain = potential * ((double) target / count * Math.pow(2, newMilestones) - 1);
                 if (gain > 0 && next.cost / gain < bestRatio) {
                     bestRatio = next.cost / gain;
@@ -82,9 +83,8 @@ public final class FarmFinance {
             }
 
             double base = def.baseRevenue * count / def.cycleSeconds;
-            double lnUpgrades = (s.upgradeLevel(w, g, GameState.UPGRADE_SPEED) + s.upgradeLevel(w, g, GameState.UPGRADE_VALUE)) * LN2
-                    + Math.log(s.upgradeProfitMultiplier(w));
-            double lnMilestones = GameState.milestonesReached(count) * LN2;
+            double lnUpgrades = (s.upgradeLevel(w, g, GameState.UPGRADE_SPEED) + s.upgradeLevel(w, g, GameState.UPGRADE_VALUE)) * LN2;
+            double lnMilestones = s.milestones(w, g) * LN2 + lnMedals;
             double lnAll = lnUpgrades + lnMilestones + lnPoints;
             double extra = Math.max(0, potential - base);
             if (lnAll > 0) {

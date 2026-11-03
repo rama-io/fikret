@@ -1,5 +1,9 @@
 # Changelog
 
+## 9
+
+- Adding milestones to the achievements section
+
 ## 8
 
 - Adding Celestial birds
