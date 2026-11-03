@@ -86,6 +86,18 @@
 
     <TextView
         style="@style/Text"
+        android:text="@string/finance_garden_multipliers" />
+
+    <View style="@style/SeparatorListVertical" />
+
+    <LinearLayout
+        android:id="@+id/farm_multipliers"
+        style="@style/VerticalList_BG2" />
+
+    <View style="@style/SeparatorListVertical" />
+
+    <TextView
+        style="@style/Text"
         android:text="@string/finance_total" />
 
     <View style="@style/SeparatorListVertical" />
@@ -147,6 +159,30 @@
 
     <TextView
         style="@style/Text"
+        android:text="@string/finance_achievements" />
+
+    <View style="@style/SeparatorListVertical" />
+
+    <LinearLayout style="@style/VerticalList_BG2">
+
+        <TextView
+            android:id="@+id/farm_medals_empty"
+            style="@style/Text"
+            android:text="@string/finance_no_medals"
+            android:textColor="@color/disabled" />
+
+        <GridLayout
+            android:id="@+id/farm_medals"
+            android:layout_width="match_parent"
+            android:layout_height="wrap_content"
+            android:columnCount="5"
+            android:useDefaultMargins="true" />
+    </LinearLayout>
+
+    <View style="@style/SeparatorListVertical" />
+
+    <TextView
+        style="@style/Text"
         android:text="@string/finance_ascension" />
 
     <View style="@style/SeparatorListVertical" />
@@ -169,6 +205,23 @@
 
             <TextView
                 android:id="@+id/farm_points"
+                style="@style/Text"
+                android:layout_width="0dp"
+                android:layout_weight="1"
+                android:gravity="end" />
+        </LinearLayout>
+
+        <View style="@style/SeparatorListVertical" />
+
+        <LinearLayout style="@style/HorizontalList">
+
+            <TextView
+                style="@style/Text"
+                android:layout_width="wrap_content"
+                android:text="@string/finance_farm_points_multiplier" />
+
+            <TextView
+                android:id="@+id/farm_points_multiplier"
                 style="@style/Text"
                 android:layout_width="0dp"
                 android:layout_weight="1"
