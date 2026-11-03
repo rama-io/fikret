@@ -175,7 +175,8 @@
             android:id="@+id/farm_medals"
             android:layout_width="match_parent"
             android:layout_height="wrap_content"
-            android:columnCount="5" />
+            android:columnCount="5"
+            android:useDefaultMargins="true" />
     </LinearLayout>
 
     <View style="@style/SeparatorListVertical" />
