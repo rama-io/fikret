@@ -17,6 +17,7 @@ import java.util.ArrayList;
 import java.util.Collections;
 import java.util.Comparator;
 import java.util.List;
+import java.util.Locale;
 
 public class ManagersActivity extends ListScreenActivity {
     private static final int KIND_MANAGER = 0;
@@ -25,6 +26,8 @@ public class ManagersActivity extends ListScreenActivity {
     private static final int KIND_DISCOUNT = 3;
     private static final int KIND_BUYER = 4;
     private static final int KIND_QUICK_BUY = 5;
+    private static final int KIND_SUPER = 6;
+    private static final int KIND_EFFICIENCY = 7;
 
     private final List<int[]> rows = new ArrayList<>();
 
@@ -38,6 +41,10 @@ public class ManagersActivity extends ListScreenActivity {
         return getString(R.string.empty_managers);
     }
 
+    protected boolean pointsScreen() {
+        return false;
+    }
+
     @Override
     protected String subtitle() {
         return Worlds.ALL[state.getCurrentWorld()].name;
@@ -45,33 +52,46 @@ public class ManagersActivity extends ListScreenActivity {
 
     private void rebuildRows() {
         rows.clear();
-        for (int g = 0; g < Worlds.GARDENS_PER_WORLD; g++) {
-            if (!state.hasManager(world, g)) {
-                rows.add(new int[]{KIND_MANAGER, g});
-            }
-        }
-        if (state.hasAccountantList(world)) {
-            for (int g = 0; g < Worlds.GARDENS_PER_WORLD; g++) {
-                if (!state.hasAccountant(world, g)) {
-                    rows.add(new int[]{KIND_ACCOUNTANT, g});
+        if (pointsScreen()) {
+            if (state.hasAccountantList(world)) {
+                for (int g = 0; g < Worlds.GARDENS_PER_WORLD; g++) {
+                    if (!state.hasAccountant(world, g)) {
+                        rows.add(new int[]{KIND_ACCOUNTANT, g});
+                    }
                 }
             }
-        }
-        if (state.hasDiscountList(world)) {
-            for (int g = 0; g < Worlds.GARDENS_PER_WORLD; g++) {
-                if (!state.hasDiscount(world, g)) {
-                    rows.add(new int[]{KIND_DISCOUNT, g});
+            for (int i = 0; i < Worlds.SUPER_UPGRADE_COUNT; i++) {
+                if (!state.hasSuperUpgrade(world, i)) {
+                    rows.add(new int[]{KIND_SUPER, i});
                 }
             }
-        }
-        if (!state.hasTravelManager(world)) {
-            rows.add(new int[]{KIND_GUIDE, 0});
-        }
-        if (!state.hasBuyer(world)) {
-            rows.add(new int[]{KIND_BUYER, 0});
-        }
-        if (!state.hasQuickBuy(world)) {
-            rows.add(new int[]{KIND_QUICK_BUY, 0});
+        } else {
+            for (int g = 0; g < Worlds.GARDENS_PER_WORLD; g++) {
+                if (!state.hasManager(world, g)) {
+                    rows.add(new int[]{KIND_MANAGER, g});
+                }
+            }
+            if (state.hasDiscountList(world)) {
+                for (int g = 0; g < Worlds.GARDENS_PER_WORLD; g++) {
+                    if (!state.hasDiscount(world, g)) {
+                        rows.add(new int[]{KIND_DISCOUNT, g});
+                    }
+                }
+            }
+            if (!state.hasTravelManager(world)) {
+                rows.add(new int[]{KIND_GUIDE, 0});
+            }
+            if (!state.hasBuyer(world)) {
+                rows.add(new int[]{KIND_BUYER, 0});
+            }
+            if (!state.hasQuickBuy(world)) {
+                rows.add(new int[]{KIND_QUICK_BUY, 0});
+            }
+            for (int i = 0; i < Worlds.EFFICIENCY_BIRD_COUNT; i++) {
+                if (!state.hasEfficiencyBird(world, i)) {
+                    rows.add(new int[]{KIND_EFFICIENCY, i});
+                }
+            }
         }
         Collections.sort(rows, new Comparator<int[]>() {
             @Override
@@ -91,9 +111,9 @@ public class ManagersActivity extends ListScreenActivity {
         });
     }
 
-    /** Accountants are bought with farm points; everything else costs money. */
+    /** Accountants and super upgrades are bought with farm points; everything else costs money. */
     private static boolean paidInPoints(int kind) {
-        return kind == KIND_ACCOUNTANT;
+        return kind == KIND_ACCOUNTANT || kind == KIND_SUPER;
     }
 
     private double cost(int kind, int g) {
@@ -106,6 +126,10 @@ public class ManagersActivity extends ListScreenActivity {
                 return state.quickBuyCost(world);
             case KIND_ACCOUNTANT:
                 return state.accountantCost(world, g);
+            case KIND_SUPER:
+                return state.superUpgradeCost(g);
+            case KIND_EFFICIENCY:
+                return state.efficiencyBirdCost(world, g);
             case KIND_DISCOUNT:
                 return state.discountCost(world, g);
             default:
@@ -175,6 +199,12 @@ public class ManagersActivity extends ListScreenActivity {
                 case KIND_ACCOUNTANT:
                     hired = state.hireAccountant(world, g);
                     break;
+                case KIND_SUPER:
+                    hired = state.buySuperUpgrade(world, g);
+                    break;
+                case KIND_EFFICIENCY:
+                    hired = state.hireEfficiencyBird(world, g);
+                    break;
                 case KIND_DISCOUNT:
                     hired = state.hireDiscountManager(world, g);
                     break;
@@ -233,6 +263,31 @@ public class ManagersActivity extends ListScreenActivity {
                 String garden = def.gardens[g].name;
                 name = getString(R.string.accountant_name, garden);
                 description = getString(R.string.accountant_desc, garden);
+                costLabel = getString(R.string.farm_points_cost, NumberFormatter.number(cost));
+                affordable = state.getAngels(world) >= cost;
+                break;
+            }
+            case KIND_EFFICIENCY: {
+                double cost = state.efficiencyBirdCost(world, g);
+                String pct = NumberFormatter.number(Worlds.efficiencyBirdValue(g) * 100);
+                name = getString(R.string.bird_efficiency_name, pct);
+                description = getString(R.string.super_efficiency_desc, pct);
+                costLabel = NumberFormatter.money(world, cost);
+                affordable = state.getMoney(world) >= cost;
+                break;
+            }
+            case KIND_SUPER: {
+                double cost = state.superUpgradeCost(g);
+                double value = Worlds.superValue(g);
+                if (Worlds.superKind(g) == Worlds.SUPER_PROFIT) {
+                    String x = value == Math.rint(value) ? String.format(Locale.US, "%.0f", value) : String.format(Locale.US, "%.2f", value);
+                    name = getString(R.string.super_profit_name, x);
+                    description = getString(R.string.super_profit_desc, x);
+                } else {
+                    String pct = NumberFormatter.number(value * 100);
+                    name = getString(R.string.super_efficiency_name, pct);
+                    description = getString(R.string.super_efficiency_desc, pct);
+                }
                 costLabel = getString(R.string.farm_points_cost, NumberFormatter.number(cost));
                 affordable = state.getAngels(world) >= cost;
                 break;

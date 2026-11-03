@@ -1,5 +1,10 @@
 # Changelog
 
+## 8
+
+- Adding Celestial birds
+- Adding medals
+
 ## 7
 
 - Release forest farm (Based on Brazil)

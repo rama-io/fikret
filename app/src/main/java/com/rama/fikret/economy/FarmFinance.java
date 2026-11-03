@@ -31,7 +31,7 @@ public final class FarmFinance {
 
     private FarmFinance(GameState s, int w) {
         world = w;
-        double pointsMultiplier = s.angelBonus(w);
+        double pointsMultiplier = s.angelBonus(w) * s.superProfitMultiplier(w);
         double lnPoints = Math.log(pointsMultiplier);
         double total = 0;
         double money = s.getMoney(w);
@@ -82,7 +82,8 @@ public final class FarmFinance {
             }
 
             double base = def.baseRevenue * count / def.cycleSeconds;
-            double lnUpgrades = (s.upgradeLevel(w, g, GameState.UPGRADE_SPEED) + s.upgradeLevel(w, g, GameState.UPGRADE_VALUE)) * LN2;
+            double lnUpgrades = (s.upgradeLevel(w, g, GameState.UPGRADE_SPEED) + s.upgradeLevel(w, g, GameState.UPGRADE_VALUE)) * LN2
+                    + Math.log(s.upgradeProfitMultiplier(w));
             double lnMilestones = GameState.milestonesReached(count) * LN2;
             double lnAll = lnUpgrades + lnMilestones + lnPoints;
             double extra = Math.max(0, potential - base);
@@ -123,23 +124,5 @@ public final class FarmFinance {
 
     public static FarmFinance of(GameState state, int world) {
         return new FarmFinance(state, world);
-    }
-
-    public int[] gardensByIncome() {
-        int n = byGarden.length;
-        int[] order = new int[n];
-        for (int g = 0; g < n; g++) {
-            order[g] = g;
-        }
-        for (int i = 1; i < n; i++) {
-            int key = order[i];
-            int j = i - 1;
-            while (j >= 0 && byGarden[order[j]] < byGarden[key]) {
-                order[j + 1] = order[j];
-                j--;
-            }
-            order[j + 1] = key;
-        }
-        return order;
     }
 }
