@@ -273,29 +273,35 @@ public class FinanceActivity extends ListScreenActivity {
 
     private static final class Tile {
         final int icon;
-        final String label;
+        final String caption;
+        final String value;
 
-        Tile(int icon, String label) {
+        Tile(int icon, String caption, String value) {
             this.icon = icon;
-            this.label = label;
+            this.caption = caption;
+            this.value = value;
         }
+    }
+
+    private String tileValue(double multiplier) {
+        return getString(R.string.medal_multiplier, NumberFormatter.multiplier(multiplier));
     }
 
     private List<Tile> achievementTiles(int w) {
         List<Tile> tiles = new ArrayList<>();
         double medals = state.medalMultiplier(w);
         if (medals > 1) {
-            tiles.add(new Tile(R.drawable.medal, getString(R.string.medal_multiplier, NumberFormatter.multiplier(medals))));
+            tiles.add(new Tile(R.drawable.medal, getString(R.string.tile_profit), tileValue(medals)));
         }
         for (int g = 0; g < Worlds.GARDENS_PER_WORLD; g++) {
             int icon = GardenIcons.forGarden(w, g);
             double value = state.gardenValueMultiplier(w, g);
             if (value > 1) {
-                tiles.add(new Tile(icon, getString(R.string.medal_multiplier, NumberFormatter.multiplier(value))));
+                tiles.add(new Tile(icon, getString(R.string.tile_value), tileValue(value)));
             }
             double speed = state.speedMultiplier(w, g);
             if (speed > 1) {
-                tiles.add(new Tile(icon, getString(R.string.finance_multiplier_speed, NumberFormatter.multiplier(speed))));
+                tiles.add(new Tile(icon, getString(R.string.tile_speed), tileValue(speed)));
             }
         }
         return tiles;
@@ -306,7 +312,7 @@ public class FinanceActivity extends ListScreenActivity {
         List<Tile> tiles = achievementTiles(w);
         StringBuilder key = new StringBuilder();
         for (Tile tile : tiles) {
-            key.append(tile.icon).append(':').append(tile.label).append(';');
+            key.append(tile.icon).append(':').append(tile.caption).append(':').append(tile.value).append(';');
         }
         String signature = key.toString();
         h.achievements.setVisibility(tiles.isEmpty() ? View.GONE : View.VISIBLE);
@@ -319,7 +325,8 @@ public class FinanceActivity extends ListScreenActivity {
         for (int i = 0; i < tiles.size(); i++) {
             View view = inflater.inflate(R.layout.list_item_medal, h.medals, false);
             ((ImageView) view.findViewById(R.id.medal_icon)).setImageResource(tiles.get(i).icon);
-            ((TextView) view.findViewById(R.id.medal_value)).setText(tiles.get(i).label);
+            ((TextView) view.findViewById(R.id.medal_caption)).setText(tiles.get(i).caption);
+            ((TextView) view.findViewById(R.id.medal_value)).setText(tiles.get(i).value);
             applyFont(view);
             GridLayout.LayoutParams params = new GridLayout.LayoutParams(
                     GridLayout.spec(i / MEDAL_COLUMNS), GridLayout.spec(i % MEDAL_COLUMNS, 1f));
