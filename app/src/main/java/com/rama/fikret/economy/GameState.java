@@ -409,6 +409,24 @@ public final class GameState {
         return m;
     }
 
+    public static int milestoneThreshold(int k) {
+        if (k <= 1) return 25;
+        if (k == 2) return 50;
+        if (k == 3) return 100;
+        return (k - 2) * 100;
+    }
+
+    public int nextUnearnedMilestone(int w, int g) {
+        return milestoneThreshold(worlds[w].gardens[g].milestones + 1);
+    }
+
+    public int nextMedalIndex(int w) {
+        for (int i = 0; i < Worlds.MEDAL_COUNT; i++) {
+            if (!medalUnlocked[w][i]) return i;
+        }
+        return -1;
+    }
+
     public static int nextMilestone(int count) {
         if (count < 25) return 25;
         if (count < 50) return 50;

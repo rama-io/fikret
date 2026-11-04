@@ -1,5 +1,6 @@
 package com.rama.fikret.activities;
 
+import android.view.Gravity;
 import android.view.LayoutInflater;
 import android.view.View;
 import android.view.ViewGroup;
@@ -269,17 +270,30 @@ public class FinanceActivity extends ListScreenActivity {
         ViewUpdates.setText(h.gainHour, NumberFormatter.money(w, f.income * 3600));
     }
 
-    private static final int MEDAL_COLUMNS = 5;
+    private static final int MEDAL_COLUMNS = 4;
+    private static final int BADGES_PER_ROW = MEDAL_COLUMNS / 2;
 
     private static final class Tile {
         final int icon;
         final String caption;
         final String value;
+        final String nextCaption;
+        final String nextValue;
 
         Tile(int icon, String caption, String value) {
+            this(icon, caption, value, null, null);
+        }
+
+        Tile(int icon, String caption, String value, String nextCaption, String nextValue) {
             this.icon = icon;
             this.caption = caption;
             this.value = value;
+            this.nextCaption = nextCaption;
+            this.nextValue = nextValue;
+        }
+
+        boolean hasNext() {
+            return nextCaption != null;
         }
     }
 
@@ -290,29 +304,34 @@ public class FinanceActivity extends ListScreenActivity {
     private List<Tile> achievementTiles(int w) {
         List<Tile> tiles = new ArrayList<>();
         double medals = state.medalMultiplier(w);
-        if (medals > 1) {
-            tiles.add(new Tile(R.drawable.medal, getString(R.string.tile_profit), tileValue(medals)));
-        }
         for (int g = 0; g < Worlds.GARDENS_PER_WORLD; g++) {
             int icon = GardenIcons.forGarden(w, g);
-            double value = state.gardenValueMultiplier(w, g);
-            if (value > 1) {
-                tiles.add(new Tile(icon, getString(R.string.tile_value), tileValue(value)));
+            int earned = state.milestones(w, g);
+            if (earned > 0) {
+                double speed = Math.pow(2, earned);
+                // Milestones are earned once and kept through ascensions, so the next one is the
+                // first milestone this garden has not earned yet, not the first one above the count.
+                tiles.add(new Tile(icon, getString(R.string.tile_speed), tileValue(speed),
+                        Worlds.ALL[w].gardens[g].name,
+                        String.valueOf(state.nextUnearnedMilestone(w, g))));
             }
-            double speed = state.speedMultiplier(w, g);
-            if (speed > 1) {
-                tiles.add(new Tile(icon, getString(R.string.tile_speed), tileValue(speed)));
-            }
+        }
+        if (medals > 1) {
+            int nextMedal = state.nextMedalIndex(w);
+            tiles.add(new Tile(R.drawable.medal, getString(R.string.tile_profit), tileValue(medals),
+                    getString(R.string.tile_profit),
+                    nextMedal >= 0 ? NumberFormatter.money(w, state.medalThreshold(w, nextMedal))
+                            : getString(R.string.tile_max)));
         }
         return tiles;
     }
 
-    /** Rebuilds the gallery only when it changes, since rows are refreshed every tick. */
     private void bindMedals(FarmHolder h, int w) {
         List<Tile> tiles = achievementTiles(w);
         StringBuilder key = new StringBuilder();
         for (Tile tile : tiles) {
-            key.append(tile.icon).append(':').append(tile.caption).append(':').append(tile.value).append(';');
+            key.append(tile.icon).append(':').append(tile.caption).append(':').append(tile.value)
+                    .append(':').append(tile.nextCaption).append(':').append(tile.nextValue).append(';');
         }
         String signature = key.toString();
         h.achievements.setVisibility(tiles.isEmpty() ? View.GONE : View.VISIBLE);
@@ -323,16 +342,36 @@ public class FinanceActivity extends ListScreenActivity {
         h.medals.removeAllViews();
         LayoutInflater inflater = LayoutInflater.from(this);
         for (int i = 0; i < tiles.size(); i++) {
+            Tile tile = tiles.get(i);
+            int row = i / BADGES_PER_ROW;
+            int column = (i % BADGES_PER_ROW) * 2;
+
             View view = inflater.inflate(R.layout.list_item_medal, h.medals, false);
-            ((ImageView) view.findViewById(R.id.medal_icon)).setImageResource(tiles.get(i).icon);
-            ((TextView) view.findViewById(R.id.medal_caption)).setText(tiles.get(i).caption);
-            ((TextView) view.findViewById(R.id.medal_value)).setText(tiles.get(i).value);
+            ((ImageView) view.findViewById(R.id.medal_icon)).setImageResource(tile.icon);
+            ((TextView) view.findViewById(R.id.medal_caption)).setText(tile.caption);
+            ((TextView) view.findViewById(R.id.medal_value)).setText(tile.value);
             applyFont(view);
-            GridLayout.LayoutParams params = new GridLayout.LayoutParams(
-                    GridLayout.spec(i / MEDAL_COLUMNS), GridLayout.spec(i % MEDAL_COLUMNS, 1f));
-            params.width = 0;
-            h.medals.addView(view, params);
+            addMedalCell(h.medals, view, row, column);
+
+            View next;
+            if (tile.hasNext()) {
+                next = inflater.inflate(R.layout.list_item_medal_next, h.medals, false);
+                ((TextView) next.findViewById(R.id.medal_caption)).setText(tile.nextCaption);
+                ((TextView) next.findViewById(R.id.medal_value)).setText(tile.nextValue);
+                applyFont(next);
+            } else {
+                next = new View(this);
+            }
+            addMedalCell(h.medals, next, row, column + 1);
         }
+    }
+
+    private static void addMedalCell(GridLayout grid, View cell, int row, int column) {
+        GridLayout.LayoutParams params = new GridLayout.LayoutParams(
+                GridLayout.spec(row), GridLayout.spec(column, 1f));
+        params.width = 0;
+        params.setGravity(Gravity.FILL);
+        grid.addView(cell, params);
     }
 
     private boolean buyBest(FarmHolder h) {

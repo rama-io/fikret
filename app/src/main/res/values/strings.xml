@@ -77,9 +77,10 @@
     <string name="finance_farm_points">Farm Points</string>
     <string name="finance_achievements">Achievements</string>
     <string name="medal_multiplier">x%1$s</string>
-    <string name="tile_value">Value</string>
     <string name="tile_speed">Speed</string>
     <string name="tile_profit">Profit</string>
+    <string name="tile_next">Next</string>
+    <string name="tile_max">Max out</string>
     <string name="finance_farm_points_multiplier">Multiplier</string>
     <string name="finance_points_efficiency">%1$s%%</string>
     <string name="finance_garden_multipliers">Garden multipliers</string>
