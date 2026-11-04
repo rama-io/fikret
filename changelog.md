@@ -3,6 +3,8 @@
 ## 10
 
 - Finance/achievements redesign. the profits_badge now sits at the bottom and the number of columns is even so the badges align nicely
+- Add next suggestion to each badge
+- Improve next milestone suggestion
 
 ## 9
 
