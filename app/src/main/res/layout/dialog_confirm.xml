@@ -1,0 +1,29 @@
+<?xml version="1.0" encoding="utf-8"?>
+<LinearLayout xmlns:android="http://schemas.android.com/apk/res/android"
+    style="@style/Dialog_Root">
+
+    <TextView
+        android:id="@+id/confirm_title"
+        android:gravity="center"
+        style="@style/H1" />
+
+    <View style="@style/SeparatorListVertical" />
+
+    <TextView
+        android:id="@+id/confirm_message"
+        style="@style/Text" />
+
+    <View style="@style/Separator" />
+
+    <TextView
+        android:id="@+id/confirm_yes"
+        style="@style/BTN_danger" />
+
+    <View style="@style/SeparatorListVertical" />
+
+    <TextView
+        android:id="@+id/confirm_cancel"
+        style="@style/BTN"
+        android:text="@string/btn_go_back" />
+
+</LinearLayout>

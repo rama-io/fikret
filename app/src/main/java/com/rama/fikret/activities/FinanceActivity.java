@@ -1,5 +1,6 @@
 package com.rama.fikret.activities;
 
+import android.app.Dialog;
 import android.view.Gravity;
 import android.view.LayoutInflater;
 import android.view.View;
@@ -45,6 +46,12 @@ public class FinanceActivity extends ListScreenActivity {
         TextView speed;
     }
 
+    private static final class NextCell {
+        Tile tile;
+        TextView timer;
+        View buy;
+    }
+
     private static final class FarmHolder {
         WdCollapsibleSection section;
         int world = -1;
@@ -54,17 +61,12 @@ public class FinanceActivity extends ListScreenActivity {
         GridLayout medals;
         View achievements;
         String medalsKey = "";
+        final List<NextCell> nextCells = new ArrayList<>();
         TextView points;
         TextView pointsMultiplier;
         TextView pointsProfit;
         TextView pointsGainOnAscend;
         View ascendButton;
-        View bestGroup;
-        TextView bestName;
-        int bestKind = FarmFinance.BEST_NONE;
-        int bestGarden;
-        TextView afford;
-        TextView paysBack;
         TextView gainSecond;
         TextView gainMinute;
         TextView gainHour;
@@ -89,7 +91,7 @@ public class FinanceActivity extends ListScreenActivity {
         farms.clear();
         for (int w = 0; w < DeveloperMode.availableFarms(); w++) {
             FarmFinance finance = FarmFinance.of(state, w);
-            if (finance.income > 0) {
+            if (state.isFarmUnlocked(w)) {
                 farms.add(finance);
             }
         }
@@ -159,19 +161,10 @@ public class FinanceActivity extends ListScreenActivity {
         h.pointsGainOnAscend = row.findViewById(R.id.farm_points_gain_on_ascend);
         h.ascendButton = row.findViewById(R.id.ascend_confirm);
         h.ascendButton.setOnClickListener(v -> {
-            if (h.world >= 0 && state.ascend(h.world)) {
-                adapter.notifyDataSetChanged();
+            if (h.world >= 0 && state.pendingAngels(h.world) > 0) {
+                confirmAscend(h.world);
             }
         });
-        h.bestGroup = row.findViewById(R.id.farm_best_group);
-        h.bestName = row.findViewById(R.id.best_buy_name);
-        h.bestName.setOnClickListener(v -> {
-            if (h.world >= 0 && buyBest(h)) {
-                adapter.notifyDataSetChanged();
-            }
-        });
-        h.afford = row.findViewById(R.id.afford_timer);
-        h.paysBack = row.findViewById(R.id.pays_back);
         h.gainSecond = row.findViewById(R.id.gain_second);
         h.gainMinute = row.findViewById(R.id.gain_minute);
         h.gainHour = row.findViewById(R.id.gain_hour);
@@ -181,6 +174,26 @@ public class FinanceActivity extends ListScreenActivity {
         applyFont(row);
         row.setTag(h);
         return row;
+    }
+
+    private void confirmAscend(int w) {
+        Dialog dialog = new Dialog(this, R.style.AppDialog);
+        View content = LayoutInflater.from(this).inflate(R.layout.dialog_confirm, null);
+        ((TextView) content.findViewById(R.id.confirm_title)).setText(getString(R.string.ascend_dialog_title, Worlds.ALL[w].name));
+        ((TextView) content.findViewById(R.id.confirm_message)).setText(getString(R.string.ascend_dialog_message,
+                getString(R.string.ascend_warning), NumberFormatter.number(state.pendingAngels(w))));
+        TextView yes = content.findViewById(R.id.confirm_yes);
+        yes.setText(R.string.ascend_confirm);
+        yes.setOnClickListener(v -> {
+            dialog.dismiss();
+            if (state.ascend(w)) {
+                adapter.notifyDataSetChanged();
+            }
+        });
+        content.findViewById(R.id.confirm_cancel).setOnClickListener(v -> dialog.dismiss());
+        applyFont(content);
+        dialog.setContentView(content);
+        dialog.show();
     }
 
     private void fillBars(LayoutInflater inflater, LinearLayout parent, Bar[] bars) {
@@ -247,23 +260,11 @@ public class FinanceActivity extends ListScreenActivity {
         }
 
         ViewUpdates.setText(h.points, NumberFormatter.number(f.points));
-        bindMedals(h, w);
+        bindMedals(h, w, f.income);
         ViewUpdates.setText(h.pointsMultiplier, getString(R.string.finance_points_efficiency, NumberFormatter.number(state.pointsEfficiency(w) * 100)));
         ViewUpdates.setText(h.pointsProfit, getString(R.string.finance_profit_bonus, NumberFormatter.number(f.pointsBonusPercent)));
         ViewUpdates.setText(h.pointsGainOnAscend, getString(R.string.finance_points_gain, NumberFormatter.number(f.pointsGain)));
         ViewUpdates.setBackgroundColor(h.ascendButton, f.pointsGain > 0 ? ViewUpdates.themeColor(this, R.attr.accent) : ViewUpdates.color(this, R.color.disabled));
-
-        boolean hasBest = f.bestBuyKind != FarmFinance.BEST_NONE;
-        h.bestGroup.setVisibility(hasBest ? View.VISIBLE : View.GONE);
-        if (hasBest) {
-            h.bestKind = f.bestBuyKind;
-            h.bestGarden = f.bestBuyGarden;
-            ViewUpdates.setText(h.bestName, bestBuyName(f, w));
-            ViewUpdates.setBackgroundColor(h.bestName, f.bestBuyWait <= 0
-                    ? ViewUpdates.themeColor(this, R.attr.accent) : ViewUpdates.color(this, R.color.disabled));
-            ViewUpdates.setText(h.afford, f.bestBuyWait <= 0 ? getString(R.string.finance_afford_now) : longDuration(f.bestBuyWait));
-            ViewUpdates.setText(h.paysBack, longDuration(f.bestBuyPayback));
-        }
 
         ViewUpdates.setText(h.gainSecond, NumberFormatter.money(w, f.income));
         ViewUpdates.setText(h.gainMinute, NumberFormatter.money(w, f.income * 60));
@@ -273,23 +274,30 @@ public class FinanceActivity extends ListScreenActivity {
     private static final int MEDAL_COLUMNS = 4;
     private static final int BADGES_PER_ROW = MEDAL_COLUMNS / 2;
 
+    private static final int NEXT_NONE = 0;
+    private static final int NEXT_MILESTONE = 1;
+    private static final int NEXT_MEDAL = 2;
+
     private static final class Tile {
         final int icon;
         final String caption;
         final String value;
         final String nextCaption;
         final String nextValue;
+        final int nextKind;
+        final int garden;
+        final double medalThreshold;
 
-        Tile(int icon, String caption, String value) {
-            this(icon, caption, value, null, null);
-        }
-
-        Tile(int icon, String caption, String value, String nextCaption, String nextValue) {
+        Tile(int icon, String caption, String value, String nextCaption, String nextValue,
+             int nextKind, int garden, double medalThreshold) {
             this.icon = icon;
             this.caption = caption;
             this.value = value;
             this.nextCaption = nextCaption;
             this.nextValue = nextValue;
+            this.nextKind = nextKind;
+            this.garden = garden;
+            this.medalThreshold = medalThreshold;
         }
 
         boolean hasNext() {
@@ -313,20 +321,22 @@ public class FinanceActivity extends ListScreenActivity {
                 // first milestone this garden has not earned yet, not the first one above the count.
                 tiles.add(new Tile(icon, getString(R.string.tile_speed), tileValue(speed),
                         Worlds.ALL[w].gardens[g].name,
-                        String.valueOf(state.nextUnearnedMilestone(w, g))));
+                        String.valueOf(state.nextUnearnedMilestone(w, g)),
+                        NEXT_MILESTONE, g, 0));
             }
         }
         if (medals > 1) {
             int nextMedal = state.nextMedalIndex(w);
+            double threshold = nextMedal >= 0 ? state.medalThreshold(w, nextMedal) : 0;
             tiles.add(new Tile(R.drawable.medal, getString(R.string.tile_profit), tileValue(medals),
                     getString(R.string.tile_profit),
-                    nextMedal >= 0 ? NumberFormatter.money(w, state.medalThreshold(w, nextMedal))
-                            : getString(R.string.tile_max)));
+                    nextMedal >= 0 ? NumberFormatter.money(w, threshold) : getString(R.string.tile_max),
+                    nextMedal >= 0 ? NEXT_MEDAL : NEXT_NONE, -1, threshold));
         }
         return tiles;
     }
 
-    private void bindMedals(FarmHolder h, int w) {
+    private void bindMedals(FarmHolder h, int w, double income) {
         List<Tile> tiles = achievementTiles(w);
         StringBuilder key = new StringBuilder();
         for (Tile tile : tiles) {
@@ -335,11 +345,16 @@ public class FinanceActivity extends ListScreenActivity {
         }
         String signature = key.toString();
         h.achievements.setVisibility(tiles.isEmpty() ? View.GONE : View.VISIBLE);
-        if (signature.equals(h.medalsKey)) {
-            return;
+        if (!signature.equals(h.medalsKey)) {
+            h.medalsKey = signature;
+            rebuildMedals(h, w, tiles);
         }
-        h.medalsKey = signature;
+        updateNextCells(h, w, income);
+    }
+
+    private void rebuildMedals(FarmHolder h, int w, List<Tile> tiles) {
         h.medals.removeAllViews();
+        h.nextCells.clear();
         LayoutInflater inflater = LayoutInflater.from(this);
         for (int i = 0; i < tiles.size(); i++) {
             Tile tile = tiles.get(i);
@@ -358,11 +373,52 @@ public class FinanceActivity extends ListScreenActivity {
                 next = inflater.inflate(R.layout.list_item_medal_next, h.medals, false);
                 ((TextView) next.findViewById(R.id.medal_caption)).setText(tile.nextCaption);
                 ((TextView) next.findViewById(R.id.medal_value)).setText(tile.nextValue);
+                NextCell cell = new NextCell();
+                cell.tile = tile;
+                cell.timer = next.findViewById(R.id.time_counter);
+                cell.buy = next.findViewById(R.id.buy_next);
+                ((TextView) cell.buy).setText(R.string.tile_buy);
+                if (tile.nextKind == NEXT_MILESTONE) {
+                    int garden = tile.garden;
+                    cell.buy.setOnClickListener(v -> {
+                        if (h.world >= 0 && state.buy(h.world, garden, GameState.BUY_NEXT)) {
+                            adapter.notifyDataSetChanged();
+                        }
+                    });
+                }
+                h.nextCells.add(cell);
                 applyFont(next);
             } else {
                 next = new View(this);
             }
             addMedalCell(h.medals, next, row, column + 1);
+        }
+    }
+
+    private void updateNextCells(FarmHolder h, int w, double income) {
+        double money = state.getMoney(w);
+        for (NextCell cell : h.nextCells) {
+            Tile tile = cell.tile;
+            double cost;
+            boolean canBuy = false;
+            if (tile.nextKind == NEXT_MILESTONE) {
+                GameState.Quote quote = state.quote(w, tile.garden, GameState.BUY_NEXT);
+                cost = quote.cost;
+                canBuy = quote.amount > 0;
+            } else if (tile.nextKind == NEXT_MEDAL) {
+                cost = tile.medalThreshold;
+            } else {
+                cell.timer.setVisibility(View.GONE);
+                cell.buy.setVisibility(View.GONE);
+                continue;
+            }
+            double wait = money >= cost ? 0 : income > 0 ? (cost - money) / income : Double.POSITIVE_INFINITY;
+            boolean showBuy = tile.nextKind == NEXT_MILESTONE && canBuy && wait <= 0;
+            cell.buy.setVisibility(showBuy ? View.VISIBLE : View.GONE);
+            cell.timer.setVisibility(showBuy ? View.GONE : View.VISIBLE);
+            if (!showBuy) {
+                ViewUpdates.setText(cell.timer, wait <= 0 ? getString(R.string.finance_afford_now) : longDuration(wait));
+            }
         }
     }
 
@@ -372,37 +428,6 @@ public class FinanceActivity extends ListScreenActivity {
         params.width = 0;
         params.setGravity(Gravity.FILL);
         grid.addView(cell, params);
-    }
-
-    private boolean buyBest(FarmHolder h) {
-        int w = h.world;
-        int g = h.bestGarden;
-        switch (h.bestKind) {
-            case FarmFinance.BEST_SUPERVISOR:
-                return state.hireManager(w, g);
-            case FarmFinance.BEST_SPEED:
-                return state.buyUpgrade(w, g, GameState.UPGRADE_SPEED, state.upgradeLevel(w, g, GameState.UPGRADE_SPEED));
-            case FarmFinance.BEST_VALUE:
-                return state.buyUpgrade(w, g, GameState.UPGRADE_VALUE, state.upgradeLevel(w, g, GameState.UPGRADE_VALUE));
-            case FarmFinance.BEST_MILESTONE:
-                return state.buy(w, g, GameState.BUY_NEXT);
-            default:
-                return false;
-        }
-    }
-
-    private String bestBuyName(FarmFinance f, int w) {
-        String garden = Worlds.ALL[w].gardens[f.bestBuyGarden].name;
-        switch (f.bestBuyKind) {
-            case FarmFinance.BEST_SPEED:
-                return getString(R.string.upgrade_speed_name, garden);
-            case FarmFinance.BEST_VALUE:
-                return getString(R.string.upgrade_value_name, garden);
-            case FarmFinance.BEST_MILESTONE:
-                return getString(R.string.milestone_name, garden, f.bestBuyTarget);
-            default:
-                return getString(R.string.supervisor_name, garden);
-        }
     }
 
     private void bindBar(Bar bar, String label, int w, double value, double total) {

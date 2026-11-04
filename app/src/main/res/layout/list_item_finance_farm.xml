@@ -6,60 +6,6 @@
     android:layout_height="wrap_content"
     app:defaultExpanded="true">
 
-    <LinearLayout
-        android:id="@+id/farm_best_group"
-        style="@style/VerticalList">
-
-        <TextView
-            style="@style/Text"
-            android:text="@string/finance_best_buy_title" />
-
-        <View style="@style/SeparatorListVertical" />
-
-        <LinearLayout style="@style/VerticalList_BG2">
-
-            <Button
-                android:id="@+id/best_buy_name"
-                style="@style/BTN" />
-
-            <View style="@style/SeparatorListVertical" />
-
-            <LinearLayout style="@style/HorizontalList">
-
-                <TextView
-                    style="@style/Text"
-                    android:layout_width="wrap_content"
-                    android:text="@string/finance_afford_in" />
-
-                <TextView
-                    android:id="@+id/afford_timer"
-                    style="@style/Text"
-                    android:layout_width="0dp"
-                    android:layout_weight="1"
-                    android:gravity="end" />
-            </LinearLayout>
-
-            <View style="@style/SeparatorListVertical" />
-
-            <LinearLayout style="@style/HorizontalList">
-
-                <TextView
-                    style="@style/Text"
-                    android:layout_width="wrap_content"
-                    android:text="@string/finance_pays_back" />
-
-                <TextView
-                    android:id="@+id/pays_back"
-                    style="@style/Text"
-                    android:layout_width="0dp"
-                    android:layout_weight="1"
-                    android:gravity="end" />
-            </LinearLayout>
-        </LinearLayout>
-    </LinearLayout>
-
-    <View style="@style/SeparatorListVertical" />
-
     <TextView
         style="@style/Text"
         android:text="@string/finance_summary" />

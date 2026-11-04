@@ -16,6 +16,8 @@
     <string name="menu_upgrades">Upgrades</string>
     <string name="ascend_warning">Ascending restarts this farm: money, gardens and upgrades are lost. Farm points, milestones and birds stay.</string>
     <string name="ascend_confirm">Ascend</string>
+    <string name="ascend_dialog_title">%1$s Ascension</string>
+    <string name="ascend_dialog_message">%1$s\n\nYou will gain %2$s farm points.</string>
     <string name="menu_teleport">Teleport</string>
     <string name="menu_finance">Finance</string>
     <string name="empty_finance">No active farms yet. Hire a supervisor to start earning.</string>
@@ -81,6 +83,7 @@
     <string name="tile_profit">Profit</string>
     <string name="tile_next">Next</string>
     <string name="tile_max">Max out</string>
+    <string name="tile_buy">Buy</string>
     <string name="finance_farm_points_multiplier">Multiplier</string>
     <string name="finance_points_efficiency">%1$s%%</string>
     <string name="finance_garden_multipliers">Garden multipliers</string>
@@ -89,10 +92,7 @@
     <string name="finance_farm_points_profit">Farm Points Profit</string>
     <string name="finance_farm_points_gain">Gain on ascend</string>
     <string name="finance_points_gain">+%1$s</string>
-    <string name="finance_best_buy_title">Best Buy</string>
-    <string name="finance_afford_in">You can afford it in:</string>
     <string name="finance_afford_now">Now</string>
-    <string name="finance_pays_back">Pays back in:</string>
     <string name="finance_total">Total</string>
     <string name="finance_gain_second">Gain per Second</string>
     <string name="finance_gain_minute">Gain per Minute</string>
@@ -104,6 +104,5 @@
     <string name="quick_buy_bird_name">Quick buy</string>
     <string name="quick_buy_bird_desc">Buy every upgrade you can afford.</string>
     <string name="quick_buy_all">Buy all</string>
-    <string name="milestone_name">%1$s to %2$d</string>
     <string name="finance_profit_bonus">+%1$s%%</string>
 </resources>
