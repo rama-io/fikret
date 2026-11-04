@@ -427,13 +427,6 @@ public final class GameState {
         return -1;
     }
 
-    public static int nextMilestone(int count) {
-        if (count < 25) return 25;
-        if (count < 50) return 50;
-        if (count < 100) return 100;
-        return (count / 100 + 1) * 100;
-    }
-
     public double priceMultiplier(int w, int g) {
         Garden garden = worlds[w].gardens[g];
         double m = 1;
@@ -453,7 +446,7 @@ public final class GameState {
         double ratio = def.coefficient;
 
         if (amount == BUY_NEXT) {
-            amount = nextMilestone(owned) - owned;
+            amount = nextUnearnedMilestone(w, g) - owned;
         } else if (amount == BUY_MAX) {
             double n = Math.floor(Math.log(money[w] * (ratio - 1) / first + 1) / Math.log(ratio));
             if (Double.isNaN(n) || n < 0) {

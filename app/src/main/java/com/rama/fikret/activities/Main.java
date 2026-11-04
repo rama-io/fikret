@@ -169,7 +169,7 @@ public class Main extends Activity {
         int count = state.getCount(w, g);
 
         ViewUpdates.setImageResource((ImageView) row.findViewById(R.id.garden_icon), GardenIcons.forGarden(w, g));
-        ViewUpdates.setText((TextView) row.findViewById(R.id.garden_count), getString(R.string.garden_count, count, GameState.nextMilestone(count)));
+        ViewUpdates.setText((TextView) row.findViewById(R.id.garden_count), getString(R.string.garden_count, count, state.nextUnearnedMilestone(w, g)));
 
         ProgressBar bar = row.findViewById(R.id.progress_bar);
         int progress = (int) Math.round(state.progress(w, g) * 1000);
