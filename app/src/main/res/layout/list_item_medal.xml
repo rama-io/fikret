@@ -2,7 +2,7 @@
 <LinearLayout xmlns:android="http://schemas.android.com/apk/res/android"
     style="@style/VerticalList"
     android:gravity="center"
-    android:background="@color/surface_1"
+    android:background="@color/base"
     android:padding="4dp">
 
     <ImageView

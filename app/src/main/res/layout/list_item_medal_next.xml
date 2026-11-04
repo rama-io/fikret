@@ -1,7 +1,7 @@
 <?xml version="1.0" encoding="utf-8"?>
 <LinearLayout xmlns:android="http://schemas.android.com/apk/res/android"
     style="@style/VerticalList"
-    android:background="@color/base"
+    android:background="@color/surface_1"
     android:gravity="center"
     android:padding="4dp">
 
@@ -10,8 +10,8 @@
         android:layout_height="wrap_content"
         android:singleLine="true"
         android:text="@string/tile_next"
-        android:textColor="@color/subtle"
-        android:textSize="@dimen/text" />
+        android:textColor="@color/text"
+        android:textSize="@dimen/small" />
 
     <TextView
         android:id="@+id/medal_caption"
@@ -19,7 +19,7 @@
         android:layout_height="wrap_content"
         android:ellipsize="end"
         android:singleLine="true"
-        android:textColor="@color/subtle"
+        android:textColor="@color/warning"
         android:textSize="@dimen/small" />
 
     <TextView
@@ -28,6 +28,6 @@
         android:layout_height="wrap_content"
         android:ellipsize="end"
         android:singleLine="true"
-        android:textColor="@color/subtle"
+        android:textColor="@color/warning"
         android:textSize="@dimen/small" />
 </LinearLayout>
