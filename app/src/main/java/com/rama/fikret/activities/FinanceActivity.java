@@ -306,8 +306,6 @@ public class FinanceActivity extends ListScreenActivity {
         double medals = state.medalMultiplier(w);
         for (int g = 0; g < Worlds.GARDENS_PER_WORLD; g++) {
             int icon = GardenIcons.forGarden(w, g);
-            }
-            double speed = state.speedMultiplier(w, g);
             int earned = state.milestones(w, g);
             if (earned > 0) {
                 double speed = Math.pow(2, earned);
@@ -350,6 +348,7 @@ public class FinanceActivity extends ListScreenActivity {
 
             View view = inflater.inflate(R.layout.list_item_medal, h.medals, false);
             ((ImageView) view.findViewById(R.id.medal_icon)).setImageResource(tile.icon);
+            ((TextView) view.findViewById(R.id.medal_caption)).setText(tile.caption);
             ((TextView) view.findViewById(R.id.medal_value)).setText(tile.value);
             applyFont(view);
             addMedalCell(h.medals, view, row, column);
