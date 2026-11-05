@@ -48,4 +48,8 @@ public final class FarmArt {
     public static Drawable supervisor(Context context, int world) {
         return load(context, world, R.drawable.supervisor);
     }
+
+    public static Drawable eternal(Context context, int world) {
+        return load(context, world, R.drawable.eternal_icon);
+    }
 }

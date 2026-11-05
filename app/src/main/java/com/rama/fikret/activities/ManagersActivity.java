@@ -10,7 +10,6 @@ import android.widget.TextView;
 import com.rama.fikret.R;
 import com.rama.fikret.economy.NumberFormatter;
 import com.rama.fikret.economy.Worlds;
-import com.rama.fikret.game.BirdSheets;
 import com.rama.fikret.helpers.FarmArt;
 import com.rama.fikret.helpers.ViewUpdates;
 
@@ -170,7 +169,7 @@ public class ManagersActivity extends ListScreenActivity {
                     applyFont(row);
                     ((ImageView) row.findViewById(R.id.manager_picture))
                             .setImageDrawable(pointsScreen()
-                                    ? BirdSheets.eternalIcon(ManagersActivity.this)
+                                    ? FarmArt.eternal(ManagersActivity.this, world)
                                     : FarmArt.supervisor(ManagersActivity.this, world));
                     wireListener(row);
                 }
