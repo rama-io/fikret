@@ -8,9 +8,5 @@
     <dimen name="text">16sp</dimen>
     <dimen name="small">12sp</dimen>
 
-    <dimen name="hud_box_size">44dp</dimen>
-    <dimen name="hud_box_icon_size">26dp</dimen>
-    <dimen name="hud_display_height">36dp</dimen>
-    <dimen name="hud_label_text_size">10sp</dimen>
-    <dimen name="hud_display_text_size">14sp</dimen>
+    <integer name="achievements_badge_columns">4</integer>
 </resources>

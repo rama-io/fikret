@@ -26,13 +26,13 @@
         android:text="@string/menu_upgrades" />
 
     <View
-        android:id="@+id/menu_super_managers_gap"
+        android:id="@+id/menu_eternals_gap"
         style="@style/SeparatorListVertical" />
 
     <TextView
-        android:id="@+id/menu_super_managers"
+        android:id="@+id/menu_eternals"
         style="@style/BTN"
-        android:text="@string/menu_super_managers" />
+        android:text="@string/menu_eternals" />
 
     <View style="@style/SeparatorListVertical" />
 

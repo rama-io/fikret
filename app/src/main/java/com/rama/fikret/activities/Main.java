@@ -119,7 +119,7 @@ public class Main extends Activity {
 
         bindMenuItem(dialog, content, R.id.menu_map, new Intent(this, GameActivity.class));
         bindMenuItem(dialog, content, R.id.menu_managers, new Intent(this, ManagersActivity.class));
-        bindMenuItem(dialog, content, R.id.menu_super_managers, new Intent(this, SuperSupervisorsActivity.class));
+        bindMenuItem(dialog, content, R.id.menu_eternals, new Intent(this, EternalsActivity.class));
         bindMenuItem(dialog, content, R.id.menu_upgrades, new Intent(this, UpgradesActivity.class));
         bindMenuItem(dialog, content, R.id.menu_finance, new Intent(this, FinanceActivity.class));
         bindMenuItem(dialog, content, R.id.menu_teleport, new Intent(this, TeleportActivity.class));
@@ -139,9 +139,9 @@ public class Main extends Activity {
         int managersVisibility = state.hasRemainingSupervisors(w) ? View.VISIBLE : View.GONE;
         content.findViewById(R.id.menu_managers).setVisibility(managersVisibility);
         content.findViewById(R.id.menu_managers_gap).setVisibility(managersVisibility);
-        int superVisibility = state.hasRemainingSuperSupervisors(w) ? View.VISIBLE : View.GONE;
-        content.findViewById(R.id.menu_super_managers).setVisibility(superVisibility);
-        content.findViewById(R.id.menu_super_managers_gap).setVisibility(superVisibility);
+        int superVisibility = state.hasRemainingEternals(w) ? View.VISIBLE : View.GONE;
+        content.findViewById(R.id.menu_eternals).setVisibility(superVisibility);
+        content.findViewById(R.id.menu_eternals_gap).setVisibility(superVisibility);
         int upgradesVisibility = state.hasRemainingUpgrades(w) ? View.VISIBLE : View.GONE;
         content.findViewById(R.id.menu_upgrades).setVisibility(upgradesVisibility);
         content.findViewById(R.id.menu_upgrades_gap).setVisibility(upgradesVisibility);
@@ -169,7 +169,7 @@ public class Main extends Activity {
         int count = state.getCount(w, g);
 
         ViewUpdates.setImageResource((ImageView) row.findViewById(R.id.garden_icon), GardenIcons.forGarden(w, g));
-        ViewUpdates.setText((TextView) row.findViewById(R.id.garden_count), getString(R.string.garden_count, count, GameState.nextMilestone(count)));
+        ViewUpdates.setText((TextView) row.findViewById(R.id.garden_count), getString(R.string.garden_count, count, state.nextUnearnedMilestone(w, g)));
 
         ProgressBar bar = row.findViewById(R.id.progress_bar);
         int progress = (int) Math.round(state.progress(w, g) * 1000);

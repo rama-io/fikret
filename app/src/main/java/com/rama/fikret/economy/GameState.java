@@ -427,13 +427,6 @@ public final class GameState {
         return -1;
     }
 
-    public static int nextMilestone(int count) {
-        if (count < 25) return 25;
-        if (count < 50) return 50;
-        if (count < 100) return 100;
-        return (count / 100 + 1) * 100;
-    }
-
     public double priceMultiplier(int w, int g) {
         Garden garden = worlds[w].gardens[g];
         double m = 1;
@@ -453,7 +446,7 @@ public final class GameState {
         double ratio = def.coefficient;
 
         if (amount == BUY_NEXT) {
-            amount = nextMilestone(owned) - owned;
+            amount = nextUnearnedMilestone(w, g) - owned;
         } else if (amount == BUY_MAX) {
             double n = Math.floor(Math.log(money[w] * (ratio - 1) / first + 1) / Math.log(ratio));
             if (Double.isNaN(n) || n < 0) {
@@ -615,7 +608,6 @@ public final class GameState {
         return hasRemainingEfficiencyBirds(w);
     }
 
-    /** Anything still to buy with farm points: accountants and super upgrades. */
     public boolean hasRemainingSuperSupervisors(int w) {
         if (hasRemainingSuperUpgrades(w)) {
             return true;
@@ -650,7 +642,6 @@ public final class GameState {
             double bestCost = Double.MAX_VALUE;
             for (int g = 0; g < Worlds.GARDENS_PER_WORLD; g++) {
                 Garden garden = worlds[w].gardens[g];
-                if (garden.count <= 0) continue;
                 for (int type = 0; type < 2; type++) {
                     boolean speed = type == UPGRADE_SPEED;
                     int level = speed ? garden.speedLevel : garden.valueLevel;

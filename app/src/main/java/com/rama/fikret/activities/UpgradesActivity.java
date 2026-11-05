@@ -53,7 +53,7 @@ public class UpgradesActivity extends ListScreenActivity {
 
     private boolean anyAffordable() {
         for (int[] r : rows) {
-            if (state.getCount(world, r[2]) > 0 && r[0] == state.upgradeLevel(world, r[2], r[1])
+            if (r[0] == state.upgradeLevel(world, r[2], r[1])
                     && state.getMoney(world) >= state.upgradeCostAt(world, r[2], r[1], r[0])) {
                 return true;
             }
@@ -135,7 +135,7 @@ public class UpgradesActivity extends ListScreenActivity {
                 return;
             }
             int[] upgrade = rows.get(position);
-            if (state.getCount(world, upgrade[2]) > 0 && state.buyUpgrade(world, upgrade[2], upgrade[1], upgrade[0])) {
+            if (state.buyUpgrade(world, upgrade[2], upgrade[1], upgrade[0])) {
                 rebuildRows();
                 adapter.notifyDataSetChanged();
             }
@@ -168,7 +168,7 @@ public class UpgradesActivity extends ListScreenActivity {
         double cost = state.upgradeCostAt(world, g, type, tier);
         ViewUpdates.setText((TextView) row.findViewById(R.id.activate_cost), NumberFormatter.money(world, cost));
 
-        boolean available = state.upgradeLevel(world, g, type) <= tier && state.getCount(world, g) > 0;
+        boolean available = state.upgradeLevel(world, g, type) <= tier;
         boolean affordable = available && state.getMoney(world) >= cost;
         ViewUpdates.setBackgroundColor(row.findViewById(R.id.activate_button), affordable ? ViewUpdates.themeColor(this, R.attr.accent) : ViewUpdates.color(this, R.color.disabled));
     }

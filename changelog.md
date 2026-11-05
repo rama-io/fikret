@@ -1,5 +1,12 @@
 # Changelog
 
+## 11
+
+- More next milestone suggestion improvement
+- Remove garden multipliers in order to make the financial tabs smaller
+- Rename celestial birds to eternals
+- Ability to buy upgrades even when you don't own the garden
+
 ## 10
 
 - Finance/achievements redesign. the profits_badge now sits at the bottom and the number of columns is even so the badges align nicely

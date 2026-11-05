@@ -30,4 +30,30 @@
         android:singleLine="true"
         android:textColor="@color/warning"
         android:textSize="@dimen/small" />
+
+    <View style="@style/SeparatorListVertical" />
+
+    <TextView
+        android:id="@+id/time_counter"
+        style="@style/BlockFlow"
+        android:background="@color/surface_0"
+        android:ellipsize="end"
+        android:gravity="center"
+        android:padding="4dp"
+        android:singleLine="true"
+        android:textColor="@color/text"
+        android:textSize="@dimen/small" />
+
+    <Button
+        android:id="@+id/buy_next"
+        style="@style/BlockFlow"
+        android:background="@color/btnBg"
+        android:ellipsize="end"
+        android:gravity="center"
+        android:padding="4dp"
+        android:singleLine="true"
+        android:text="@string/tile_buy"
+        android:textColor="@color/base"
+        android:textSize="@dimen/small"
+        android:visibility="gone" />
 </LinearLayout>

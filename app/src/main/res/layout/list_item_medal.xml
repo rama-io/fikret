@@ -1,8 +1,8 @@
 <?xml version="1.0" encoding="utf-8"?>
 <LinearLayout xmlns:android="http://schemas.android.com/apk/res/android"
     style="@style/VerticalList"
-    android:gravity="center"
     android:background="@color/base"
+    android:gravity="center"
     android:padding="4dp">
 
     <ImageView
@@ -17,6 +17,7 @@
         android:id="@+id/medal_caption"
         android:layout_width="wrap_content"
         android:layout_height="wrap_content"
+        android:ellipsize="end"
         android:singleLine="true"
         android:textColor="@color/text"
         android:textSize="@dimen/small" />
@@ -25,6 +26,7 @@
         android:id="@+id/medal_value"
         android:layout_width="wrap_content"
         android:layout_height="wrap_content"
+        android:ellipsize="end"
         android:singleLine="true"
         android:textColor="@color/warning"
         android:textSize="@dimen/small" />
