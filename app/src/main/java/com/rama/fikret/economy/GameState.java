@@ -608,7 +608,7 @@ public final class GameState {
         return hasRemainingEfficiencyBirds(w);
     }
 
-    public boolean hasRemainingSuperSupervisors(int w) {
+    public boolean hasRemainingEternals(int w) {
         if (hasRemainingSuperUpgrades(w)) {
             return true;
         }
