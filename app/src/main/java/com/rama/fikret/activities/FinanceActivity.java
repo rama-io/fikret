@@ -40,12 +40,6 @@ public class FinanceActivity extends ListScreenActivity {
         ProgressBar fill;
     }
 
-    private static final class MultiplierRow {
-        TextView name;
-        TextView value;
-        TextView speed;
-    }
-
     private static final class NextCell {
         Tile tile;
         TextView timer;
@@ -57,7 +51,6 @@ public class FinanceActivity extends ListScreenActivity {
         int world = -1;
         final Bar[] sources = new Bar[FarmFinance.SOURCES];
         final Bar[] gardens = new Bar[Worlds.GARDENS_PER_WORLD];
-        final MultiplierRow[] multipliers = new MultiplierRow[Worlds.GARDENS_PER_WORLD];
         GridLayout medals;
         View achievements;
         String medalsKey = "";
@@ -170,7 +163,6 @@ public class FinanceActivity extends ListScreenActivity {
         h.gainHour = row.findViewById(R.id.gain_hour);
         fillBars(inflater, (LinearLayout) row.findViewById(R.id.farm_sources), h.sources);
         fillBars(inflater, (LinearLayout) row.findViewById(R.id.farm_gardens), h.gardens);
-        fillMultipliers(inflater, (LinearLayout) row.findViewById(R.id.farm_multipliers), h.multipliers);
         applyFont(row);
         row.setTag(h);
         return row;
@@ -212,19 +204,6 @@ public class FinanceActivity extends ListScreenActivity {
         }
     }
 
-    private void fillMultipliers(LayoutInflater inflater, LinearLayout parent, MultiplierRow[] rows) {
-        for (int i = 0; i < rows.length; i++) {
-            View root = inflater.inflate(R.layout.list_item_finance_multiplier, parent, false);
-            MultiplierRow m = new MultiplierRow();
-            m.name = root.findViewById(R.id.mult_name);
-            m.value = root.findViewById(R.id.mult_value);
-            m.speed = root.findViewById(R.id.mult_speed);
-            root.findViewById(R.id.mult_gap).setVisibility(i == 0 ? View.GONE : View.VISIBLE);
-            parent.addView(root);
-            rows[i] = m;
-        }
-    }
-
     @Override
     protected void bindRow(View row, int position) {
         FarmFinance f = farmAt(position);
@@ -253,10 +232,6 @@ public class FinanceActivity extends ListScreenActivity {
 
         for (int g = 0; g < h.gardens.length; g++) {
             bindBar(h.gardens[g], Worlds.ALL[w].gardens[g].name, w, f.byGarden[g], f.income);
-            MultiplierRow m = h.multipliers[g];
-            ViewUpdates.setText(m.name, Worlds.ALL[w].gardens[g].name);
-            ViewUpdates.setText(m.value, getString(R.string.finance_multiplier_value, NumberFormatter.number(state.valueMultiplier(w, g))));
-            ViewUpdates.setText(m.speed, getString(R.string.finance_multiplier_speed, NumberFormatter.number(state.speedMultiplier(w, g))));
         }
 
         ViewUpdates.setText(h.points, NumberFormatter.number(f.points));
@@ -315,7 +290,7 @@ public class FinanceActivity extends ListScreenActivity {
         for (int g = 0; g < Worlds.GARDENS_PER_WORLD; g++) {
             int icon = GardenIcons.forGarden(w, g);
             int earned = state.milestones(w, g);
-            if (earned > 0) {
+            {
                 double speed = Math.pow(2, earned);
                 // Milestones are earned once and kept through ascensions, so the next one is the
                 // first milestone this garden has not earned yet, not the first one above the count.
@@ -325,7 +300,7 @@ public class FinanceActivity extends ListScreenActivity {
                         NEXT_MILESTONE, g, 0));
             }
         }
-        if (medals > 1) {
+        {
             int nextMedal = state.nextMedalIndex(w);
             double threshold = nextMedal >= 0 ? state.medalThreshold(w, nextMedal) : 0;
             tiles.add(new Tile(R.drawable.medal, getString(R.string.tile_profit), tileValue(medals),

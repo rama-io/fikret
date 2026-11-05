@@ -86,9 +86,6 @@
     <string name="tile_buy">Buy</string>
     <string name="finance_farm_points_multiplier">Multiplier</string>
     <string name="finance_points_efficiency">%1$s%%</string>
-    <string name="finance_garden_multipliers">Garden multipliers</string>
-    <string name="finance_multiplier_value">Value x%1$s</string>
-    <string name="finance_multiplier_speed">Speed x%1$s</string>
     <string name="finance_farm_points_profit">Farm Points Profit</string>
     <string name="finance_farm_points_gain">Gain on ascend</string>
     <string name="finance_points_gain">+%1$s</string>

@@ -643,7 +643,6 @@ public final class GameState {
             double bestCost = Double.MAX_VALUE;
             for (int g = 0; g < Worlds.GARDENS_PER_WORLD; g++) {
                 Garden garden = worlds[w].gardens[g];
-                if (garden.count <= 0) continue;
                 for (int type = 0; type < 2; type++) {
                     boolean speed = type == UPGRADE_SPEED;
                     int level = speed ? garden.speedLevel : garden.valueLevel;

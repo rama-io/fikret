@@ -32,18 +32,6 @@
 
     <TextView
         style="@style/Text"
-        android:text="@string/finance_garden_multipliers" />
-
-    <View style="@style/SeparatorListVertical" />
-
-    <LinearLayout
-        android:id="@+id/farm_multipliers"
-        style="@style/VerticalList_BG2" />
-
-    <View style="@style/SeparatorListVertical" />
-
-    <TextView
-        style="@style/Text"
         android:text="@string/finance_total" />
 
     <View style="@style/SeparatorListVertical" />
