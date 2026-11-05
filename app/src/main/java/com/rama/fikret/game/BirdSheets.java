@@ -34,6 +34,7 @@ public final class BirdSheets {
     private static final SparseArray<Bitmap> ICONS = new SparseArray<>();
     private static Bitmap original;
     private static Bitmap eternalFrame;
+    private static SpriteSheet eternalSheet;
 
     private BirdSheets() {
     }
@@ -74,9 +75,16 @@ public final class BirdSheets {
         return drawable;
     }
 
+    public static synchronized SpriteSheet eternalSheet(Context context) {
+        if (eternalSheet == null) {
+            eternalSheet = new SpriteSheet(context.getResources(), R.drawable.eternal, COLUMNS, ROWS);
+        }
+        return eternalSheet;
+    }
+
     public static synchronized Drawable eternalIcon(Context context) {
         if (eternalFrame == null) {
-            SpriteSheet sheet = new SpriteSheet(context.getResources(), R.drawable.eternal, COLUMNS, ROWS);
+            SpriteSheet sheet = eternalSheet(context);
             Rect r = sheet.frameRect(Direction.RIGHT.column, ICON_FRAME);
             eternalFrame = Bitmap.createBitmap(sheet.getBitmap(), r.left, r.top, r.width(), r.height());
         }
