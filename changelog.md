@@ -3,6 +3,9 @@
 ## 11
 
 - More next milestone suggestion improvement
+- Remove garden multipliers in order to make the financial tabs smaller
+- Rename celestial birds to eternals
+- Ability to buy upgrades even when you don't own the garden
 
 ## 10
 

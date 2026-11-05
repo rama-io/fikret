@@ -1,6 +1,7 @@
 package com.rama.fikret.activities;
 
 import android.app.Dialog;
+import android.os.Bundle;
 import android.view.Gravity;
 import android.view.LayoutInflater;
 import android.view.View;
@@ -28,6 +29,8 @@ import java.util.Locale;
 
 public class FinanceActivity extends ListScreenActivity {
     private static final int[] SOURCE_NAMES = {R.string.source_base, R.string.source_upgrades, R.string.source_milestones, R.string.source_points};
+    private int MEDAL_COLUMNS;
+    private int BADGES_PER_ROW;
 
     private final List<FarmFinance> farms = new ArrayList<>();
 
@@ -246,9 +249,6 @@ public class FinanceActivity extends ListScreenActivity {
         ViewUpdates.setText(h.gainHour, NumberFormatter.money(w, f.income * 3600));
     }
 
-    private static final int MEDAL_COLUMNS = 4;
-    private static final int BADGES_PER_ROW = MEDAL_COLUMNS / 2;
-
     private static final int NEXT_NONE = 0;
     private static final int NEXT_MILESTONE = 1;
     private static final int NEXT_MEDAL = 2;
@@ -292,8 +292,6 @@ public class FinanceActivity extends ListScreenActivity {
             int earned = state.milestones(w, g);
             {
                 double speed = Math.pow(2, earned);
-                // Milestones are earned once and kept through ascensions, so the next one is the
-                // first milestone this garden has not earned yet, not the first one above the count.
                 tiles.add(new Tile(icon, getString(R.string.tile_speed), tileValue(speed),
                         Worlds.ALL[w].gardens[g].name,
                         String.valueOf(state.nextUnearnedMilestone(w, g)),
@@ -429,5 +427,15 @@ public class FinanceActivity extends ListScreenActivity {
             return getString(R.string.duration_days, NumberFormatter.number(seconds / 86400));
         }
         return NumberFormatter.duration(seconds);
+    }
+
+    protected void onCreate(Bundle savedInstanceState) {
+        super.onCreate(savedInstanceState);
+
+        MEDAL_COLUMNS = getResources().getInteger(
+                R.integer.achievements_badge_columns
+        );
+
+        BADGES_PER_ROW = MEDAL_COLUMNS / 2;
     }
 }

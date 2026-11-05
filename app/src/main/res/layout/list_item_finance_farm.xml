@@ -109,7 +109,8 @@
                 android:layout_width="match_parent"
                 android:layout_height="wrap_content"
                 android:useDefaultMargins="true"
-                android:columnCount="4" />
+                android:alignmentMode="alignMargins"
+                android:columnCount="@integer/achievements_badge_columns" />
         </LinearLayout>
     </LinearLayout>
 
