@@ -2,12 +2,10 @@ package com.rama.fikret.activities;
 
 import android.app.Dialog;
 import android.os.Bundle;
-import android.view.Gravity;
 import android.view.LayoutInflater;
 import android.view.View;
 import android.view.ViewGroup;
 import android.widget.BaseAdapter;
-import android.widget.GridLayout;
 import android.widget.ImageView;
 import android.widget.LinearLayout;
 import android.widget.ProgressBar;
@@ -29,7 +27,6 @@ import java.util.Locale;
 
 public class FinanceActivity extends ListScreenActivity {
     private static final int[] SOURCE_NAMES = {R.string.source_base, R.string.source_upgrades, R.string.source_milestones, R.string.source_points};
-    private int MEDAL_COLUMNS;
     private int BADGES_PER_ROW;
 
     private final List<FarmFinance> farms = new ArrayList<>();
@@ -54,7 +51,7 @@ public class FinanceActivity extends ListScreenActivity {
         int world = -1;
         final Bar[] sources = new Bar[FarmFinance.SOURCES];
         final Bar[] gardens = new Bar[Worlds.GARDENS_PER_WORLD];
-        GridLayout medals;
+        LinearLayout medals;
         View achievements;
         String medalsKey = "";
         final List<NextCell> nextCells = new ArrayList<>();
@@ -329,21 +326,23 @@ public class FinanceActivity extends ListScreenActivity {
         h.medals.removeAllViews();
         h.nextCells.clear();
         LayoutInflater inflater = LayoutInflater.from(this);
+        LinearLayout rowLayout = null;
         for (int i = 0; i < tiles.size(); i++) {
             Tile tile = tiles.get(i);
-            int row = i / BADGES_PER_ROW;
-            int column = (i % BADGES_PER_ROW) * 2;
+            if (i % BADGES_PER_ROW == 0) {
+                rowLayout = newMedalRow(h.medals);
+            }
 
-            View view = inflater.inflate(R.layout.list_item_medal, h.medals, false);
+            View view = inflater.inflate(R.layout.list_item_medal, rowLayout, false);
             ((ImageView) view.findViewById(R.id.medal_icon)).setImageResource(tile.icon);
             ((TextView) view.findViewById(R.id.medal_caption)).setText(tile.caption);
             ((TextView) view.findViewById(R.id.medal_value)).setText(tile.value);
             applyFont(view);
-            addMedalCell(h.medals, view, row, column);
+            addMedalCell(rowLayout, view);
 
             View next;
             if (tile.hasNext()) {
-                next = inflater.inflate(R.layout.list_item_medal_next, h.medals, false);
+                next = inflater.inflate(R.layout.list_item_medal_next, rowLayout, false);
                 ((TextView) next.findViewById(R.id.medal_caption)).setText(tile.nextCaption);
                 ((TextView) next.findViewById(R.id.medal_value)).setText(tile.nextValue);
                 NextCell cell = new NextCell();
@@ -364,7 +363,14 @@ public class FinanceActivity extends ListScreenActivity {
             } else {
                 next = new View(this);
             }
-            addMedalCell(h.medals, next, row, column + 1);
+            addMedalCell(rowLayout, next);
+        }
+        int remainder = tiles.size() % BADGES_PER_ROW;
+        if (rowLayout != null && remainder != 0) {
+            for (int i = remainder; i < BADGES_PER_ROW; i++) {
+                addMedalCell(rowLayout, new View(this));
+                addMedalCell(rowLayout, new View(this));
+            }
         }
     }
 
@@ -395,12 +401,21 @@ public class FinanceActivity extends ListScreenActivity {
         }
     }
 
-    private static void addMedalCell(GridLayout grid, View cell, int row, int column) {
-        GridLayout.LayoutParams params = new GridLayout.LayoutParams(
-                GridLayout.spec(row), GridLayout.spec(column, 1f));
-        params.width = 0;
-        params.setGravity(Gravity.FILL);
-        grid.addView(cell, params);
+    private LinearLayout newMedalRow(LinearLayout parent) {
+        LinearLayout row = new LinearLayout(this);
+        row.setOrientation(LinearLayout.HORIZONTAL);
+        LinearLayout.LayoutParams params = new LinearLayout.LayoutParams(
+                ViewGroup.LayoutParams.MATCH_PARENT, ViewGroup.LayoutParams.WRAP_CONTENT);
+        parent.addView(row, params);
+        return row;
+    }
+
+    private void addMedalCell(LinearLayout row, View cell) {
+        int gap = getResources().getDimensionPixelSize(R.dimen.space_between_elements) / 2;
+        LinearLayout.LayoutParams params = new LinearLayout.LayoutParams(0,
+                ViewGroup.LayoutParams.MATCH_PARENT, 1f);
+        params.setMargins(gap, gap, gap, gap);
+        row.addView(cell, params);
     }
 
     private void bindBar(Bar bar, String label, int w, double value, double total) {
@@ -432,10 +447,8 @@ public class FinanceActivity extends ListScreenActivity {
     protected void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
 
-        MEDAL_COLUMNS = getResources().getInteger(
+        BADGES_PER_ROW = getResources().getInteger(
                 R.integer.achievements_badge_columns
-        );
-
-        BADGES_PER_ROW = MEDAL_COLUMNS / 2;
+        ) / 2;
     }
 }

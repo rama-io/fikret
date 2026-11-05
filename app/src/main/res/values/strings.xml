@@ -12,7 +12,7 @@
 
     <string name="menu_map">Map</string>
     <string name="menu_managers">Birds</string>
-    <string name="menu_super_managers">Celestial Birds</string>
+    <string name="menu_eternals">Eternals</string>
     <string name="menu_upgrades">Upgrades</string>
     <string name="ascend_warning">Ascending restarts this farm: money, gardens and upgrades are lost. Farm points, milestones and birds stay.</string>
     <string name="ascend_confirm">Ascend</string>
@@ -23,7 +23,7 @@
     <string name="empty_finance">No active farms yet. Hire a supervisor to start earning.</string>
     <string name="empty_upgrades">All upgrades bought.</string>
     <string name="empty_managers">Everyone is hired.</string>
-    <string name="empty_super_managers">No celestial birds left.</string>
+    <string name="empty_eternals">No Eternals left.</string>
     <string name="rescue">Rescue</string>
     <string name="activate">Activate</string>
     <string name="buy_max">Max</string>

@@ -3,15 +3,15 @@ package com.rama.fikret.activities;
 import com.rama.fikret.R;
 import com.rama.fikret.economy.NumberFormatter;
 
-public class SuperSupervisorsActivity extends ManagersActivity {
+public class EternalsActivity extends ManagersActivity {
     @Override
     protected String screenTitle() {
-        return getString(R.string.menu_super_managers);
+        return getString(R.string.menu_eternals);
     }
 
     @Override
     protected String emptyText() {
-        return getString(R.string.empty_super_managers);
+        return getString(R.string.empty_eternals);
     }
 
     @Override

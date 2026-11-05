@@ -608,7 +608,6 @@ public final class GameState {
         return hasRemainingEfficiencyBirds(w);
     }
 
-    /** Anything still to buy with farm points: accountants and super upgrades. */
     public boolean hasRemainingSuperSupervisors(int w) {
         if (hasRemainingSuperUpgrades(w)) {
             return true;
