@@ -164,6 +164,7 @@ public class FinanceActivity extends ListScreenActivity {
         fillBars(inflater, (LinearLayout) row.findViewById(R.id.farm_sources), h.sources);
         fillBars(inflater, (LinearLayout) row.findViewById(R.id.farm_gardens), h.gardens);
         applyFont(row);
+        applyUnicodeFont(row);
         row.setTag(h);
         return row;
     }
@@ -184,6 +185,8 @@ public class FinanceActivity extends ListScreenActivity {
         });
         content.findViewById(R.id.confirm_cancel).setOnClickListener(v -> dialog.dismiss());
         applyFont(content);
+        applyUnicodeFont(content.findViewById(R.id.confirm_title));
+        applyUnicodeFont(content.findViewById(R.id.confirm_message));
         dialog.setContentView(content);
         dialog.show();
     }
@@ -338,6 +341,7 @@ public class FinanceActivity extends ListScreenActivity {
             ((TextView) view.findViewById(R.id.medal_caption)).setText(tile.caption);
             ((TextView) view.findViewById(R.id.medal_value)).setText(tile.value);
             applyFont(view);
+            applyUnicodeFont(view);
             addMedalCell(rowLayout, view);
 
             View next;
@@ -360,6 +364,7 @@ public class FinanceActivity extends ListScreenActivity {
                 }
                 h.nextCells.add(cell);
                 applyFont(next);
+                applyUnicodeFont(next);
             } else {
                 next = new View(this);
             }

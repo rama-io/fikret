@@ -6,7 +6,7 @@ public final class DeveloperMode {
     private DeveloperMode() {
     }
 
-    public static final boolean ENABLED = false;
+    public static final boolean ENABLED = true;
 
     public static final int AVAILABLE_FARMS = 2;
 

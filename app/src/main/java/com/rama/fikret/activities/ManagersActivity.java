@@ -167,6 +167,8 @@ public class ManagersActivity extends ListScreenActivity {
                 if (row == null) {
                     row = LayoutInflater.from(ManagersActivity.this).inflate(R.layout.list_item_manager, parent, false);
                     applyFont(row);
+                    applyUnicodeFont(row.findViewById(R.id.manager_name));
+                    applyUnicodeFont(row.findViewById(R.id.manager_description));
                     ((ImageView) row.findViewById(R.id.manager_picture))
                             .setImageDrawable(pointsScreen()
                                     ? FarmArt.eternal(ManagersActivity.this, world)

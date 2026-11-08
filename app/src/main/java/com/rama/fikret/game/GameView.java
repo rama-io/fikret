@@ -596,7 +596,7 @@ public class GameView extends SurfaceView implements SurfaceHolder.Callback {
             }
             for (int i = 0; i < eternals && !spots.isEmpty(); i++) {
                 int[] spot = spots.remove(random.nextInt(spots.size()));
-                Bird bird = new Bird(BirdSheets.eternalSheet(getContext()), spot[0], spot[1]);
+                Bird bird = new Bird(BirdSheets.eternalSheet(getContext(), worldIndex), spot[0], spot[1]);
                 bird.setSwimming(map.getCell(spot[0], spot[1]).isLiquid());
                 managerBirds.add(bird);
             }

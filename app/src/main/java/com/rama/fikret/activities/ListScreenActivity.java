@@ -67,7 +67,7 @@ public abstract class ListScreenActivity extends Activity {
         setContentView(R.layout.activity_list);
         View root = findViewById(R.id.root);
         SystemBars.applyInsets(root);
-        FontManager.apply(root, FontManager.getJersey25(this));
+        FontManager.apply(root, FontManager.get(this));
 
         world = state.getCurrentWorld();
         moneyText = findViewById(R.id.money);
@@ -110,6 +110,10 @@ public abstract class ListScreenActivity extends Activity {
     }
 
     protected void applyFont(View row) {
-        FontManager.apply(row, FontManager.getJersey25(this));
+        FontManager.apply(row, FontManager.get(this));
+    }
+
+    protected void applyUnicodeFont(View view) {
+        FontManager.apply(view, FontManager.getUnicode(this));
     }
 }

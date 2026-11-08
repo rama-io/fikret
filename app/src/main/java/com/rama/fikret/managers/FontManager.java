@@ -7,17 +7,32 @@ import android.view.ViewGroup;
 import android.widget.TextView;
 
 public class FontManager {
-    private static Typeface jersey25;
+    private static final String JERSEY_PATH = "fonts/jersey25_regular.otf";
+    private static final String UNIFONT_PATH = "fonts/unifont-ex-16px-square.ttf";
 
-    public static Typeface getJersey25(Context context) {
+    private static Typeface jersey25;
+    private static Typeface unifont;
+
+    public static Typeface get(Context context) {
         if (jersey25 == null) {
-            try {
-                jersey25 = Typeface.createFromAsset(context.getApplicationContext().getAssets(), "fonts/jersey25_regular.otf");
-            } catch (Exception e) {
-                jersey25 = Typeface.DEFAULT;
-            }
+            jersey25 = load(context, JERSEY_PATH);
         }
         return jersey25;
+    }
+
+    public static Typeface getUnicode(Context context) {
+        if (unifont == null) {
+            unifont = load(context, UNIFONT_PATH);
+        }
+        return unifont;
+    }
+
+    private static Typeface load(Context context, String path) {
+        try {
+            return Typeface.createFromAsset(context.getApplicationContext().getAssets(), path);
+        } catch (Exception e) {
+            return Typeface.DEFAULT;
+        }
     }
 
     public static void apply(View view, Typeface typeface) {
