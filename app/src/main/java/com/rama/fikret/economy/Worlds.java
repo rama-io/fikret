@@ -266,35 +266,145 @@ public final class Worlds {
         }
     }
 
-    private static final double[][] LAKE_NUMBERS = {{3.7, 1.07, 0.6, 1}, {60, 1.15, 3, 60}, {720, 1.14, 6, 540}, {8640, 1.13, 12, 4320}, {103680, 1.12, 24, 51840}, {1244160, 1.11, 96, 622080}, {14929920, 1.1, 384, 7464960}, {179159040, 1.09, 1536, 89579520}, {2149908480d, 1.08, 6144, 1074954240d}, {25789901760d, 1.07, 36864, 29668737024d},};
+    private static final double[][] LAKE_NUMBERS = {
+            {4e0, 1.07, 0.6, 1e0},
+            {5e1, 1.15, 3, 2e1},
+            {6e2, 1.14, 6, 3e2},
+            {7e3, 1.13, 12, 4e3},
+            {8e4, 1.12, 24, 5e4},
+            {9e5, 1.11, 96, 6e5},
+            {1e6, 1.1, 384, 7e6},
+            {2e7, 1.09, 1536, 8e7},
+            {3e8, 1.08, 6144, 9e8},
+            {4e9, 1.07, 36864, 1e9},
+    };
 
     private static final double LAKE_TOP_INCOME = LAKE_NUMBERS[GARDENS_PER_WORLD - 1][3] / LAKE_NUMBERS[GARDENS_PER_WORLD - 1][2];
 
-    private static final String[] LAKE_NAMES = {"Yuca", "Mango", "Cajuil", "Guayaba", "Carambola", "Jobo", "Papaya", "Yautía", "Mamey", "Guanabana"};
+    private static final String[] LAKE_NAMES = {
+            "Yuca",
+            "Mango",
+            "Cajuil",
+            "Guayaba",
+            "Carambola",
+            "Jobo",
+            "Papaya",
+            "Yautía",
+            "Mamey",
+            "Guanabana"
+    };
 
     // Brazil
-    private static final String[] FOREST_NAMES = {"Abacaxi", "Maracujá", "Pitanga", "Jabuticaba", "Açaí", "Cupuaçu", "Guaraná", "Acerola", "Bacaba", "Tucumã"};
+    private static final String[] FOREST_NAMES = {
+            "Abacaxi",
+            "Maracujá",
+            "Pitanga",
+            "Jabuticaba",
+            "Açaí",
+            "Cupuaçu",
+            "Guaraná",
+            "Acerola",
+            "Bacaba",
+            "Tucumã"
+    };
 
     // Vietnam
-    private static final String[] CAVE_NAMES = {"Nhãn", "Vải", "Bưởi", "Sấu", "Trám đen", "Dâu da đất", "Thị", "Táo mèo", "Mắc mật", "Bứa"};
+    private static final String[] CAVE_NAMES = {
+            "Nhãn",
+            "Vải",
+            "Bưởi",
+            "Sấu",
+            "Trám đen",
+            "Dâu da đất",
+            "Thị",
+            "Táo mèo",
+            "Mắc mật",
+            "Bứa"
+    };
 
     // Indonesia
-    private static final String[] VOLCANO_NAMES = {"Salak", "Durian", "Manggis", "Rambutan", "Duku", "Kepel", "Matoa", "Duwet", "Gandaria", "Kemang"};
+    private static final String[] VOLCANO_NAMES = {
+            "Salak",
+            "Durian",
+            "Manggis",
+            "Rambutan",
+            "Duku",
+            "Kepel",
+            "Matoa",
+            "Duwet",
+            "Gandaria",
+            "Kemang"
+    };
 
     // China
-    private static final String[] NUCLEAR_NAMES = {"杨梅", "枣", "猕猴桃", "五味子", "山楂", "黄皮", "悬钩子", "野梨", "柿", "酸枣"};
+    private static final String[] NUCLEAR_NAMES = {
+            "杨梅",
+            "枣",
+            "猕猴桃",
+            "五味子",
+            "山楂",
+            "黄皮",
+            "悬钩子",
+            "野梨",
+            "柿",
+            "酸枣"
+    };
 
     // Russia
-    private static final String[] ARCTIC_NAMES = {"Морошка", "Брусника", "Черника", "Голубика", "Водяника", "Княженика", "Костяника", "Жимолость", "Рябина", "Шиповник"};
+    private static final String[] ARCTIC_NAMES = {
+            "Морошка",
+            "Брусника",
+            "Черника",
+            "Голубика",
+            "Водяника",
+            "Княженика",
+            "Костяника",
+            "Жимолость",
+            "Рябина",
+            "Шиповник"
+    };
 
     // Bahamas
-    private static final String[] BUBBLEGUM_NAMES = {"Guana berry", "Governor's plum", "Darling plum", "Pigeon plum", "Coco plum", "Sea grape", "Saffron plum", "Andros wild guava", "Sapodilla", "Sugar apple"};
+    private static final String[] BUBBLEGUM_NAMES = {
+            "Guana berry",
+            "Governor's plum",
+            "Darling plum",
+            "Pigeon plum",
+            "Coco plum",
+            "Sea grape",
+            "Saffron plum",
+            "Andros wild guava",
+            "Sapodilla",
+            "Sugar apple"
+    };
 
     // Japan
-    private static final String[] SPACE_NAMES = {"アケビ", "サルナシ", "ヤマブドウ", "シークヮーサー", "スダチ", "カボス", "ユズ", "ヤマモモ", "ムベ", "ハスカップ"};
+    private static final String[] SPACE_NAMES = {
+            "アケビ",
+            "サルナシ",
+            "ヤマブドウ",
+            "シークヮーサー",
+            "スダチ",
+            "カボス",
+            "ユズ",
+            "ヤマモモ",
+            "ムベ",
+            "ハスカップ"
+    };
 
     // Spain
-    private static final String[] NIGHTMARE_NAMES = {"Granada", "Cereza", "Uva tinta", "Higo", "Madroño", "Tomate", "Pimiento choricero", "Remolacha", "Lombarda", "Frambuesa"};
+    private static final String[] NIGHTMARE_NAMES = {
+            "Granada",
+            "Cereza",
+            "Uva tinta",
+            "Higo",
+            "Madroño",
+            "Tomate",
+            "Pimiento choricero",
+            "Remolacha",
+            "Lombarda",
+            "Frambuesa"
+    };
 
     private static GardenDef[] build(String[] names, double[][] numbers) {
         GardenDef[] result = new GardenDef[GARDENS_PER_WORLD];
@@ -332,7 +442,93 @@ public final class Worlds {
     private static final double SCALE_JPY = 1.6;
     private static final double SCALE_EUR = 0.12;
 
-    public static final WorldDef[] ALL = {new WorldDef(Maps.LAKE, "Lake", CURRENCY_LAKE, build(LAKE_NAMES, LAKE_NUMBERS), PLACEHOLDER_MANAGER_COSTS, GUIDE_BIRD_COST, LAKE_ACCOUNTANT_COSTS, LAKE_DISCOUNT_COSTS, 1, false, START_MONEY), farm(Maps.FOREST, "Forest", CURRENCY_FOREST, FOREST_NAMES, SCALE_BRL, 1.1, 0), farm(Maps.CAVE, "Cave", CURRENCY_CAVE, CAVE_NAMES, SCALE_VND, 1.2, 0), farm(Maps.VOLCANO, "Volcano", CURRENCY_VOLCANO, VOLCANO_NAMES, SCALE_IDR, 1.3, 0.005), farm(Maps.NUCLEAR, "Nuclear", CURRENCY_NUCLEAR, NUCLEAR_NAMES, SCALE_CNY, 1.4, 0.005), farm(Maps.ARCTIC, "Arctic", CURRENCY_ARCTIC, ARCTIC_NAMES, SCALE_RUB, 1.5, 0.01), farm(Maps.BUBBLEGUM_LAND, "Bubblegum land", CURRENCY_BUBBLEGUM, BUBBLEGUM_NAMES, SCALE_BSD, 1.6, 0.01), farm(Maps.SPACE, "Space", CURRENCY_SPACE, SPACE_NAMES, SCALE_JPY, 1.7, 0.015), farm(Maps.NIGHTMARE, "Nightmare", CURRENCY_NIGHTMARE, NIGHTMARE_NAMES, SCALE_EUR, 1.8, 0.02),};
+    public static final WorldDef[] ALL = {
+            new WorldDef(
+                    Maps.LAKE,
+                    "Lake",
+                    CURRENCY_LAKE,
+                    build(LAKE_NAMES, LAKE_NUMBERS),
+                    PLACEHOLDER_MANAGER_COSTS,
+                    GUIDE_BIRD_COST,
+                    LAKE_ACCOUNTANT_COSTS,
+                    LAKE_DISCOUNT_COSTS,
+                    1,
+                    false,
+                    START_MONEY
+            ),
+            farm(
+                    Maps.FOREST,
+                    "Forest",
+                    CURRENCY_FOREST,
+                    FOREST_NAMES,
+                    SCALE_BRL,
+                    1.1,
+                    0
+            ),
+            farm(
+                    Maps.CAVE,
+                    "Cave",
+                    CURRENCY_CAVE,
+                    CAVE_NAMES,
+                    SCALE_VND,
+                    1.2,
+                    0
+            ),
+            farm(
+                    Maps.VOLCANO,
+                    "Volcano",
+                    CURRENCY_VOLCANO,
+                    VOLCANO_NAMES,
+                    SCALE_IDR,
+                    1.3,
+                    0.005
+            ),
+            farm(
+                    Maps.NUCLEAR,
+                    "Nuclear",
+                    CURRENCY_NUCLEAR,
+                    NUCLEAR_NAMES,
+                    SCALE_CNY,
+                    1.4,
+                    0.005
+            ),
+            farm(
+                    Maps.ARCTIC,
+                    "Arctic",
+                    CURRENCY_ARCTIC,
+                    ARCTIC_NAMES,
+                    SCALE_RUB,
+                    1.5,
+                    0.01
+            ),
+            farm(
+                    Maps.BUBBLEGUM_LAND,
+                    "Bubblegum land",
+                    CURRENCY_BUBBLEGUM,
+                    BUBBLEGUM_NAMES,
+                    SCALE_BSD,
+                    1.6,
+                    0.01
+            ),
+            farm(
+                    Maps.SPACE,
+                    "Space",
+                    CURRENCY_SPACE,
+                    SPACE_NAMES,
+                    SCALE_JPY,
+                    1.7,
+                    0.015
+            ),
+            farm(
+                    Maps.NIGHTMARE,
+                    "Nightmare",
+                    CURRENCY_NIGHTMARE,
+                    NIGHTMARE_NAMES,
+                    SCALE_EUR,
+                    1.8,
+                    0.02
+            ),
+    };
 
     private static WorldDef farm(int stageId, String name, String currency, String[] names, double currencyScale, double timeScale, double coefficientOffset) {
         return new WorldDef(stageId, name, currency, buildFromLake(names, currencyScale, timeScale, coefficientOffset), scaled(PLACEHOLDER_MANAGER_COSTS, currencyScale), GUIDE_BIRD_COST * currencyScale, LAKE_ACCOUNTANT_COSTS, scaled(LAKE_DISCOUNT_COSTS, currencyScale), currencyScale, true, START_MONEY * currencyScale);
