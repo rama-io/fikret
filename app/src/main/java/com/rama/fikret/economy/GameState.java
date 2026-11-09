@@ -254,12 +254,10 @@ public final class GameState {
         return 1 + angelRate[w] * angels[w];
     }
 
-    /** Profit multiplier from the farm point upgrades bought on this farm. */
     public synchronized double superProfitMultiplier(int w) {
         return superProfit[w];
     }
 
-    /** Profit given by each farm point, 0.02 = 2%. */
     public synchronized double pointsEfficiency(int w) {
         return angelRate[w];
     }
@@ -656,7 +654,8 @@ public final class GameState {
             }
             if (best == null) break;
             money[w] -= bestCost;
-            if (bestSpeed) best.speedLevel++; else best.valueLevel++;
+            if (bestSpeed) best.speedLevel++;
+            else best.valueLevel++;
             bought++;
         }
         if (bought > 0) save();
@@ -792,7 +791,6 @@ public final class GameState {
             sb.append(w == 0 ? "angels" : "angels." + w).append('=')
                     .append(Double.doubleToLongBits(angels[w])).append('\n');
         }
-        // Farm 0 keeps the original key names so older saves still load.
         for (int w = 0; w < lifetimeEarnings.length; w++) {
             sb.append(w == 0 ? "lifetime" : "lifetime." + w).append('=')
                     .append(Double.doubleToLongBits(lifetimeEarnings[w])).append('\n');
@@ -893,7 +891,8 @@ public final class GameState {
                         worlds[w].buyer = p.length > 1 && p[1].equals("1");
                         worlds[w].buyerGarden = p.length > 2 ? Integer.parseInt(p[2]) : -1;
                         worlds[w].quickBuy = p.length > 3 && p[3].equals("1");
-                        if (worlds[w].buyerGarden >= Worlds.GARDENS_PER_WORLD) worlds[w].buyerGarden = -1;
+                        if (worlds[w].buyerGarden >= Worlds.GARDENS_PER_WORLD)
+                            worlds[w].buyerGarden = -1;
                     }
                 } else if (key.startsWith("g")) {
                     String[] ids = key.substring(1).split("\\.");

@@ -21,32 +21,32 @@ public final class Worlds {
             {1e9, SUPER_PROFIT, 5},
             {1e11, SUPER_PROFIT, 9},
             {1e12, SUPER_PROFIT, 11},
-            {1e21, SUPER_PROFIT, 15},
-            {1e33, SUPER_EFFICIENCY, 0.10},
-            {10e33, SUPER_PROFIT, 15},
-            {1e36, SUPER_PROFIT, 3},
-            {10e39, SUPER_PROFIT, 5},
-            {1e42, SUPER_PROFIT, 5},
-            {500e51, SUPER_EFFICIENCY, 0.10},
-            {100e60, SUPER_PROFIT, 5},
-            {100e63, SUPER_PROFIT, 7},
-            {777e66, SUPER_PROFIT, 8},
-            {3e84, SUPER_PROFIT, 13},
-            {13e87, SUPER_PROFIT, 5},
-            {3e90, SUPER_PROFIT, 3},
-            {13e93, SUPER_PROFIT, 4},
-            {24e96, SUPER_PROFIT, 5},
-            {333e108, SUPER_PROFIT, 3},
-            {2e138, SUPER_PROFIT, 19},
+            {1e17, SUPER_PROFIT, 15},
+            {1e19, SUPER_EFFICIENCY, 0.10},
+            {1e20, SUPER_PROFIT, 15},
+            {1e22, SUPER_PROFIT, 3},
+            {1e24, SUPER_PROFIT, 5},
+            {1e26, SUPER_PROFIT, 5},
+            {1e28, SUPER_EFFICIENCY, 0.10},
+            {1e30, SUPER_PROFIT, 5},
+            {1e32, SUPER_PROFIT, 7},
+            {1e34, SUPER_PROFIT, 8},
+            {1e36, SUPER_PROFIT, 13},
+            {1e38, SUPER_PROFIT, 5},
+            {1e40, SUPER_PROFIT, 3},
+            {1e42, SUPER_PROFIT, 4},
+            {1e44, SUPER_PROFIT, 5},
+            {1e46, SUPER_PROFIT, 3},
+            {1e48, SUPER_PROFIT, 19},
     };
 
     private static final double[][] MEDALS = {
             {1e12, 3},
-            {50e15, 3},
-            {500e18, 3},
-            {900e21, 3},
+            {1e15, 3},
+            {1e18, 3},
+            {1e21, 3},
             {1e42, 7},
-            {100e45, 3},
+            {1e45, 3},
             {1e51, 7},
             {1e54, 5},
             {1e60, 7},
@@ -56,64 +56,65 @@ public final class Worlds {
             {1e78, 15},
             {1e84, 3},
             {3e87, 3},
-            {500e93, 2},
-            {10e99, 3},
-            {20e99, 6},
-            {500e99, 2},
+            {1e93, 2},
+            {1e98, 3},
+            {1e99, 6},
+            {1e100, 2},
             {1e102, 5},
-            {600e105, 3},
+            {1e105, 3},
             {1e111, 3},
-            {450e114, 3},
-            {350e117, 5},
-            {500e117, 3},
-            {700e120, 7},
+            {1e114, 3},
+            {1e117, 5},
+            {1e118, 3},
+            {1e120, 7},
             {1e123, 3},
-            {10e126, 5},
-            {900e129, 2},
-            {5e138, 3},
-            {3e141, 3},
-            {2e144, 3},
-            {450e144, 3},
-            {500e153, 5},
-            {514e156, 3},
-            {900e159, 3},
-            {250e162, 2},
-            {750e162, 2},
-            {250e165, 2},
-            {750e165, 2},
-            {250e168, 2},
-            {750e168, 2},
-            {250e171, 2},
-            {750e171, 2},
-            {250e174, 2},
+            {1e126, 5},
+            {1e129, 2},
+            {1e138, 3},
+            {1e141, 3},
+            {1e144, 3},
+            {1e145, 3},
+            {1e153, 5},
+            {1e156, 3},
+            {1e159, 3},
+            {1e162, 2},
+            {1e163, 2},
+            {1e165, 2},
+            {1e166, 2},
+            {1e168, 2},
+            {1e169, 2},
+            {1e171, 2},
+            {1e172, 2},
+            {1e174, 2},
             {1e177, 9},
-            {5e183, 10},
-            {5e189, 5},
-            {27e192, 3},
-            {13e195, 4},
-            {2e198, 5},
-            {600e207, 5},
-            {555e216, 5},
-            {100e228, 5},
-            {100e231, 2},
-            {10e237, 4},
+            {1e183, 10},
+            {1e189, 5},
+            {1e192, 3},
+            {1e195, 4},
+            {1e198, 5},
+            {1e207, 5},
+            {1e216, 5},
+            {1e228, 5},
+            {1e231, 2},
+            {1e237, 4},
     };
 
     private static final double[][] EFFICIENCY_BIRDS = {
-            {100e15, 0.01},
-            {1e21, 0.01},
-            {10e24, 0.01},
-            {1e207, 0.021},
-            {1e213, 0.015},
-            {1e216, 0.01},
-            {1e219, 0.02},
-            {1e222, 0.005},
-            {1e225, 0.02},
-            {1e228, 0.012},
-            {1e231, 0.013},
-            {10e231, 0.007},
-            {1e237, 0.02},
-            {1e240, 0.003},
+            {1e15, 0.01},
+            {1e20, 0.01},
+            {1e25, 0.01},
+            {1e35, 0.01},
+            {1e45, 0.021},
+            {1e50, 0.015},
+            {1e55, 0.01},
+            {1e60, 0.02},
+            {1e65, 0.005},
+            {1e70, 0.02},
+            {1e75, 0.012},
+            {1e80, 0.013},
+            {10e85, 0.007},
+            {1e90, 0.02},
+            {1e100, 0.003},
     };
 
     public static final int MEDAL_COUNT = MEDALS.length;
@@ -161,19 +162,52 @@ public final class Worlds {
 
     public static final double START_MONEY = 4;
 
-    private static final double[] PLACEHOLDER_MANAGER_COSTS = {1e3, 1.5e4, 1e5, 5e5, 1.2e6, 1e7, 1.11e8, 5.55e8, 1e10, 1e11};
+    private static final double[] PLACEHOLDER_MANAGER_COSTS = {
+            1e3,
+            1e4,
+            1e5,
+            1e6,
+            1e7,
+            1e8,
+            1e9,
+            1e10,
+            1e11,
+            1e12
+    };
 
     private static final double GUIDE_BIRD_COST = 1e33;
 
-    private static final double BUYER_COST_LAKE = 1e20;
+    private static final double BUYER_COST_LAKE = 1e21;
 
-    private static final double QUICK_BUY_COST = 1e25;
+    private static final double QUICK_BUY_COST = 1e23;
 
     public static final double ACCOUNTANT_COST_FACTOR = 0.9;
-    private static final double[] LAKE_ACCOUNTANT_COSTS = {10, 100, 1e3, 1e4, 1e5, 1e7, 1e8, 1e9, 1e10, 1e11};
+    private static final double[] LAKE_ACCOUNTANT_COSTS = {
+            10,
+            100,
+            1e3,
+            1e4,
+            1e5,
+            1e7,
+            1e8,
+            1e9,
+            1e10,
+            1e11
+    };
 
     public static final double DISCOUNT_COST_DIVISOR = 100000;
-    private static final double[] LAKE_DISCOUNT_COSTS = {10e102, 75e105, 250e108, 100e111, 50e114, 3e117, 750e117, 3e120, 33e123, 9e126};
+    private static final double[] LAKE_DISCOUNT_COSTS = {
+            1e102,
+            1e104,
+            1e106,
+            1e108,
+            1e110,
+            1e112,
+            1e114,
+            1e116,
+            1e118,
+            1e120
+    };
 
     public static final double UPGRADE_VALUE_FACTOR = 100;
     public static final double UPGRADE_SPEED_FACTOR = 250;
@@ -367,5 +401,15 @@ public final class Worlds {
         }
     }
 
-    public static final int[] ALL_STAGE_IDS = {Maps.LAKE, Maps.FOREST, Maps.CAVE, Maps.VOLCANO, Maps.NUCLEAR, Maps.ARCTIC, Maps.BUBBLEGUM_LAND, Maps.SPACE, Maps.NIGHTMARE};
+    public static final int[] ALL_STAGE_IDS = {
+            Maps.LAKE,
+            Maps.FOREST,
+            Maps.CAVE,
+            Maps.VOLCANO,
+            Maps.NUCLEAR,
+            Maps.ARCTIC,
+            Maps.BUBBLEGUM_LAND,
+            Maps.SPACE,
+            Maps.NIGHTMARE
+    };
 }
