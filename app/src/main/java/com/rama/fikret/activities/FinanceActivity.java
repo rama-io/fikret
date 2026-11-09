@@ -161,10 +161,9 @@ public class FinanceActivity extends ListScreenActivity {
         h.gainSecond = row.findViewById(R.id.gain_second);
         h.gainMinute = row.findViewById(R.id.gain_minute);
         h.gainHour = row.findViewById(R.id.gain_hour);
-        fillBars(inflater, (LinearLayout) row.findViewById(R.id.farm_sources), h.sources);
-        fillBars(inflater, (LinearLayout) row.findViewById(R.id.farm_gardens), h.gardens);
         applyFont(row);
-        applyUnicodeFont(row);
+        fillBars(inflater, (LinearLayout) row.findViewById(R.id.farm_sources), h.sources, false);
+        fillBars(inflater, (LinearLayout) row.findViewById(R.id.farm_gardens), h.gardens, true);
         row.setTag(h);
         return row;
     }
@@ -185,13 +184,11 @@ public class FinanceActivity extends ListScreenActivity {
         });
         content.findViewById(R.id.confirm_cancel).setOnClickListener(v -> dialog.dismiss());
         applyFont(content);
-        applyUnicodeFont(content.findViewById(R.id.confirm_title));
-        applyUnicodeFont(content.findViewById(R.id.confirm_message));
         dialog.setContentView(content);
         dialog.show();
     }
 
-    private void fillBars(LayoutInflater inflater, LinearLayout parent, Bar[] bars) {
+    private void fillBars(LayoutInflater inflater, LinearLayout parent, Bar[] bars, Boolean isGarden) {
         for (int i = 0; i < bars.length; i++) {
             Bar bar = new Bar();
             View root = inflater.inflate(R.layout.list_item_finance_bar, parent, false);
@@ -200,6 +197,15 @@ public class FinanceActivity extends ListScreenActivity {
             bar.value = root.findViewById(R.id.bar_value);
             bar.percent = root.findViewById(R.id.bar_percent);
             bar.fill = root.findViewById(R.id.bar_fill);
+
+            if (isGarden) {
+                applyUnicodeFont(bar.label);
+                applyFont(bar.percent);
+                applyFont(bar.value);
+            } else {
+                applyFont(root);
+            }
+
             bar.gap.setVisibility(i == 0 ? View.GONE : View.VISIBLE);
             bar.root = root;
             parent.addView(root);
@@ -341,7 +347,6 @@ public class FinanceActivity extends ListScreenActivity {
             ((TextView) view.findViewById(R.id.medal_caption)).setText(tile.caption);
             ((TextView) view.findViewById(R.id.medal_value)).setText(tile.value);
             applyFont(view);
-            applyUnicodeFont(view);
             addMedalCell(rowLayout, view);
 
             View next;
@@ -364,7 +369,7 @@ public class FinanceActivity extends ListScreenActivity {
                 }
                 h.nextCells.add(cell);
                 applyFont(next);
-                applyUnicodeFont(next);
+                applyUnicodeFont(next.findViewById(R.id.medal_caption));
             } else {
                 next = new View(this);
             }
