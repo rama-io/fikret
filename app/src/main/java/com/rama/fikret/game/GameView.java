@@ -384,6 +384,7 @@ public class GameView extends SurfaceView implements SurfaceHolder.Callback {
         checkHoleTransition();
         updateTeleport(deltaMs);
         updateGuideBirds(deltaMs);
+        updateManagerBirds(deltaMs);
         updatePanReset(deltaMs);
         updateCamera(deltaMs);
         if (stage.hasBlizzard) {
@@ -580,6 +581,7 @@ public class GameView extends SurfaceView implements SurfaceHolder.Callback {
                 int[] spot = spots.remove(random.nextInt(spots.size()));
                 Bird bird = new Bird(BirdSheets.forWorld(getContext(), worldIndex), spot[0], spot[1]);
                 bird.setSwimming(map.getCell(spot[0], spot[1]).isLiquid());
+                assignPatrol(bird, spot[0], spot[1], spots, random);
                 managerBirds.add(bird);
             }
 
@@ -598,6 +600,7 @@ public class GameView extends SurfaceView implements SurfaceHolder.Callback {
                 int[] spot = spots.remove(random.nextInt(spots.size()));
                 Bird bird = new Bird(BirdSheets.eternalSheet(getContext(), worldIndex), spot[0], spot[1]);
                 bird.setSwimming(map.getCell(spot[0], spot[1]).isLiquid());
+                assignPatrol(bird, spot[0], spot[1], spots, random);
                 managerBirds.add(bird);
             }
         }
@@ -639,6 +642,55 @@ public class GameView extends SurfaceView implements SurfaceHolder.Callback {
             }
         }
         return null;
+    }
+
+    private void updateManagerBirds(long deltaMs) {
+        for (int i = 0; i < managerBirds.size(); i++) {
+            Bird bird = managerBirds.get(i);
+            bird.update(deltaMs);
+            bird.setSwimming(isOverLiquid(bird.getX(), bird.getY()));
+        }
+    }
+
+    private static final int PATROL_MIN_TILES = 2;
+    private static final int PATROL_MAX_TILES = 6;
+    private static final int[][] PATROL_DIRECTIONS = {{0, 1}, {0, -1}, {1, 0}, {-1, 0}};
+
+    private void assignPatrol(Bird bird, int row, int col, List<int[]> spots, Random random) {
+        boolean liquid = map.getCell(row, col).isLiquid();
+        int first = random.nextInt(2);
+        for (int attempt = 0; attempt < PATROL_DIRECTIONS.length; attempt++) {
+            int[] dir = PATROL_DIRECTIONS[attempt < 2 ? (attempt + first) % 2 : attempt];
+            int length = 0;
+            int limit = PATROL_MIN_TILES + random.nextInt(PATROL_MAX_TILES - PATROL_MIN_TILES + 1);
+            for (int step = 1; step <= limit; step++) {
+                int r = row + dir[0] * step;
+                int c = col + dir[1] * step;
+                MapCell cell = map.getCell(r, c);
+                if (cell == null || cell.hasItem() || cell.isLiquid() != liquid
+                        || (r == goose.getRow() && c == goose.getCol()) || indexOfSpot(spots, r, c) < 0) {
+                    break;
+                }
+                length = step;
+            }
+            if (length >= 1) {
+                for (int step = 1; step <= length; step++) {
+                    spots.remove(indexOfSpot(spots, row + dir[0] * step, col + dir[1] * step));
+                }
+                bird.setPatrol(row + dir[0] * length, col + dir[1] * length);
+                return;
+            }
+        }
+    }
+
+    private static int indexOfSpot(List<int[]> spots, int row, int col) {
+        for (int i = 0; i < spots.size(); i++) {
+            int[] s = spots.get(i);
+            if (s[0] == row && s[1] == col) {
+                return i;
+            }
+        }
+        return -1;
     }
 
     private void updateGuideBirds(long deltaMs) {

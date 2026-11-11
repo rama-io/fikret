@@ -273,7 +273,7 @@ public class ManagersActivity extends ListScreenActivity {
             }
             case KIND_EFFICIENCY: {
                 double cost = state.efficiencyBirdCost(world, g);
-                String pct = NumberFormatter.number(Worlds.efficiencyBirdValue(g) * 100);
+                String pct = String.valueOf(Math.round(Worlds.efficiencyBirdValue(g) * 100));
                 name = getString(R.string.bird_efficiency_name, pct);
                 description = getString(R.string.super_efficiency_desc, pct);
                 costLabel = NumberFormatter.money(world, cost);
@@ -288,7 +288,7 @@ public class ManagersActivity extends ListScreenActivity {
                     name = getString(R.string.super_profit_name, x);
                     description = getString(R.string.super_profit_desc, x);
                 } else {
-                    String pct = NumberFormatter.number(value * 100);
+                    String pct = String.valueOf(Math.round(value * 100));
                     name = getString(R.string.super_efficiency_name, pct);
                     description = getString(R.string.super_efficiency_desc, pct);
                 }

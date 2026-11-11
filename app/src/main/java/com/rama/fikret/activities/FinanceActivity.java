@@ -245,7 +245,7 @@ public class FinanceActivity extends ListScreenActivity {
 
         ViewUpdates.setText(h.points, NumberFormatter.number(f.points));
         bindMedals(h, w, f.income);
-        ViewUpdates.setText(h.pointsMultiplier, getString(R.string.finance_points_efficiency, NumberFormatter.number(state.pointsEfficiency(w) * 100)));
+        ViewUpdates.setText(h.pointsMultiplier, getString(R.string.finance_points_efficiency, String.valueOf(Math.round(state.pointsEfficiency(w) * 100))));
         ViewUpdates.setText(h.pointsProfit, getString(R.string.finance_profit_bonus, NumberFormatter.number(f.pointsBonusPercent)));
         ViewUpdates.setText(h.pointsGainOnAscend, getString(R.string.finance_points_gain, NumberFormatter.number(f.pointsGain)));
         ViewUpdates.setBackgroundColor(h.ascendButton, f.pointsGain > 0 ? ViewUpdates.themeColor(this, R.attr.accent) : ViewUpdates.color(this, R.color.disabled));
