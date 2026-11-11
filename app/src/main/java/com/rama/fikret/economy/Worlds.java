@@ -14,7 +14,7 @@ public final class Worlds {
     public static final int SUPER_PROFIT = 0;
     public static final int SUPER_EFFICIENCY = 1;
 
-    private static final double[][] SUPER_UPGRADES = {
+    private static final double[][] BIRD_ETERNALS_VALUES = {
             {1e4, SUPER_PROFIT, 3},
             {1e5, SUPER_EFFICIENCY, 0.02},
             {1e8, SUPER_EFFICIENCY, 0.02},
@@ -99,33 +99,33 @@ public final class Worlds {
             {1e237, 4},
     };
 
-    private static final double[][] EFFICIENCY_BIRDS = {
+    private static final double[][] BIRD_EFFICIENCY_VALUES = {
             {1e15, 0.01},
             {1e20, 0.01},
             {1e25, 0.01},
-            {1e35, 0.01},
-            {1e45, 0.021},
-            {1e50, 0.015},
-            {1e55, 0.01},
-            {1e60, 0.02},
-            {1e65, 0.005},
-            {1e70, 0.02},
-            {1e75, 0.012},
-            {1e80, 0.013},
-            {10e85, 0.007},
-            {1e90, 0.02},
-            {1e100, 0.003},
+            {1e30, 0.01},
+            {1e35, 0.021},
+            {1e40, 0.015},
+            {1e42, 0.01},
+            {1e44, 0.02},
+            {1e46, 0.005},
+            {1e48, 0.02},
+            {1e50, 0.012},
+            {1e52, 0.013},
+            {10e54, 0.007},
+            {1e56, 0.02},
+            {1e58, 0.003},
     };
 
     public static final int MEDAL_COUNT = MEDALS.length;
-    public static final int EFFICIENCY_BIRD_COUNT = EFFICIENCY_BIRDS.length;
+    public static final int EFFICIENCY_BIRD_COUNT = BIRD_EFFICIENCY_VALUES.length;
 
     public static double medalValue(int index) {
         return MEDALS[index][1];
     }
 
     public static double efficiencyBirdValue(int index) {
-        return EFFICIENCY_BIRDS[index][1];
+        return BIRD_EFFICIENCY_VALUES[index][1];
     }
 
     private static double[] column(double[][] table, double factor) {
@@ -136,18 +136,18 @@ public final class Worlds {
         return result;
     }
 
-    public static final int SUPER_UPGRADE_COUNT = SUPER_UPGRADES.length;
+    public static final int SUPER_UPGRADE_COUNT = BIRD_ETERNALS_VALUES.length;
 
     public static double superCost(int index) {
-        return SUPER_UPGRADES[index][0];
+        return BIRD_ETERNALS_VALUES[index][0];
     }
 
     public static int superKind(int index) {
-        return (int) SUPER_UPGRADES[index][1];
+        return (int) BIRD_ETERNALS_VALUES[index][1];
     }
 
     public static double superValue(int index) {
-        return SUPER_UPGRADES[index][2];
+        return BIRD_ETERNALS_VALUES[index][2];
     }
 
     public static final String CURRENCY_LAKE = "DOP";
@@ -162,7 +162,7 @@ public final class Worlds {
 
     public static final double START_MONEY = 4;
 
-    private static final double[] PLACEHOLDER_MANAGER_COSTS = {
+    private static final double[] BIRD_MANAGER_COSTS = {
             1e3,
             1e4,
             1e5,
@@ -182,7 +182,7 @@ public final class Worlds {
     private static final double QUICK_BUY_COST = 1e23;
 
     public static final double ACCOUNTANT_COST_FACTOR = 0.9;
-    private static final double[] LAKE_ACCOUNTANT_COSTS = {
+    private static final double[] BIRD_ACCOUNTANT_COSTS = {
             10,
             100,
             1e3,
@@ -196,17 +196,17 @@ public final class Worlds {
     };
 
     public static final double DISCOUNT_COST_DIVISOR = 100000;
-    private static final double[] LAKE_DISCOUNT_COSTS = {
-            1e102,
-            1e104,
-            1e106,
-            1e108,
-            1e110,
-            1e112,
-            1e114,
-            1e116,
-            1e118,
-            1e120
+    private static final double[] BIRD_DISCOUNT_COST = {
+            1e60,
+            1e62,
+            1e64,
+            1e66,
+            1e68,
+            1e70,
+            1e72,
+            1e74,
+            1e76,
+            1e78
     };
 
     public static final double UPGRADE_VALUE_FACTOR = 100;
@@ -250,7 +250,7 @@ public final class Worlds {
         WorldDef(int stageId, String name, String currency, GardenDef[] gardens, double[] managerCosts, double travelManagerCost, double[] accountantCosts, double[] discountCosts, double currencyScale, boolean placeholderPrices, double startMoney) {
             this.startMoney = startMoney;
             this.medalThresholds = column(MEDALS, currencyScale);
-            this.efficiencyBirdCosts = column(EFFICIENCY_BIRDS, currencyScale);
+            this.efficiencyBirdCosts = column(BIRD_EFFICIENCY_VALUES, currencyScale);
             this.stageId = stageId;
             this.name = name;
             this.currency = currency;
@@ -276,7 +276,7 @@ public final class Worlds {
             {1e6, 1.1, 384, 7e6},
             {2e7, 1.09, 1536, 8e7},
             {3e8, 1.08, 6144, 9e8},
-            {4e9, 1.07, 36864, 1e9},
+            {4e9, 1.07, 36864, 1e10},
     };
 
     private static final double LAKE_TOP_INCOME = LAKE_NUMBERS[GARDENS_PER_WORLD - 1][3] / LAKE_NUMBERS[GARDENS_PER_WORLD - 1][2];
@@ -448,10 +448,10 @@ public final class Worlds {
                     "Lake",
                     CURRENCY_LAKE,
                     build(LAKE_NAMES, LAKE_NUMBERS),
-                    PLACEHOLDER_MANAGER_COSTS,
+                    BIRD_MANAGER_COSTS,
                     GUIDE_BIRD_COST,
-                    LAKE_ACCOUNTANT_COSTS,
-                    LAKE_DISCOUNT_COSTS,
+                    BIRD_ACCOUNTANT_COSTS,
+                    BIRD_DISCOUNT_COST,
                     1,
                     false,
                     START_MONEY
@@ -531,7 +531,7 @@ public final class Worlds {
     };
 
     private static WorldDef farm(int stageId, String name, String currency, String[] names, double currencyScale, double timeScale, double coefficientOffset) {
-        return new WorldDef(stageId, name, currency, buildFromLake(names, currencyScale, timeScale, coefficientOffset), scaled(PLACEHOLDER_MANAGER_COSTS, currencyScale), GUIDE_BIRD_COST * currencyScale, LAKE_ACCOUNTANT_COSTS, scaled(LAKE_DISCOUNT_COSTS, currencyScale), currencyScale, true, START_MONEY * currencyScale);
+        return new WorldDef(stageId, name, currency, buildFromLake(names, currencyScale, timeScale, coefficientOffset), scaled(BIRD_MANAGER_COSTS, currencyScale), GUIDE_BIRD_COST * currencyScale, BIRD_ACCOUNTANT_COSTS, scaled(BIRD_DISCOUNT_COST, currencyScale), currencyScale, true, START_MONEY * currencyScale);
     }
 
     private static final double[][][][] UPGRADE_PRICES = buildUpgradePrices();
