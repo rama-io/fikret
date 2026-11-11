@@ -3,6 +3,8 @@ package com.rama.fikret.game;
 import android.graphics.Canvas;
 import android.graphics.Rect;
 
+import java.util.Random;
+
 public class Bird {
     private static final long STEP_DURATION_MS = 200;
     private static final long WALK_FRAME_DURATION_MS = 80;
@@ -12,7 +14,16 @@ public class Bird {
     private static final int FRAME_WALK_A = 2;
     private static final int FRAME_WALK_B = 3;
 
+    private static final long PATROL_WAIT_MIN_MS = 3000;
+    private static final long PATROL_WAIT_MAX_MS = 9000;
+
     private final SpriteSheet spriteSheet;
+    private final Random random = new Random();
+
+    private boolean patrolling = false;
+    private int patrolRowA, patrolColA, patrolRowB, patrolColB;
+    private boolean patrolToB = true;
+    private long patrolWaitMs = 0;
 
     private int fromRow, fromCol;
     private int row, col;
@@ -49,6 +60,40 @@ public class Bird {
         hasPendingTarget = false;
     }
 
+    public void setPatrol(int rowB, int colB) {
+        patrolRowA = row;
+        patrolColA = col;
+        patrolRowB = rowB;
+        patrolColB = colB;
+        patrolToB = true;
+        patrolling = rowB != row || colB != col;
+        patrolWaitMs = randomWait();
+    }
+
+    private long randomWait() {
+        return PATROL_WAIT_MIN_MS + (long) (random.nextFloat() * (PATROL_WAIT_MAX_MS - PATROL_WAIT_MIN_MS));
+    }
+
+    private void updatePatrol(long deltaMs) {
+        if (!patrolling || following || moving || hasPendingTarget) {
+            return;
+        }
+        int targetRow = patrolToB ? patrolRowB : patrolRowA;
+        int targetCol = patrolToB ? patrolColB : patrolColA;
+        if (row == targetRow && col == targetCol) {
+            patrolToB = !patrolToB;
+            patrolWaitMs = randomWait();
+            return;
+        }
+        if (patrolWaitMs > 0) {
+            patrolWaitMs -= deltaMs;
+            return;
+        }
+        pendingTargetRow = row + Integer.signum(targetRow - row);
+        pendingTargetCol = col + Integer.signum(targetCol - col);
+        hasPendingTarget = true;
+    }
+
     public void startFollowing() {
         following = true;
     }
@@ -63,6 +108,7 @@ public class Bird {
     }
 
     public void update(long deltaMs) {
+        updatePatrol(deltaMs);
         if (!moving && hasPendingTarget) {
             hasPendingTarget = false;
             int dRow = pendingTargetRow - row;

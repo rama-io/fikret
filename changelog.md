@@ -1,5 +1,12 @@
 # Changelog
 
+## 12
+
+- Add new font to support the rest of the languages
+- Adjust the prices to be more reasonable
+- Add eternals to the map
+- Add patrol birds
+
 ## 11
 
 - More next milestone suggestion improvement

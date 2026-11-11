@@ -21,7 +21,7 @@ public class About extends Activity {
         setContentView(R.layout.activity_about);
         View root = findViewById(R.id.root);
         SystemBars.applyInsets(root);
-        FontManager.apply(root, FontManager.getJersey25(this));
+        FontManager.apply(root, FontManager.get(this));
         TextView appName = findViewById(R.id.name_version);
         try {
             PackageInfo info = getPackageManager().getPackageInfo(getPackageName(), 0);

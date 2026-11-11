@@ -62,7 +62,7 @@ public class Main extends Activity {
         setContentView(R.layout.activity_main);
         View root = findViewById(R.id.root);
         SystemBars.applyInsets(root);
-        FontManager.apply(root, FontManager.getJersey25(this));
+        FontManager.apply(root, FontManager.get(this));
 
         moneyText = findViewById(R.id.money);
         multiplierButton = findViewById(R.id.multiplier);
@@ -114,7 +114,7 @@ public class Main extends Activity {
     private void showMenu() {
         final Dialog dialog = new Dialog(this, R.style.AppDialog);
         View content = LayoutInflater.from(this).inflate(R.layout.dialog_menu, null);
-        FontManager.apply(content, FontManager.getJersey25(this));
+        FontManager.apply(content, FontManager.get(this));
         dialog.setContentView(content);
 
         bindMenuItem(dialog, content, R.id.menu_map, new Intent(this, GameActivity.class));
@@ -236,7 +236,7 @@ public class Main extends Activity {
             View row = convertView;
             if (row == null) {
                 row = LayoutInflater.from(Main.this).inflate(R.layout.list_item_garden, parent, false);
-                FontManager.apply(row, FontManager.getJersey25(Main.this));
+                FontManager.apply(row, FontManager.get(Main.this));
                 wireListeners(row);
             }
             bind(row, position);

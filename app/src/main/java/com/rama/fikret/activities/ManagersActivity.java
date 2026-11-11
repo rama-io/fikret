@@ -167,6 +167,8 @@ public class ManagersActivity extends ListScreenActivity {
                 if (row == null) {
                     row = LayoutInflater.from(ManagersActivity.this).inflate(R.layout.list_item_manager, parent, false);
                     applyFont(row);
+                    applyUnicodeFont(row.findViewById(R.id.manager_name));
+                    applyUnicodeFont(row.findViewById(R.id.manager_description));
                     ((ImageView) row.findViewById(R.id.manager_picture))
                             .setImageDrawable(pointsScreen()
                                     ? FarmArt.eternal(ManagersActivity.this, world)
@@ -271,7 +273,7 @@ public class ManagersActivity extends ListScreenActivity {
             }
             case KIND_EFFICIENCY: {
                 double cost = state.efficiencyBirdCost(world, g);
-                String pct = NumberFormatter.number(Worlds.efficiencyBirdValue(g) * 100);
+                String pct = String.valueOf(Math.round(Worlds.efficiencyBirdValue(g) * 100));
                 name = getString(R.string.bird_efficiency_name, pct);
                 description = getString(R.string.super_efficiency_desc, pct);
                 costLabel = NumberFormatter.money(world, cost);
@@ -286,7 +288,7 @@ public class ManagersActivity extends ListScreenActivity {
                     name = getString(R.string.super_profit_name, x);
                     description = getString(R.string.super_profit_desc, x);
                 } else {
-                    String pct = NumberFormatter.number(value * 100);
+                    String pct = String.valueOf(Math.round(value * 100));
                     name = getString(R.string.super_efficiency_name, pct);
                     description = getString(R.string.super_efficiency_desc, pct);
                 }

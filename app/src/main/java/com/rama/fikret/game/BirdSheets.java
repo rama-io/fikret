@@ -32,8 +32,9 @@ public final class BirdSheets {
 
     private static final SparseArray<SpriteSheet> CACHE = new SparseArray<>();
     private static final SparseArray<Bitmap> ICONS = new SparseArray<>();
+    private static final SparseArray<SpriteSheet> ETERNAL_CACHE = new SparseArray<>();
     private static Bitmap original;
-    private static SpriteSheet eternalSheet;
+    private static Bitmap eternalOriginal;
 
     private BirdSheets() {
     }
@@ -47,6 +48,12 @@ public final class BirdSheets {
         if (original == null) {
             original = new SpriteSheet(context.getResources(), R.drawable.bird, COLUMNS, ROWS).getBitmap();
         }
+        SpriteSheet sheet = new SpriteSheet(tinted(context, original, style), COLUMNS, ROWS);
+        CACHE.put(style, sheet);
+        return sheet;
+    }
+
+    private static Bitmap tinted(Context context, Bitmap source, int style) {
         Context themed = new ContextThemeWrapper(context, style);
         int[] target = new int[FARM_ATTRS.length];
         boolean same = true;
@@ -54,10 +61,7 @@ public final class BirdSheets {
             target[i] = ViewUpdates.themeColor(themed, FARM_ATTRS[i]) & 0xFFFFFF;
             same &= target[i] == ART_COLORS[i];
         }
-        Bitmap bitmap = same ? original : recolor(original, target);
-        SpriteSheet sheet = new SpriteSheet(bitmap, COLUMNS, ROWS);
-        CACHE.put(style, sheet);
-        return sheet;
+        return same ? source : recolor(source, target);
     }
 
     public static synchronized Drawable icon(Context context, int world) {
@@ -74,11 +78,18 @@ public final class BirdSheets {
         return drawable;
     }
 
-    public static synchronized SpriteSheet eternalSheet(Context context) {
-        if (eternalSheet == null) {
-            eternalSheet = new SpriteSheet(context.getResources(), R.drawable.eternal, COLUMNS, ROWS);
+    public static synchronized SpriteSheet eternalSheet(Context context, int world) {
+        int style = FarmArt.styleOf(world);
+        SpriteSheet cached = ETERNAL_CACHE.get(style);
+        if (cached != null) {
+            return cached;
         }
-        return eternalSheet;
+        if (eternalOriginal == null) {
+            eternalOriginal = new SpriteSheet(context.getResources(), R.drawable.eternal, COLUMNS, ROWS).getBitmap();
+        }
+        SpriteSheet sheet = new SpriteSheet(tinted(context, eternalOriginal, style), COLUMNS, ROWS);
+        ETERNAL_CACHE.put(style, sheet);
+        return sheet;
     }
 
     private static Bitmap recolor(Bitmap source, int[] target) {

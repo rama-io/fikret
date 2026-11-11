@@ -14,39 +14,39 @@ public final class Worlds {
     public static final int SUPER_PROFIT = 0;
     public static final int SUPER_EFFICIENCY = 1;
 
-    private static final double[][] SUPER_UPGRADES = {
+    private static final double[][] BIRD_ETERNALS_VALUES = {
             {1e4, SUPER_PROFIT, 3},
             {1e5, SUPER_EFFICIENCY, 0.02},
             {1e8, SUPER_EFFICIENCY, 0.02},
             {1e9, SUPER_PROFIT, 5},
             {1e11, SUPER_PROFIT, 9},
             {1e12, SUPER_PROFIT, 11},
-            {1e21, SUPER_PROFIT, 15},
-            {1e33, SUPER_EFFICIENCY, 0.10},
-            {10e33, SUPER_PROFIT, 15},
-            {1e36, SUPER_PROFIT, 3},
-            {10e39, SUPER_PROFIT, 5},
-            {1e42, SUPER_PROFIT, 5},
-            {500e51, SUPER_EFFICIENCY, 0.10},
-            {100e60, SUPER_PROFIT, 5},
-            {100e63, SUPER_PROFIT, 7},
-            {777e66, SUPER_PROFIT, 8},
-            {3e84, SUPER_PROFIT, 13},
-            {13e87, SUPER_PROFIT, 5},
-            {3e90, SUPER_PROFIT, 3},
-            {13e93, SUPER_PROFIT, 4},
-            {24e96, SUPER_PROFIT, 5},
-            {333e108, SUPER_PROFIT, 3},
-            {2e138, SUPER_PROFIT, 19},
+            {1e17, SUPER_PROFIT, 15},
+            {1e19, SUPER_EFFICIENCY, 0.10},
+            {1e20, SUPER_PROFIT, 15},
+            {1e22, SUPER_PROFIT, 3},
+            {1e24, SUPER_PROFIT, 5},
+            {1e26, SUPER_PROFIT, 5},
+            {1e28, SUPER_EFFICIENCY, 0.10},
+            {1e30, SUPER_PROFIT, 5},
+            {1e32, SUPER_PROFIT, 7},
+            {1e34, SUPER_PROFIT, 8},
+            {1e36, SUPER_PROFIT, 13},
+            {1e38, SUPER_PROFIT, 5},
+            {1e40, SUPER_PROFIT, 3},
+            {1e42, SUPER_PROFIT, 4},
+            {1e44, SUPER_PROFIT, 5},
+            {1e46, SUPER_PROFIT, 3},
+            {1e48, SUPER_PROFIT, 19},
     };
 
     private static final double[][] MEDALS = {
             {1e12, 3},
-            {50e15, 3},
-            {500e18, 3},
-            {900e21, 3},
+            {1e15, 3},
+            {1e18, 3},
+            {1e21, 3},
             {1e42, 7},
-            {100e45, 3},
+            {1e45, 3},
             {1e51, 7},
             {1e54, 5},
             {1e60, 7},
@@ -56,75 +56,80 @@ public final class Worlds {
             {1e78, 15},
             {1e84, 3},
             {3e87, 3},
-            {500e93, 2},
-            {10e99, 3},
-            {20e99, 6},
-            {500e99, 2},
+            {1e93, 2},
+            {1e98, 3},
+            {1e99, 6},
+            {1e100, 2},
             {1e102, 5},
-            {600e105, 3},
+            {1e105, 3},
             {1e111, 3},
-            {450e114, 3},
-            {350e117, 5},
-            {500e117, 3},
-            {700e120, 7},
+            {1e114, 3},
+            {1e117, 5},
+            {1e118, 3},
+            {1e120, 7},
             {1e123, 3},
-            {10e126, 5},
-            {900e129, 2},
-            {5e138, 3},
-            {3e141, 3},
-            {2e144, 3},
-            {450e144, 3},
-            {500e153, 5},
-            {514e156, 3},
-            {900e159, 3},
-            {250e162, 2},
-            {750e162, 2},
-            {250e165, 2},
-            {750e165, 2},
-            {250e168, 2},
-            {750e168, 2},
-            {250e171, 2},
-            {750e171, 2},
-            {250e174, 2},
+            {1e126, 5},
+            {1e129, 2},
+            {1e138, 3},
+            {1e141, 3},
+            {1e144, 3},
+            {1e145, 3},
+            {1e153, 5},
+            {1e156, 3},
+            {1e159, 3},
+            {1e162, 2},
+            {1e163, 2},
+            {1e165, 2},
+            {1e166, 2},
+            {1e168, 2},
+            {1e169, 2},
+            {1e171, 2},
+            {1e172, 2},
+            {1e174, 2},
             {1e177, 9},
-            {5e183, 10},
-            {5e189, 5},
-            {27e192, 3},
-            {13e195, 4},
-            {2e198, 5},
-            {600e207, 5},
-            {555e216, 5},
-            {100e228, 5},
-            {100e231, 2},
-            {10e237, 4},
+            {1e183, 10},
+            {1e189, 5},
+            {1e192, 3},
+            {1e195, 4},
+            {1e198, 5},
+            {1e207, 5},
+            {1e216, 5},
+            {1e228, 5},
+            {1e231, 2},
+            {1e237, 4},
     };
 
-    private static final double[][] EFFICIENCY_BIRDS = {
-            {100e15, 0.01},
-            {1e21, 0.01},
-            {10e24, 0.01},
-            {1e207, 0.021},
-            {1e213, 0.015},
-            {1e216, 0.01},
-            {1e219, 0.02},
-            {1e222, 0.005},
-            {1e225, 0.02},
-            {1e228, 0.012},
-            {1e231, 0.013},
-            {10e231, 0.007},
-            {1e237, 0.02},
-            {1e240, 0.003},
+    private static final double[][] BIRD_EFFICIENCY_VALUES = {
+            {1e15, 0.01},
+            {1e20, 0.01},
+            {1e25, 0.01},
+            {1e30, 0.01},
+            {1e35, 0.02},
+            {1e40, 0.01},
+            {1e42, 0.01},
+            {1e44, 0.02},
+            {1e46, 0.01},
+            {1e48, 0.02},
+            {1e50, 0.01},
+            {1e52, 0.01},
+            {10e54, 0.01},
+            {1e56, 0.02},
+            {1e58, 0.01},
+            {1e60, 0.01},
+            {1e62, 0.02},
+            {1e64, 0.01},
+            {1e66, 0.01},
     };
 
     public static final int MEDAL_COUNT = MEDALS.length;
-    public static final int EFFICIENCY_BIRD_COUNT = EFFICIENCY_BIRDS.length;
+    public static final int EFFICIENCY_BIRD_COUNT = BIRD_EFFICIENCY_VALUES.length;
 
     public static double medalValue(int index) {
         return MEDALS[index][1];
     }
 
     public static double efficiencyBirdValue(int index) {
-        return EFFICIENCY_BIRDS[index][1];
+        return BIRD_EFFICIENCY_VALUES[index][1];
     }
 
     private static double[] column(double[][] table, double factor) {
@@ -135,18 +140,18 @@ public final class Worlds {
         return result;
     }
 
-    public static final int SUPER_UPGRADE_COUNT = SUPER_UPGRADES.length;
+    public static final int SUPER_UPGRADE_COUNT = BIRD_ETERNALS_VALUES.length;
 
     public static double superCost(int index) {
-        return SUPER_UPGRADES[index][0];
+        return BIRD_ETERNALS_VALUES[index][0];
     }
 
     public static int superKind(int index) {
-        return (int) SUPER_UPGRADES[index][1];
+        return (int) BIRD_ETERNALS_VALUES[index][1];
     }
 
     public static double superValue(int index) {
-        return SUPER_UPGRADES[index][2];
+        return BIRD_ETERNALS_VALUES[index][2];
     }
 
     public static final String CURRENCY_LAKE = "DOP";
@@ -161,19 +166,52 @@ public final class Worlds {
 
     public static final double START_MONEY = 4;
 
-    private static final double[] PLACEHOLDER_MANAGER_COSTS = {1e3, 1.5e4, 1e5, 5e5, 1.2e6, 1e7, 1.11e8, 5.55e8, 1e10, 1e11};
+    private static final double[] BIRD_MANAGER_COSTS = {
+            1e3,
+            1e4,
+            1e5,
+            1e6,
+            1e7,
+            1e8,
+            1e9,
+            1e10,
+            1e11,
+            1e12
+    };
 
     private static final double GUIDE_BIRD_COST = 1e33;
 
-    private static final double BUYER_COST_LAKE = 1e20;
+    private static final double BUYER_COST_LAKE = 1e21;
 
-    private static final double QUICK_BUY_COST = 1e25;
+    private static final double QUICK_BUY_COST = 1e23;
 
     public static final double ACCOUNTANT_COST_FACTOR = 0.9;
-    private static final double[] LAKE_ACCOUNTANT_COSTS = {10, 100, 1e3, 1e4, 1e5, 1e7, 1e8, 1e9, 1e10, 1e11};
+    private static final double[] BIRD_ACCOUNTANT_COSTS = {
+            10,
+            100,
+            1e3,
+            1e4,
+            1e5,
+            1e7,
+            1e8,
+            1e9,
+            1e10,
+            1e11
+    };
 
     public static final double DISCOUNT_COST_DIVISOR = 100000;
-    private static final double[] LAKE_DISCOUNT_COSTS = {10e102, 75e105, 250e108, 100e111, 50e114, 3e117, 750e117, 3e120, 33e123, 9e126};
+    private static final double[] BIRD_DISCOUNT_COST = {
+            1e60,
+            1e62,
+            1e64,
+            1e66,
+            1e68,
+            1e70,
+            1e72,
+            1e74,
+            1e76,
+            1e78
+    };
 
     public static final double UPGRADE_VALUE_FACTOR = 100;
     public static final double UPGRADE_SPEED_FACTOR = 250;
@@ -216,7 +254,7 @@ public final class Worlds {
         WorldDef(int stageId, String name, String currency, GardenDef[] gardens, double[] managerCosts, double travelManagerCost, double[] accountantCosts, double[] discountCosts, double currencyScale, boolean placeholderPrices, double startMoney) {
             this.startMoney = startMoney;
             this.medalThresholds = column(MEDALS, currencyScale);
-            this.efficiencyBirdCosts = column(EFFICIENCY_BIRDS, currencyScale);
+            this.efficiencyBirdCosts = column(BIRD_EFFICIENCY_VALUES, currencyScale);
             this.stageId = stageId;
             this.name = name;
             this.currency = currency;
@@ -232,35 +270,145 @@ public final class Worlds {
         }
     }
 
-    private static final double[][] LAKE_NUMBERS = {{3.7, 1.07, 0.6, 1}, {60, 1.15, 3, 60}, {720, 1.14, 6, 540}, {8640, 1.13, 12, 4320}, {103680, 1.12, 24, 51840}, {1244160, 1.11, 96, 622080}, {14929920, 1.1, 384, 7464960}, {179159040, 1.09, 1536, 89579520}, {2149908480d, 1.08, 6144, 1074954240d}, {25789901760d, 1.07, 36864, 29668737024d},};
+    private static final double[][] LAKE_NUMBERS = {
+            {4e0, 1.07, 0.6, 1e0},
+            {5e1, 1.15, 3, 2e1},
+            {6e2, 1.14, 6, 3e2},
+            {7e3, 1.13, 12, 4e3},
+            {8e4, 1.12, 24, 5e4},
+            {9e5, 1.11, 96, 6e5},
+            {1e6, 1.1, 384, 7e6},
+            {2e7, 1.09, 1536, 8e7},
+            {3e8, 1.08, 6144, 9e8},
+            {4e9, 1.07, 36864, 1e10},
+    };
 
     private static final double LAKE_TOP_INCOME = LAKE_NUMBERS[GARDENS_PER_WORLD - 1][3] / LAKE_NUMBERS[GARDENS_PER_WORLD - 1][2];
 
-    private static final String[] LAKE_NAMES = {"Yuca", "Mango", "Cajuil", "Guayaba", "Carambola", "Jobo", "Papaya", "Yautía", "Mamey", "Guanabana"};
+    private static final String[] LAKE_NAMES = {
+            "Yuca",
+            "Mango",
+            "Cajuil",
+            "Guayaba",
+            "Carambola",
+            "Jobo",
+            "Papaya",
+            "Yautía",
+            "Mamey",
+            "Guanabana"
+    };
 
     // Brazil
-    private static final String[] FOREST_NAMES = {"Abacaxi", "Maracujá", "Pitanga", "Jabuticaba", "Açaí", "Cupuaçu", "Guaraná", "Acerola", "Bacaba", "Tucumã"};
+    private static final String[] FOREST_NAMES = {
+            "Abacaxi",
+            "Maracujá",
+            "Pitanga",
+            "Jabuticaba",
+            "Açaí",
+            "Cupuaçu",
+            "Guaraná",
+            "Acerola",
+            "Bacaba",
+            "Tucumã"
+    };
 
     // Vietnam
-    private static final String[] CAVE_NAMES = {"Nhãn", "Vải", "Bưởi", "Sấu", "Trám đen", "Dâu da đất", "Thị", "Táo mèo", "Mắc mật", "Bứa"};
+    private static final String[] CAVE_NAMES = {
+            "Nhãn",
+            "Vải",
+            "Bưởi",
+            "Sấu",
+            "Trám đen",
+            "Dâu da đất",
+            "Thị",
+            "Táo mèo",
+            "Mắc mật",
+            "Bứa"
+    };
 
     // Indonesia
-    private static final String[] VOLCANO_NAMES = {"Salak", "Durian", "Manggis", "Rambutan", "Duku", "Kepel", "Matoa", "Duwet", "Gandaria", "Kemang"};
+    private static final String[] VOLCANO_NAMES = {
+            "Salak",
+            "Durian",
+            "Manggis",
+            "Rambutan",
+            "Duku",
+            "Kepel",
+            "Matoa",
+            "Duwet",
+            "Gandaria",
+            "Kemang"
+    };
 
     // China
-    private static final String[] NUCLEAR_NAMES = {"杨梅", "枣", "猕猴桃", "五味子", "山楂", "黄皮", "悬钩子", "野梨", "柿", "酸枣"};
+    private static final String[] NUCLEAR_NAMES = {
+            "杨梅",
+            "枣",
+            "猕猴桃",
+            "五味子",
+            "山楂",
+            "黄皮",
+            "悬钩子",
+            "野梨",
+            "柿",
+            "酸枣"
+    };
 
     // Russia
-    private static final String[] ARCTIC_NAMES = {"Морошка", "Брусника", "Черника", "Голубика", "Водяника", "Княженика", "Костяника", "Жимолость", "Рябина", "Шиповник"};
+    private static final String[] ARCTIC_NAMES = {
+            "Морошка",
+            "Брусника",
+            "Черника",
+            "Голубика",
+            "Водяника",
+            "Княженика",
+            "Костяника",
+            "Жимолость",
+            "Рябина",
+            "Шиповник"
+    };
 
     // Bahamas
-    private static final String[] BUBBLEGUM_NAMES = {"Guana berry", "Governor's plum", "Darling plum", "Pigeon plum", "Coco plum", "Sea grape", "Saffron plum", "Andros wild guava", "Sapodilla", "Sugar apple"};
+    private static final String[] BUBBLEGUM_NAMES = {
+            "Guana berry",
+            "Governor's plum",
+            "Darling plum",
+            "Pigeon plum",
+            "Coco plum",
+            "Sea grape",
+            "Saffron plum",
+            "Andros wild guava",
+            "Sapodilla",
+            "Sugar apple"
+    };
 
     // Japan
-    private static final String[] SPACE_NAMES = {"アケビ", "サルナシ", "ヤマブドウ", "シークヮーサー", "スダチ", "カボス", "ユズ", "ヤマモモ", "ムベ", "ハスカップ"};
+    private static final String[] SPACE_NAMES = {
+            "アケビ",
+            "サルナシ",
+            "ヤマブドウ",
+            "シークヮーサー",
+            "スダチ",
+            "カボス",
+            "ユズ",
+            "ヤマモモ",
+            "ムベ",
+            "ハスカップ"
+    };
 
     // Spain
-    private static final String[] NIGHTMARE_NAMES = {"Granada", "Cereza", "Uva tinta", "Higo", "Madroño", "Tomate", "Pimiento choricero", "Remolacha", "Lombarda", "Frambuesa"};
+    private static final String[] NIGHTMARE_NAMES = {
+            "Granada",
+            "Cereza",
+            "Uva tinta",
+            "Higo",
+            "Madroño",
+            "Tomate",
+            "Pimiento choricero",
+            "Remolacha",
+            "Lombarda",
+            "Frambuesa"
+    };
 
     private static GardenDef[] build(String[] names, double[][] numbers) {
         GardenDef[] result = new GardenDef[GARDENS_PER_WORLD];
@@ -298,10 +446,96 @@ public final class Worlds {
     private static final double SCALE_JPY = 1.6;
     private static final double SCALE_EUR = 0.12;
 
-    public static final WorldDef[] ALL = {new WorldDef(Maps.LAKE, "Lake", CURRENCY_LAKE, build(LAKE_NAMES, LAKE_NUMBERS), PLACEHOLDER_MANAGER_COSTS, GUIDE_BIRD_COST, LAKE_ACCOUNTANT_COSTS, LAKE_DISCOUNT_COSTS, 1, false, START_MONEY), farm(Maps.FOREST, "Forest", CURRENCY_FOREST, FOREST_NAMES, SCALE_BRL, 1.1, 0), farm(Maps.CAVE, "Cave", CURRENCY_CAVE, CAVE_NAMES, SCALE_VND, 1.2, 0), farm(Maps.VOLCANO, "Volcano", CURRENCY_VOLCANO, VOLCANO_NAMES, SCALE_IDR, 1.3, 0.005), farm(Maps.NUCLEAR, "Nuclear", CURRENCY_NUCLEAR, NUCLEAR_NAMES, SCALE_CNY, 1.4, 0.005), farm(Maps.ARCTIC, "Arctic", CURRENCY_ARCTIC, ARCTIC_NAMES, SCALE_RUB, 1.5, 0.01), farm(Maps.BUBBLEGUM_LAND, "Bubblegum land", CURRENCY_BUBBLEGUM, BUBBLEGUM_NAMES, SCALE_BSD, 1.6, 0.01), farm(Maps.SPACE, "Space", CURRENCY_SPACE, SPACE_NAMES, SCALE_JPY, 1.7, 0.015), farm(Maps.NIGHTMARE, "Nightmare", CURRENCY_NIGHTMARE, NIGHTMARE_NAMES, SCALE_EUR, 1.8, 0.02),};
+    public static final WorldDef[] ALL = {
+            new WorldDef(
+                    Maps.LAKE,
+                    "Lake",
+                    CURRENCY_LAKE,
+                    build(LAKE_NAMES, LAKE_NUMBERS),
+                    BIRD_MANAGER_COSTS,
+                    GUIDE_BIRD_COST,
+                    BIRD_ACCOUNTANT_COSTS,
+                    BIRD_DISCOUNT_COST,
+                    1,
+                    false,
+                    START_MONEY
+            ),
+            farm(
+                    Maps.FOREST,
+                    "Forest",
+                    CURRENCY_FOREST,
+                    FOREST_NAMES,
+                    SCALE_BRL,
+                    1.1,
+                    0
+            ),
+            farm(
+                    Maps.CAVE,
+                    "Cave",
+                    CURRENCY_CAVE,
+                    CAVE_NAMES,
+                    SCALE_VND,
+                    1.2,
+                    0
+            ),
+            farm(
+                    Maps.VOLCANO,
+                    "Volcano",
+                    CURRENCY_VOLCANO,
+                    VOLCANO_NAMES,
+                    SCALE_IDR,
+                    1.3,
+                    0.005
+            ),
+            farm(
+                    Maps.NUCLEAR,
+                    "Nuclear",
+                    CURRENCY_NUCLEAR,
+                    NUCLEAR_NAMES,
+                    SCALE_CNY,
+                    1.4,
+                    0.005
+            ),
+            farm(
+                    Maps.ARCTIC,
+                    "Arctic",
+                    CURRENCY_ARCTIC,
+                    ARCTIC_NAMES,
+                    SCALE_RUB,
+                    1.5,
+                    0.01
+            ),
+            farm(
+                    Maps.BUBBLEGUM_LAND,
+                    "Bubblegum land",
+                    CURRENCY_BUBBLEGUM,
+                    BUBBLEGUM_NAMES,
+                    SCALE_BSD,
+                    1.6,
+                    0.01
+            ),
+            farm(
+                    Maps.SPACE,
+                    "Space",
+                    CURRENCY_SPACE,
+                    SPACE_NAMES,
+                    SCALE_JPY,
+                    1.7,
+                    0.015
+            ),
+            farm(
+                    Maps.NIGHTMARE,
+                    "Nightmare",
+                    CURRENCY_NIGHTMARE,
+                    NIGHTMARE_NAMES,
+                    SCALE_EUR,
+                    1.8,
+                    0.02
+            ),
+    };
 
     private static WorldDef farm(int stageId, String name, String currency, String[] names, double currencyScale, double timeScale, double coefficientOffset) {
-        return new WorldDef(stageId, name, currency, buildFromLake(names, currencyScale, timeScale, coefficientOffset), scaled(PLACEHOLDER_MANAGER_COSTS, currencyScale), GUIDE_BIRD_COST * currencyScale, LAKE_ACCOUNTANT_COSTS, scaled(LAKE_DISCOUNT_COSTS, currencyScale), currencyScale, true, START_MONEY * currencyScale);
+        return new WorldDef(stageId, name, currency, buildFromLake(names, currencyScale, timeScale, coefficientOffset), scaled(BIRD_MANAGER_COSTS, currencyScale), GUIDE_BIRD_COST * currencyScale, BIRD_ACCOUNTANT_COSTS, scaled(BIRD_DISCOUNT_COST, currencyScale), currencyScale, true, START_MONEY * currencyScale);
     }
 
     private static final double[][][][] UPGRADE_PRICES = buildUpgradePrices();
@@ -367,5 +601,15 @@ public final class Worlds {
         }
     }
 
-    public static final int[] ALL_STAGE_IDS = {Maps.LAKE, Maps.FOREST, Maps.CAVE, Maps.VOLCANO, Maps.NUCLEAR, Maps.ARCTIC, Maps.BUBBLEGUM_LAND, Maps.SPACE, Maps.NIGHTMARE};
+    public static final int[] ALL_STAGE_IDS = {
+            Maps.LAKE,
+            Maps.FOREST,
+            Maps.CAVE,
+            Maps.VOLCANO,
+            Maps.NUCLEAR,
+            Maps.ARCTIC,
+            Maps.BUBBLEGUM_LAND,
+            Maps.SPACE,
+            Maps.NIGHTMARE
+    };
 }

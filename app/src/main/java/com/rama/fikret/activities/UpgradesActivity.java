@@ -110,6 +110,8 @@ public class UpgradesActivity extends ListScreenActivity {
                     if (isHeader(position)) {
                         row = LayoutInflater.from(UpgradesActivity.this).inflate(R.layout.list_item_quick_buy, parent, false);
                         applyFont(row);
+                        applyUnicodeFont(row.findViewById(R.id.quick_buy_name));
+                        applyUnicodeFont(row.findViewById(R.id.quick_buy_description));
                         row.findViewById(R.id.quick_buy_button).setOnClickListener(v -> {
                             if (state.buyAllUpgrades(world) > 0) {
                                 rebuildRows();
@@ -119,6 +121,8 @@ public class UpgradesActivity extends ListScreenActivity {
                     } else {
                         row = LayoutInflater.from(UpgradesActivity.this).inflate(R.layout.list_item_upgrade, parent, false);
                         applyFont(row);
+                        applyUnicodeFont(row.findViewById(R.id.garden_name));
+                        applyUnicodeFont(row.findViewById(R.id.upgrade_description));
                         wireListener(row);
                     }
                 }
