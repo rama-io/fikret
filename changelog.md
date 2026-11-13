@@ -1,5 +1,9 @@
 # Changelog
 
+## 13
+
+- Farm points efficiency from 50% to 100%
+
 ## 12
 
 - Add new font to support the rest of the languages
