@@ -31,7 +31,9 @@ public abstract class ListScreenActivity extends Activity {
         @Override
         public void run() {
             state.sync();
-            ViewUpdates.setText(moneyText, balanceText());
+            if (showBalance()) {
+                ViewUpdates.setText(moneyText, balanceText());
+            }
             onTick();
             refreshRows();
             handler.postDelayed(this, TICK_MS);
@@ -55,6 +57,10 @@ public abstract class ListScreenActivity extends Activity {
     protected void onTick() {
     }
 
+    protected boolean showBalance() {
+        return true;
+    }
+
     protected String balanceText() {
         return NumberFormatter.money(world, state.getMoney(world));
     }
@@ -71,6 +77,9 @@ public abstract class ListScreenActivity extends Activity {
 
         world = state.getCurrentWorld();
         moneyText = findViewById(R.id.money);
+        if (!showBalance()) {
+            moneyText.setVisibility(View.GONE);
+        }
         list = findViewById(R.id.list);
 
         TextView title = findViewById(R.id.title);

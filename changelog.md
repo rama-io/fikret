@@ -3,6 +3,9 @@
 ## 13
 
 - Farm points efficiency from 50% to 100%
+- Fix internal navigation, a visit farm button inside the finance view
+- Fix eternals prices in other farms
+- Add farm money of each farm in the finance view instead of just the current farm.
 
 ## 12
 

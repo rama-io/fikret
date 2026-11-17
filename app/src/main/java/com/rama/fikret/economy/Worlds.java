@@ -168,8 +168,8 @@ public final class Worlds {
 
     public static final int SUPER_UPGRADE_COUNT = BIRD_ETERNALS_VALUES.length;
 
-    public static double superCost(int index) {
-        return BIRD_ETERNALS_VALUES[index][0];
+    public static double superCost(int world, int index) {
+        return ALL[world].superCosts[index];
     }
 
     public static int superKind(int index) {
@@ -274,6 +274,7 @@ public final class Worlds {
         public final double[] discountCosts;
         public final double[] medalThresholds;
         public final double[] efficiencyBirdCosts;
+        public final double[] superCosts;
         public final boolean placeholderPrices;
         public final double startMoney;
 
@@ -281,6 +282,7 @@ public final class Worlds {
             this.startMoney = startMoney;
             this.medalThresholds = column(MEDALS, currencyScale);
             this.efficiencyBirdCosts = column(BIRD_EFFICIENCY_VALUES, currencyScale);
+            this.superCosts = column(BIRD_ETERNALS_VALUES, currencyScale);
             this.stageId = stageId;
             this.name = name;
             this.currency = currency;
