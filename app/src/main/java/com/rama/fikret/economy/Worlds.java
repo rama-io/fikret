@@ -119,6 +119,32 @@ public final class Worlds {
             {1e62, 0.02},
             {1e64, 0.01},
             {1e66, 0.01},
+
+            {1e68, 0.02},
+            {1e70, 0.02},
+            {1e72, 0.02},
+            {1e74, 0.02},
+            {1e76, 0.02},
+            {1e78, 0.02},
+            {1e80, 0.02},
+            {1e82, 0.02},
+            {1e84, 0.02},
+            {1e86, 0.02},
+            {1e88, 0.02},
+            {1e90, 0.02},
+            {1e92, 0.02},
+            {1e94, 0.02},
+            {1e96, 0.02},
+            {1e98, 0.02},
+            {1e100, 0.02},
+            {1e102, 0.02},
+            {1e104, 0.02},
+            {1e106, 0.02},
+            {1e108, 0.02},
+            {1e110, 0.02},
+            {1e112, 0.02},
+            {1e114, 0.02},
+            {1e116, 0.02},
     };
 
     public static final int MEDAL_COUNT = MEDALS.length;
@@ -142,8 +168,8 @@ public final class Worlds {
 
     public static final int SUPER_UPGRADE_COUNT = BIRD_ETERNALS_VALUES.length;
 
-    public static double superCost(int index) {
-        return BIRD_ETERNALS_VALUES[index][0];
+    public static double superCost(int world, int index) {
+        return ALL[world].superCosts[index];
     }
 
     public static int superKind(int index) {
@@ -248,6 +274,7 @@ public final class Worlds {
         public final double[] discountCosts;
         public final double[] medalThresholds;
         public final double[] efficiencyBirdCosts;
+        public final double[] superCosts;
         public final boolean placeholderPrices;
         public final double startMoney;
 
@@ -255,6 +282,7 @@ public final class Worlds {
             this.startMoney = startMoney;
             this.medalThresholds = column(MEDALS, currencyScale);
             this.efficiencyBirdCosts = column(BIRD_EFFICIENCY_VALUES, currencyScale);
+            this.superCosts = column(BIRD_ETERNALS_VALUES, currencyScale);
             this.stageId = stageId;
             this.name = name;
             this.currency = currency;

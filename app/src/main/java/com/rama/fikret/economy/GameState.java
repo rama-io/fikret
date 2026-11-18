@@ -342,8 +342,8 @@ public final class GameState {
         return (superBought[w] & (1L << index)) != 0;
     }
 
-    public double superUpgradeCost(int index) {
-        return Worlds.superCost(index);
+    public double superUpgradeCost(int w, int index) {
+        return Worlds.superCost(w, index);
     }
 
     public boolean hasRemainingSuperUpgrades(int w) {
@@ -358,7 +358,7 @@ public final class GameState {
         if (index < 0 || index >= Worlds.SUPER_UPGRADE_COUNT || hasSuperUpgrade(w, index)) {
             return false;
         }
-        double cost = Worlds.superCost(index);
+        double cost = superUpgradeCost(w, index);
         if (angels[w] < cost) {
             return false;
         }

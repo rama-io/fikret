@@ -102,4 +102,7 @@
     <string name="quick_buy_bird_desc">Buy every upgrade you can afford.</string>
     <string name="quick_buy_all">Buy all</string>
     <string name="finance_profit_bonus">+%1$s%%</string>
+    <string name="visit_farm">Visit Farm</string>
+    <string name="finance_farm_money">Farm Money</string>
+    <string name="tile_next_multiplier">%1$s x%2$s</string>
 </resources>

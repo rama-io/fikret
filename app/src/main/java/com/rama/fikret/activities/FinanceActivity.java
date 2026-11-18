@@ -1,6 +1,7 @@
 package com.rama.fikret.activities;
 
 import android.app.Dialog;
+import android.content.Intent;
 import android.os.Bundle;
 import android.view.LayoutInflater;
 import android.view.View;
@@ -55,11 +56,15 @@ public class FinanceActivity extends ListScreenActivity {
         View achievements;
         String medalsKey = "";
         final List<NextCell> nextCells = new ArrayList<>();
+        TextView money;
+        View sourcesSeparator;
+        View sourcesList;
         TextView points;
         TextView pointsMultiplier;
         TextView pointsProfit;
         TextView pointsGainOnAscend;
         View ascendButton;
+        View visitButton;
         TextView gainSecond;
         TextView gainMinute;
         TextView gainHour;
@@ -73,6 +78,11 @@ public class FinanceActivity extends ListScreenActivity {
     @Override
     protected String emptyText() {
         return getString(R.string.empty_finance);
+    }
+
+    @Override
+    protected boolean showBalance() {
+        return false;
     }
 
     private boolean refreshFarms() {
@@ -146,6 +156,20 @@ public class FinanceActivity extends ListScreenActivity {
         View row = inflater.inflate(R.layout.list_item_finance_farm, parent, false);
         FarmHolder h = new FarmHolder();
         h.section = (WdCollapsibleSection) row;
+        h.money = row.findViewById(R.id.farm_money);
+        h.sourcesSeparator = row.findViewById(R.id.farm_sources_separator);
+        h.sourcesList = row.findViewById(R.id.farm_sources);
+        h.visitButton = row.findViewById(R.id.visit_farm);
+        h.visitButton.setOnClickListener(v -> {
+            if (h.world >= 0) {
+                // Switch the active farm and return to the main harvest screen.
+                state.onStageEntered(Worlds.ALL[h.world].stageId);
+                Intent intent = new Intent(this, Main.class);
+                intent.addFlags(Intent.FLAG_ACTIVITY_CLEAR_TOP | Intent.FLAG_ACTIVITY_SINGLE_TOP);
+                startActivity(intent);
+                finish();
+            }
+        });
         h.points = row.findViewById(R.id.farm_points);
         h.medals = row.findViewById(R.id.farm_medals);
         h.achievements = row.findViewById(R.id.farm_achievements);
@@ -230,14 +254,25 @@ public class FinanceActivity extends ListScreenActivity {
             h.section.setKey("finance:section:" + w, true);
         }
 
+        ViewUpdates.setText(h.money, NumberFormatter.money(w, state.getMoney(w)));
+
+        // The base source is not listed; only the bonuses that actually contribute.
+        boolean anySource = false;
+        boolean firstShown = true;
         for (int i = 0; i < h.sources.length; i++) {
             double value = f.bySource[i];
-            boolean show = i == FarmFinance.SOURCE_BASE || value > 0;
+            boolean show = i != FarmFinance.SOURCE_BASE && value > 0;
             h.sources[i].root.setVisibility(show ? View.VISIBLE : View.GONE);
             if (show) {
+                h.sources[i].gap.setVisibility(firstShown ? View.GONE : View.VISIBLE);
+                firstShown = false;
+                anySource = true;
                 bindBar(h.sources[i], getString(SOURCE_NAMES[i]), w, value, f.income);
             }
         }
+        // An empty list would still draw its padded background as a blank block.
+        h.sourcesSeparator.setVisibility(anySource ? View.VISIBLE : View.GONE);
+        h.sourcesList.setVisibility(anySource ? View.VISIBLE : View.GONE);
 
         for (int g = 0; g < h.gardens.length; g++) {
             bindBar(h.gardens[g], Worlds.ALL[w].gardens[g].name, w, f.byGarden[g], f.income);
@@ -299,7 +334,8 @@ public class FinanceActivity extends ListScreenActivity {
             {
                 double speed = Math.pow(2, earned);
                 tiles.add(new Tile(icon, getString(R.string.tile_speed), tileValue(speed),
-                        Worlds.ALL[w].gardens[g].name,
+                        getString(R.string.tile_next_multiplier, Worlds.ALL[w].gardens[g].name,
+                                NumberFormatter.multiplier(2)),
                         String.valueOf(state.nextUnearnedMilestone(w, g)),
                         NEXT_MILESTONE, g, 0));
             }
@@ -308,7 +344,10 @@ public class FinanceActivity extends ListScreenActivity {
             int nextMedal = state.nextMedalIndex(w);
             double threshold = nextMedal >= 0 ? state.medalThreshold(w, nextMedal) : 0;
             tiles.add(new Tile(R.drawable.medal, getString(R.string.tile_profit), tileValue(medals),
-                    getString(R.string.tile_profit),
+                    nextMedal >= 0
+                            ? getString(R.string.tile_next_multiplier, getString(R.string.tile_profit),
+                                    NumberFormatter.multiplier(Worlds.medalValue(nextMedal)))
+                            : getString(R.string.tile_profit),
                     nextMedal >= 0 ? NumberFormatter.money(w, threshold) : getString(R.string.tile_max),
                     nextMedal >= 0 ? NEXT_MEDAL : NEXT_NONE, -1, threshold));
         }

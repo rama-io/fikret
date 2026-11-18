@@ -1,5 +1,6 @@
 package com.rama.fikret.activities;
 
+import android.content.Context;
 import android.content.Intent;
 import android.view.LayoutInflater;
 import android.view.View;
@@ -67,11 +68,15 @@ public class TeleportActivity extends ListScreenActivity {
     }
 
     private void teleportTo(int stageId) {
-        Stage stage = Maps.get(stageId);
-        PrefsManager.getInstance(this).saveTeleportHome(stageId, stage.spawnRow, stage.spawnCol);
-        Intent intent = new Intent(this, GameActivity.class);
-        intent.putExtra(GameActivity.EXTRA_TELEPORT_ARRIVAL, true);
-        startActivity(intent);
+        teleport(this, stageId);
         finish();
+    }
+
+    static void teleport(Context context, int stageId) {
+        Stage stage = Maps.get(stageId);
+        PrefsManager.getInstance(context).saveTeleportHome(stageId, stage.spawnRow, stage.spawnCol);
+        Intent intent = new Intent(context, GameActivity.class);
+        intent.putExtra(GameActivity.EXTRA_TELEPORT_ARRIVAL, true);
+        context.startActivity(intent);
     }
 }

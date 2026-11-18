@@ -127,7 +127,7 @@ public class ManagersActivity extends ListScreenActivity {
             case KIND_ACCOUNTANT:
                 return state.accountantCost(world, g);
             case KIND_SUPER:
-                return state.superUpgradeCost(g);
+                return state.superUpgradeCost(world, g);
             case KIND_EFFICIENCY:
                 return state.efficiencyBirdCost(world, g);
             case KIND_DISCOUNT:
@@ -281,7 +281,7 @@ public class ManagersActivity extends ListScreenActivity {
                 break;
             }
             case KIND_SUPER: {
-                double cost = state.superUpgradeCost(g);
+                double cost = state.superUpgradeCost(world, g);
                 double value = Worlds.superValue(g);
                 if (Worlds.superKind(g) == Worlds.SUPER_PROFIT) {
                     String x = value == Math.rint(value) ? String.format(Locale.US, "%.0f", value) : String.format(Locale.US, "%.2f", value);

@@ -12,9 +12,39 @@
 
     <View style="@style/SeparatorListVertical" />
 
+    <LinearLayout style="@style/VerticalList_BG2">
+
+        <LinearLayout style="@style/HorizontalList">
+
+            <TextView
+                style="@style/Text"
+                android:layout_width="wrap_content"
+                android:text="@string/finance_farm_money" />
+
+            <TextView
+                android:id="@+id/farm_money"
+                style="@style/Text"
+                android:layout_width="0dp"
+                android:layout_weight="1"
+                android:gravity="end" />
+        </LinearLayout>
+
+        <View style="@style/SeparatorListVertical" />
+
+        <Button
+            android:id="@+id/visit_farm"
+            style="@style/BTN"
+            android:text="@string/visit_farm" />
+    </LinearLayout>
+
+    <View
+        android:id="@+id/farm_sources_separator"
+        style="@style/SeparatorListVertical" />
     <LinearLayout
         android:id="@+id/farm_sources"
         style="@style/VerticalList_BG2" />
+
+
 
     <View style="@style/SeparatorListVertical" />
 
