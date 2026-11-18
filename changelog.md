@@ -2,6 +2,7 @@
 
 ## 13
 
+- Add cave farm
 - Farm points efficiency from 50% to 100%
 - Fix internal navigation, a visit farm button inside the finance view
 - Fix eternals prices in other farms

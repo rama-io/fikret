@@ -22,8 +22,25 @@ public final class GardenIcons {
             R.drawable.forest_tucuma
     };
 
+    private static final int[] CAVE = {
+            R.drawable.cave_nhan, R.drawable.cave_vai, R.drawable.cave_buoi,
+            R.drawable.cave_sau, R.drawable.cave_tram_den, R.drawable.cave_dau_da_dat,
+            R.drawable.cave_thi, R.drawable.cave_tao_meo, R.drawable.cave_mac_mat,
+            R.drawable.cave_bua
+    };
+
     public static int forGarden(int world, int g) {
-        int[] icons = world == Worlds.indexOfStage(Maps.FOREST) ? FOREST : LAKE;
+        int[] icons = iconsFor(world);
         return icons[Math.max(0, Math.min(g, icons.length - 1))];
+    }
+
+    private static int[] iconsFor(int world) {
+        if (world == Worlds.indexOfStage(Maps.FOREST)) {
+            return FOREST;
+        }
+        if (world == Worlds.indexOfStage(Maps.CAVE)) {
+            return CAVE;
+        }
+        return LAKE;
     }
 }
